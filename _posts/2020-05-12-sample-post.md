@@ -131,10 +131,17 @@ Footnotes are a great way to add additional contextual details when appropriate.
     Week.weeks_in_month
     Week.weeks_in_year
     d1.no_of_months
+    
+    def primes_finder(n):
+    
+    # number range to be checked
+    number_range = set(range(2, n+1))
 
-#### Definition Lists
+    # empty list to append discovered primes to
+    primes_list = []
 
-<dl>
-    <dt>Definition Title</dt>
-    <dd>Definition Description</dd>
-</dl>
+    while number_range:
+        prime = number_range.pop()
+        primes_list.append(prime)
+        multiples = set(range(prime*2, n+1, prime))
+        number_range.difference_update(multiples)
