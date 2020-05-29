@@ -6,6 +6,12 @@ tags: [Data Science, Machine Learning, Python]
 ---
 Syntax highlighting is a feature that displays source code, in different colors and fonts according to the category of terms. This feature facilitates writing in a structured language such as a programming language or a markup language as both structures and syntax errors are visually distinct. Highlighting does not affect the meaning of the text itself; it is intended only for human readers.[^1]
 
+```ruby
+def abs()
+    print(x)
+```
+
+
 # A/B Testing using Chi-Square Test for Independence
 ### This test would be used in cases where the response is binary, for example did purchase vs. did not purchase
 
