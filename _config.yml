@@ -8,7 +8,7 @@ plugins:
 
 #-------------------------------
 # General Site Settings
-title: John Doe Website
+title: John Doe
 description: "I am an aspiring Data Scientist building up my portfolio which focuses on interesting and impactful projects that I have undertaken recently."
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
