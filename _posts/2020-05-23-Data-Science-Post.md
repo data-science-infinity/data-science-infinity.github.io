@@ -11,7 +11,6 @@ def abs()
     print(x)
 ```
 
-
 # A/B Testing using Chi-Square Test for Independence
 ### This test would be used in cases where the response is binary, for example did purchase vs. did not purchase
 
@@ -29,7 +28,21 @@ from scipy.stats import chi2_contingency, chi2
 
 ```python
 campaign_data = pd.read_excel("grocery_database.xlsx", sheet_name = "campaign_data")
+import matplotlib.pyplot as plt
+
+plt.plot([1,2,3],[2,2,2])
 ```
+
+
+
+
+    [<matplotlib.lines.Line2D at 0x1db010ce588>]
+
+
+
+
+![png](output_4_1.png)
+
 
 ## Filter Data
 
@@ -183,4 +196,3 @@ else:
 
     We accept the null hypothesis, and conclude there is no relationship between the two variables
     
-
