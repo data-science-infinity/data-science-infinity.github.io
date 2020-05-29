@@ -9,7 +9,7 @@ plugins:
 #-------------------------------
 # General Site Settings
 title: John Doe
-description: "I am an aspiring Data Scientist building up my portfolio which focuses on interesting and impactful projects I've recently undertaken. Please connect with me on LinkedIn using the link below!"
+description: "Hi I'm John, and I'm am an aspiring Data Scientist.  I'm currently building up my portfolio which focuses on interesting and impactful projects I've recently undertaken. Please connect with me on LinkedIn using the link below!"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
