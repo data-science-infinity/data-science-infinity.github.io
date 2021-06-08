@@ -187,7 +187,7 @@ I hoped you enjoyed learning about Primes, and one way to search for them using 
   
   
   
-*>> Important Note: Using pop() on a Set in Python*
+###### >> Important Note: Using pop() on a Set in Python
 
 In the real world - we would need to make a consideration around the pop() method when used on a Set as in some cases it can be a bit inconsistent.
 
