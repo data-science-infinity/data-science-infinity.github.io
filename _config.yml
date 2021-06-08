@@ -8,8 +8,8 @@ plugins:
 
 #-------------------------------
 # General Site Settings
-title: John Doe
-description: "Hi I'm John, and I'm an aspiring Data Scientist.  I'm currently building up my portfolio which focuses on interesting and impactful projects I've recently undertaken. You can visit my Github and LinkedIn pages, and download my resume by using the links below!"
+title: Johnny Hopkins
+description: "Hi I'm Johnny, and I'm a Data Scientist.  My portfolio focuses on interesting projects I've recently undertaken, always with a focus on business impact. You can visit my Github and LinkedIn pages, and download my resume by using the links below!"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
