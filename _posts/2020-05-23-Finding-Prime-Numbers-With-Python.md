@@ -185,13 +185,13 @@ That is pretty cool!
 
 I hoped you enjoyed learning about Primes, and one way to search for them using Python.
 
-## A note on using pop() with sets in Python
 
-An interesting note on the use of the pop() method with sets in Python.
 
-In the real world - we would need to make a consideration around the pop() method when used on a set as in some cases it can be a bit inconsistent.
+### Important Note: Using pop() on a Set in Python
 
-The pop() method will usually extract the lowest element of a set. Sets however are, by definition, unordered. The items are stored internally with some order, but this internal order is determined by the hash code of the key (which is what allows retrieval to be so fast). 
+In the real world - we would need to make a consideration around the pop() method when used on a Set as in some cases it can be a bit inconsistent.
+
+The pop() method will usually extract the lowest element of a Set. Sets however are, by definition, unordered. The items are stored internally with some order, but this internal order is determined by the hash code of the key (which is what allows retrieval to be so fast). 
 
 This hashing method means that we can't 100% rely on it successfully getting the lowest value. In very rare cases, the hash provides a value that is not the lowest.
 
@@ -199,13 +199,13 @@ Even though here, we're just coding up something fun - it is most definitely a u
 
 The simplest solution to force the minimum value to be used is to replace the line...
 
-```
+```ruby
 prime = number_range.pop()
 ```
 
 ...with the lines...
 
-```
+```ruby
 prime = min(sorted(number_range))
 number_range.remove(prime)
 ```
@@ -213,3 +213,5 @@ number_range.remove(prime)
 ...where we firstly force the identification of the lowest number in the number_range into our prime variable, and following that we remove it.
 
 However, because we have to sort the list for each iteration of the loop in order to get the minimum value, it's slightly slower than what we saw with pop()!
+
+
