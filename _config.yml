@@ -38,7 +38,7 @@ defaults:
     values:
       layout: post
       read_time: true
-      share: true
+      share: false
 
 
 #-------------------------------
