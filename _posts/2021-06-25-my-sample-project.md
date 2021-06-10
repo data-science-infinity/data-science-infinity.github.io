@@ -30,3 +30,5 @@ while number_range:
     multiples = set(range(prime*2, n+1, prime))
     number_range.difference_update(multiples)
 ```
+
+![Philadelphia's Magic Gardens. This place was so cool!](/img/posts/coffee_python.jpg "Philadelphia's Magic Gardens")
