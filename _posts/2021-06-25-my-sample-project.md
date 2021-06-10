@@ -16,9 +16,17 @@ Let's get into it!
 First let's start by setting up a variable that will act as the upper limit of numbers we want to search through. We'll start with 20, so we're essentially wanting to find all prime numbers that exist that are equal to or smaller than 20
 
 ```ruby
-number_range = set(range(2, n+1))
+while number_range:
+    prime = number_range.pop()
+    primes_list.append(prime)
+    multiples = set(range(prime*2, n+1, prime))
+    number_range.difference_update(multiples)
 ```
 
 ```python
-number_range = set(range(2, n+1))
+while number_range:
+    prime = number_range.pop()
+    primes_list.append(prime)
+    multiples = set(range(prime*2, n+1, prime))
+    number_range.difference_update(multiples)
 ```
