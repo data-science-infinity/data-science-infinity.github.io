@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Tester2 space in name
+title: Tester3
 image: "/posts/primes_image.jpeg"
 tags: [Python, Primes]
 ---
