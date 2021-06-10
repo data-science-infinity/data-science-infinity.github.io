@@ -59,7 +59,7 @@ I love Python & Coffee so much, here is that picture from the top of my project 
 
 The above image is just linked to the actual file in my Github, but I could also link to images online, using the URL!
 
-A line break, like this one below - helps me make sense of what I reading, especially when I've had so much coffee that my vision goes a little blurry
+A line break, like this one below - helps me make sense of what I'm reading, especially when I've had so much coffee that my vision goes a little blurry
 
 ---
 
