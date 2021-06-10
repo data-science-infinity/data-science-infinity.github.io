@@ -5,30 +5,62 @@ image: "/posts/coffee_python.jpg"
 tags: [Python, Primes]
 ---
 
-In this post I'm going to run through a function in Python that can quickly find all the Prime numbers below a given value.  For example, if I passed the function a value of 100, it would find all the prime numbers below 100!
-
-If you're not sure what a Prime number is, it is a number that can only be divided wholly by itself and one so 7 is a prime number as no other numbers apart from 7 or 1 divide cleanly into it 8 is not a prime number as while eight and one divide into it, so do 2 and 4
-
-Let's get into it!
+# My first project
+## is all about
+### how much
+#### I LOVE
+##### Python & Coffee!
 
 ---
 
-First let's start by setting up a variable that will act as the upper limit of numbers we want to search through. We'll start with 20, so we're essentially wanting to find all prime numbers that exist that are equal to or smaller than 20
+I love Python so much, here is some code!
 
-```ruby
-while number_range:
-    prime = number_range.pop()
-    primes_list.append(prime)
-    multiples = set(range(prime*2, n+1, prime))
-    number_range.difference_update(multiples)
 ```
+my_love_for_python = 0
+my_python_knowledge = 0
+
+for day in lifetime:
+    my_love_for_python += 1
+    my_python_knowledge += 1
+```
+
+I love Python so much, here is some code with some colour coded syntax!
 
 ```python
-while number_range:
-    prime = number_range.pop()
-    primes_list.append(prime)
-    multiples = set(range(prime*2, n+1, prime))
-    number_range.difference_update(multiples)
+my_love_for_python = 0
+my_python_knowledge = 0
+
+for day in lifetime:
+    my_love_for_python += 1
+    my_python_knowledge += 1  
 ```
 
-![Philadelphia's Magic Gardens. This place was so cool!](/img/posts/coffee_python.jpg "Philadelphia's Magic Gardens")
+Here is an **unordered list** showing some things I love about Python
+
+* For my work
+    * Data Analysis
+    * Data Visualisation
+    * Machine Learning
+* For fun
+    * Deep Learning
+    * Computer Vision
+    * Projects about coffee
+
+Here is an _ordered list_ showing some things I love about coffee
+
+1. The smell
+    1. Especially in the morning
+2. The taste
+3. The fact I can run the 100m in about 9 seconds after having 4 cups in quick succession
+
+I love Python & Coffee so much, here is that picture from the top again, but this time, in the body of my project!
+
+![alt text](/img/posts/coffee_python.jpg "Coffee & Python - I love them!")
+
+The above image is just linked to the actual file in my Github, but I could also link to images online, using the URL!
+
+A line break, like this one below - helps me make sense of what I reading, especially when I've had so much coffee that my vision goes a little blurry
+
+---
+
+I could also add things to my project like links, tables, quotes, and HTML blocks - but I'm started to get a headache.  I think it's coffee time.
