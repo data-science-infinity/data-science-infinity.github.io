@@ -25,7 +25,7 @@ avatar_image: /img/profile_picture.JPG
 linkedln: "https://linkedln.com/#" # Add your linkedln handle
 github: "https://github.com/#"  # Add your github handle
 
-paginate: 8
+paginate: 6
 paginate_path: "/page/:num"
 
 sass:
