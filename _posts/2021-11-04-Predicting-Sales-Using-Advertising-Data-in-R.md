@@ -14,7 +14,7 @@ First, we import the data and take a look
 Advertising<-read.csv("Advertising.csv",head=TRUE)
 head(Advertising)
 ```
-We will then fit the multiple regression model to test the Ho hypothese. We use ***F-statistic*** for this, we can see on the output below that the p-value(2.2e-16) corresponding to the F-statistic(570.3) is very low, indicating clear evidence of a relationship between advertising and sales.
+We will then fit the multiple regression model to test the Ho hypothese. We use ***F-statistic*** for this, we can see on the output below that the p-value(2.2e-16=0.00000000000000022) corresponding to the F-statistic(570.3) is very close to zero, indicating clear evidence of a relationship between advertising and sales.
 ```
 attach(Advertising)
 advertising_fit <- lm(sales ~ TV + radio + newspaper)
