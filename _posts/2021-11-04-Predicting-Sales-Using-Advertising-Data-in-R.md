@@ -17,11 +17,11 @@ How can we predict how much increase in sales will we get after spending money o
 
 We will fit the multiple regression model and test the Ho hypothese:
 
->    attach(Advertising)
+>        attach(Advertising)
 > 
->    advertising_fit <- lm(sales ~ TV + radio + newspaper)
+>        advertising_fit <- lm(sales ~ TV + radio + newspaper)
 > 
->    summary(advertising_fit)
+>        summary(advertising_fit)
 
 #### OUTPUT:
 ![output1!](/assets/images/output1.png "output1")
