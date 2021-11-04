@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Predicting-Sales-Using-Advertising-Data-in-R
-image: "/posts/chris-liverani-dBI_My696Rk-unsplash.jpeg"
+image: "/posts/chris-liverani-dBI_My696Rk-unsplash Cropped.jpg"
 tags: [R, Multiple Linear Regression]
 ---
 #How can we predict how much increase in sales will we get after
