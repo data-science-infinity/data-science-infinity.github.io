@@ -34,7 +34,6 @@ each predictor’s ***t-statistic*** using again the same output above. As we ca
 We need to look at the ***confidence intervals*** of the coefficients
 ```
 confint(advertising_fit)
-
 ```
-###### OUTPUT2:
+###### OUTPUT 2:
 ![![ouput2](/img/posts/output2.png "output1")
