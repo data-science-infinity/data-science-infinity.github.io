@@ -24,6 +24,8 @@ We will fit the multiple regression model and test the Ho hypothese:
 > summary(advertising_fit)
 
 #### OUTPUT:
+![output1!](/assets/images/output1.png "output1")
+
 
 > lm(formula = sales ~ TV + radio + newspaper)
 >
