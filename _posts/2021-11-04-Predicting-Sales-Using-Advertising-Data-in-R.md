@@ -8,16 +8,16 @@ How can we predict how much increase in sales will we get after spending money o
 
 ### First we import the data and take a look
 
-Advertising<-read.csv("Advertising.csv",head=TRUE)
-head(Advertising)
+> Advertising<-read.csv("Advertising.csv",head=TRUE)
+> head(Advertising)
 
 ### We will be answering 7 questions
 #### 1 Is there a relationship between advertising sales and budget?
 
 We will fit the multiple regression model and test the Ho hypothese:
-attach(Advertising)
-advertising_fit <- lm(sales ~ TV + radio + newspaper)
-summary(advertising_fit)
+> attach(Advertising)
+> advertising_fit <- lm(sales ~ TV + radio + newspaper)
+> summary(advertising_fit)
 
 #### OUTPUT:
 
