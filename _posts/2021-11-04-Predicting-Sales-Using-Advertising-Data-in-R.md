@@ -20,7 +20,7 @@ attach(Advertising)
 advertising_fit <- lm(sales ~ TV + radio + newspaper)
 summary(advertising_fit)
 ```
-###### OUTPUT:
+###### OUTPUT 1:
 ![![ouput1](/img/posts/output1.png "output1")
 
 #### Question 2: How strong is the relationship?
@@ -36,3 +36,5 @@ We need to look at the ***confidence intervals*** of the coefficients
 confint(advertising_fit)
 
 ```
+###### OUTPUT2:
+![![ouput2](/img/posts/output2.png "output1")
