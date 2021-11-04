@@ -13,7 +13,7 @@ Advertising<-read.csv("Advertising.csv",head=TRUE)
 head(Advertising)
 ```
 #### We will be answering 7 questions
-##### Question 1 Is there a relationship between advertising sales and budget?
+##### Question 1: Is there a relationship between advertising sales and budget?
 
 We will fit the multiple regression model and test the Ho hypothese:
 ```
