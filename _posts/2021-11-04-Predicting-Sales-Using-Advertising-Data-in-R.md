@@ -29,3 +29,10 @@ To answer this question we will look at the above output and use ***R-squared st
 #### Question 3: Which media contribute to sales?
 To answer this question, we can examine the p-values associated with
 each predictor’s ***t-statistic*** using again the same output above. As we can see, the p-values for TV and radio are low and equal to 2e-16. We can't state the same about the p-value for newspaper which is 0.86. This suggests that only TV and radio are related to sales. 
+
+#### Question 4: How large is the effect of each medium on sales?
+We need to look at the ***confidence intervals*** of the coefficients
+```
+confint(advertising_fit)
+
+```
