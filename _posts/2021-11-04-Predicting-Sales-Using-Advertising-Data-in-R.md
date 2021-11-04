@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Predicting-Sales-Using-Advertising-Data-in-R
+title: Predicting Sales Using Advertising Data in R
 image: "/posts/chris-liverani-unsplash.jpeg"
 tags: [R, Multiple Linear Regression]
 ---
