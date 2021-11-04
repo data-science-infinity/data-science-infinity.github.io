@@ -15,13 +15,11 @@ head(Advertising)
 #### 1 Is there a relationship between advertising sales and budget?
 
 We will fit the multiple regression model and test the Ho hypothese:
-
->        attach(Advertising)
-> 
->        advertising_fit <- lm(sales ~ TV + radio + newspaper)
-> 
->        summary(advertising_fit)
-
+```
+attach(Advertising)
+advertising_fit <- lm(sales ~ TV + radio + newspaper)
+summary(advertising_fit)
+```
 #### OUTPUT:
 ![![ouput1](/img/posts/output1.png "output1")
 
