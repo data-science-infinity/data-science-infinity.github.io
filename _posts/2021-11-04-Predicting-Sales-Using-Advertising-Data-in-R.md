@@ -34,8 +34,8 @@ We will fit the multiple regression model and test the Ho hypothese:
 >
 > Coefficients:
 >
-  >>>           Estimate Std. Error t value Pr(>|t|) 
-  >             
+>          Estimate Std. Error t value Pr(>|t|) 
+>             
 > (Intercept)  2.938889   0.311908   9.422   <2e-16 ***
 > 
 > TV           0.045765   0.001395  32.809   <2e-16 ***
