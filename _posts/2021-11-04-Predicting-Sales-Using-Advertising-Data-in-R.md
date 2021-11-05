@@ -8,16 +8,20 @@ How can we predict how much increase in sales will we get after spending money o
 
 ---
 
+Let's import the data and take a look
+```R
+Advertising <- read.csv("Advertising.csv", head=TRUE)
+head(Advertising)
+```
+###### OUTPUT:
+![ouput](/img/posts/output.png "output")
+
 #### We will be answering 7 questions
 ##### Question 1: Is there a relationship between advertising and sales?
 
-First, we import the data and take a look
-```R
-Advertising<-read.csv("Advertising.csv",head=TRUE)
-head(Advertising)
-```
+
 We will then fit the multiple regression model to test the Ho hypothese. We use ***F-statistic*** for this, we can see on the output below that the p-value(2.2e-16=0.00000000000000022) corresponding to the F-statistic(570.3) is very close to zero, indicating clear evidence of a relationship between advertising and sales.
-```python
+```R
 attach(Advertising)
 advertising_fit <- lm(sales ~ TV + radio + newspaper)
 summary(advertising_fit)
