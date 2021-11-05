@@ -6,16 +6,18 @@ tags: [R, Multiple Linear Regression]
 ---
 How can we predict how much increase in sales will we get after spending money on different types of ads? I am using Advertising data here to show this and any company can collect this kind of data maybe from different branches and andwer the question: For how much are we going to increase sales spending the curtain amount on ads or how much money do the company needs to spend on ads to increase sales by X amount of dollars? 
 
+---
+
 #### We will be answering 7 questions
 ##### Question 1: Is there a relationship between advertising and sales?
 
 First, we import the data and take a look
-```
+```R
 Advertising<-read.csv("Advertising.csv",head=TRUE)
 head(Advertising)
 ```
 We will then fit the multiple regression model to test the Ho hypothese. We use ***F-statistic*** for this, we can see on the output below that the p-value(2.2e-16=0.00000000000000022) corresponding to the F-statistic(570.3) is very close to zero, indicating clear evidence of a relationship between advertising and sales.
-```
+```Python
 attach(Advertising)
 advertising_fit <- lm(sales ~ TV + radio + newspaper)
 summary(advertising_fit)
