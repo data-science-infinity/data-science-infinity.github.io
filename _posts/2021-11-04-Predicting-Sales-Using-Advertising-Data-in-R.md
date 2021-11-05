@@ -104,7 +104,9 @@ summary(advertising_fit_int)
 ###### OUTPUT 10:
 ![output10](/img/posts/output10.png "output10")
 
+---
 
+We have properly fitted the ***multiple linear regression model*** with the interaction term to the model, we can make predictions.
 
 
 
