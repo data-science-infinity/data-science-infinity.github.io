@@ -97,9 +97,12 @@ The standard linear regression model assumes an additive relationship between th
 ###### OUTPUT 9:
 ![output9](/img/posts/output9.png "output9")
 
-
-
-
+```R
+advertising_fit_int <- lm(sales ~ TV * radio)
+summary(advertising_fit_int)
+```
+###### OUTPUT 10:
+![output10](/img/posts/output10.png "output10")
 
 
 
