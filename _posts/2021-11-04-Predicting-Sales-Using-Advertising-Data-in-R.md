@@ -62,16 +62,12 @@ advertising_fit_newspaper <- lm(sales ~ newspaper)
 ![output6](/img/posts/output6.png "output6")
 
 #### Question 5: How accurately can we predict future sales?
-The response can be predicted using the following formula (this is not our final model and we will also ignore newspaper variable as it's not important)
+The response can be predicted using the following formula (this is not our final model and that's why we will ignore newspaper variable as we have seen that it's not important)
 ```
 sales = 2.938889 + 0.045765 x TV + 0.188530 x radio + e
 ```
 
-The accuracy associated
-with this estimate depends on whether we wish to predict an
-individual response, Y = f(X) + , or the average response, f(X)
-(Section 3.2.2). If the former, we use a prediction interval, and if the
-latter, we use a confidence interval. Prediction intervals will always
-be wider than confidence intervals because they account for the uncertainty
-associated with , the irreducible error.
+The accuracy associated with this estimate depends on whether we wish to predict an
+***individual response*** (for a particular city out of our 200 cities), or the ***average response*** (over a large number of cities). If the former, we use a ***prediction interval***, and if the latter, we use a ***confidence interval***. Prediction intervals will always be wider than confidence intervals because they account for the uncertainty
+associated with e, the irreducible error.
 
