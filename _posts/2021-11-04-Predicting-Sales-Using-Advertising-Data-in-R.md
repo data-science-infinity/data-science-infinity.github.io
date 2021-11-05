@@ -78,7 +78,7 @@ predict(advertising_fit, newdata, interval = 'confidence')
 ![output7](/img/posts/output7.png "output7")
 
 #### Question 6: Is the relationship linear?
-The residual plots can be used in order to identify non-linearity. If the relationships are linear, then the residual plots should display no pattern. ***U-shape*** we can see on output8 below provides evidance of non-linearity. We can use non-linear transformations of the predictors in the linear regression model in order to accommodate non-linear relationships. But, we will do something even better in a minute.
+The residual plots can be used in order to identify non-linearity. If the relationships are linear, then the residual plots should display no pattern. We will look only at the plot of residulas vs. predicted (of fitted) values. ***U-shape*** we can see on output8 below provides evidance of non-linearity. We can use non-linear transformations of the predictors, such as log X, square root of X, and X^2, in the linear regression model in order to accommodate non-linear relationships. But, we will do something even better in a minute.
 ```R
 par(mfrow=c(2,2))
 plot(advertising_fit, lwd=3)
