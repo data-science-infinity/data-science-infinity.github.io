@@ -72,11 +72,13 @@ sales = 2.938889 + 0.045765 x TV + 0.188530 x radio + e
 
 The accuracy associated with this estimate depends on whether we wish to predict an
 ***individual response*** (for a particular city out of our 200 cities), or the ***average response*** (over a large number of cities). If the former, we use a ***prediction interval***, and if the latter, we use a ***confidence interval***. As we can see ont the output7, prediction intervals are wider than confidence intervals and this will always be the case because they account for the uncertainty associated with e, the irreducible error.
+
 ```R
 newdata=data.frame(TV = 1, radio = 1, newspaper = 1)
 predict(advertising_fit, newdata, interval = 'prediction')
 predict(advertising_fit, newdata, interval = 'confidence')
 ```
+
 ###### OUTPUT 7:
 ![output7](/img/posts/output7.png "output7")
 
