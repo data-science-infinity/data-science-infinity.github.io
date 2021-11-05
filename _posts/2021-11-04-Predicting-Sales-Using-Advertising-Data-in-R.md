@@ -83,7 +83,7 @@ predict(advertising_fit, newdata, interval = 'confidence')
 ![output7](/img/posts/output7.png "output7")
 
 #### Question 6: Is the relationship linear?
-The residual plots can be used in order to identify non-linearity. If the relationships are linear, then the residual plots should display no pattern. We will look only at the plot of residulas vs. predicted (of fitted) values. ***U-shape*** we can see on output8 below provides evidance of non-linearity. We can use non-linear transformations of the predictors, such as log X, square root of X, and X^2, in the linear regression model in order to accommodate non-linear relationships. But, the U-shape
+The residual plots can be used in order to identify non-linearity. If the relationships are linear, then the residual plots should display no pattern. We will look only at the plot of residulas vs. predicted (of fitted) values. ***U-shape*** we can see on output8 below provides evidance of non-linearity. We can use non-linear transformations of the predictors, such as log X, square root of X, and X^2, in the linear regression model in order to accommodate non-linear relationships. 
 ```R
 par(mfrow=c(2,2))
 plot(advertising_fit, lwd=3)
@@ -92,9 +92,10 @@ plot(advertising_fit, lwd=3)
 ![output8](/img/posts/output8.png "output8")
 
 #### Question 7: Is there synergy among the advertising media?
-The standard linear regression model assumes an additive relationship between the predictors and the response, meaning that the effect of changes in one of the predictors (let's say money spent on TV ads) on the response (sales) is independent of the values of the other predictors (radio and newspaper). An additive model is easy to interpret. However, the additive assumption may be unrealistic for certain data sets. 
+The standard linear regression model assumes an additive relationship between the predictors and the response, meaning that the effect of changes in one of the predictors (let's say money spent on TV ads) on the response (sales) is independent of the values of the other predictors (radio and newspaper). An additive model is easy to interpret. However, the additive assumption may be unrealistic for certain data sets. Output9 suggested that the Advertising data may not be additive.
 
-
+###### OUTPUT 9:
+![output9](/img/posts/output9.png "output9")
 
 
 
