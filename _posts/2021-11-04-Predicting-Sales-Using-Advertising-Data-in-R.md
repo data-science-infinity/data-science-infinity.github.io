@@ -14,7 +14,7 @@ Advertising <- read.csv("Advertising.csv", head=TRUE)
 head(Advertising)
 ```
 ###### OUTPUT:
-![ouput](/img/posts/output.png "output")
+![output](/img/posts/output.png "output")
 
 #### We will be answering 7 questions
 ##### Question 1: Is there a relationship between advertising and sales?
@@ -27,7 +27,7 @@ advertising_fit <- lm(sales ~ TV + radio + newspaper)
 summary(advertising_fit)
 ```
 ###### OUTPUT 1:
-![ouput1](/img/posts/output1.png "output1")
+![output1](/img/posts/output1.png "output1")
 
 #### Question 2: How strong is the relationship?
 To answer this question we will look at the above output and use ***R-squared statistic***(0.8972) to decide. The value of 0.8972 means that the predictors explain almost 90% of the variance in sales, so the relationship is strong.
@@ -42,4 +42,4 @@ We need to look at the ***confidence intervals*** of the coefficients
 confint(advertising_fit)
 ```
 ###### OUTPUT 2:
-![ouput2](/img/posts/output2.png "output2")
+![output2](/img/posts/output2.png "output2")
