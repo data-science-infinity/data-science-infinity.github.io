@@ -36,8 +36,9 @@ We will look at the above output1 and use ***R-squared statistic***(0.8972) to d
 To answer this question, we need to examine the p-values associated with each predictor’s ***t-statistic*** using again the same output1 above. As we can see, the p-values for TV and radio are low and equal to 2e-16. We can't state the same about the p-value for newspaper which is 0.86. This suggests that only TV and radio are related to sales. 
 
 #### Question 4: How large is the effect of each medium on sales?
-We need to look at the ***confidence intervals*** of the coefficients
-```
+We need to look at the ***confidence intervals*** of the coefficients. Looking at the output2 below we can see that for the Advertising data, the 95% confidence intervals are as follows: (0.043, 0.049) for TV, (0.172, 0.206) for radio, and (−0.013, 0.011) for newspaper. The confidence intervals for TV and radio are narrow and far from zero, providing
+evidence that these media are related to sales. But the interval for newspaper includes zero, indicating that the variable is not statistically significant given the values of TV and radio.
+```R
 confint(advertising_fit)
 ```
 ###### OUTPUT 2:
