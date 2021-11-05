@@ -39,12 +39,15 @@ We need to look at the ***confidence intervals*** of the coefficients. Looking a
 evidence that these media are related to sales. But the interval for newspaper includes zero, indicating that the variable is not statistically significant given the values of TV and radio.
 ```R
 confint(advertising_fit)
-```
+```R
 ###### OUTPUT 2:
 ![output2](/img/posts/output2.png "output2")
 
 We will examine this further to see if ***collinearity*** be the reason that the confidence interval associated with newspaper is so wide? From the output 3 we can see that the VIF scores are 1.005, 1.145, and 1.145 for TV, radio, and newspaper, suggesting no evidence of collinearity.
-
+```R
+library(car)
+vif(advertising_fit)
+```
 ###### OUTPUT 3:
 ![output3](/img/posts/output3.png "output3")
 
@@ -78,10 +81,24 @@ predict(advertising_fit, newdata, interval = 'confidence')
 ![output7](/img/posts/output7.png "output7")
 
 #### Question 6: Is the relationship linear?
-The residual plots can be used in order to identify non-linearity. If the relationships are linear, then the residual plots should display no pattern. We will look only at the plot of residulas vs. predicted (of fitted) values. ***U-shape*** we can see on output8 below provides evidance of non-linearity. We can use non-linear transformations of the predictors, such as log X, square root of X, and X^2, in the linear regression model in order to accommodate non-linear relationships. But, we will do something even better in a minute.
+The residual plots can be used in order to identify non-linearity. If the relationships are linear, then the residual plots should display no pattern. We will look only at the plot of residulas vs. predicted (of fitted) values. ***U-shape*** we can see on output8 below provides evidance of non-linearity. We can use non-linear transformations of the predictors, such as log X, square root of X, and X^2, in the linear regression model in order to accommodate non-linear relationships. But, the U-shape
 ```R
 par(mfrow=c(2,2))
 plot(advertising_fit, lwd=3)
 ```
 ###### OUTPUT 8:
 ![output8](/img/posts/output8.png "output8")
+
+#### Question 7: Is there synergy among the advertising media?
+The standard linear regression model assumes an additive relationship between the predictors and the response, meaning that the effect of changes in one of the predictors (let's say money spent on TV ads) on the response (sales) is independent of the values of the other predictors (radio and newspaper). An additive model is easy to interpret. However, the additive assumption may be unrealistic for certain data sets. 
+
+
+
+
+
+
+
+
+
+
+
