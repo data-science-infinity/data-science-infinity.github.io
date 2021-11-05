@@ -8,7 +8,7 @@ How can we predict how much increase in sales will we get after spending money o
 
 ---
 
-Let's import the Advertising data and take a look. On the output below we can see that we have 3 predictors (TV, radio, newspaper) and 1 response variable - sales and the sample size is 200, data from two hundred cities.
+Let's import the Advertising data and take a look. On the output below we can see that we have 3 predictors TV, radio, newspaper is the amount of money spent (in $1000s of dollars) on ads for those respective categories. The esponse variable is sales (which are in units of 1000s of sales. For example 10.4 sales is equivalent to 10,400 sales) and the sample size is 200, data from two hundred cities.
 ```R
 Advertising <- read.csv("Advertising.csv", head=TRUE)
 head(Advertising)
@@ -68,6 +68,11 @@ sales = 2.938889 + 0.045765 x TV + 0.188530 x radio + e
 ```
 
 The accuracy associated with this estimate depends on whether we wish to predict an
-***individual response*** (for a particular city out of our 200 cities), or the ***average response*** (over a large number of cities). If the former, we use a ***prediction interval***, and if the latter, we use a ***confidence interval***. Prediction intervals will always be wider than confidence intervals because they account for the uncertainty
-associated with e, the irreducible error.
-
+***individual response*** (for a particular city out of our 200 cities), or the ***average response*** (over a large number of cities). If the former, we use a ***prediction interval***, and if the latter, we use a ***confidence interval***. As we can see ont the output7, prediction intervals are wider than confidence intervals and this will always be the case because they account for the uncertainty associated with e, the irreducible error.
+```R
+newdata=data.frame(TV = 1, radio = 1, newspaper = 1)
+predict(advertising_fit, newdata, interval = 'prediction')
+predict(advertising_fit, newdata, interval = 'confidence')
+```
+###### OUTPUT 7:
+![output7](/img/posts/output7.png "output7")
