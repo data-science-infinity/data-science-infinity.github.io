@@ -39,7 +39,7 @@ We need to look at the ***confidence intervals*** of the coefficients. Looking a
 evidence that these media are related to sales. But the interval for newspaper includes zero, indicating that the variable is not statistically significant given the values of TV and radio.
 ```R
 confint(advertising_fit)
-```R
+```
 ###### OUTPUT 2:
 ![output2](/img/posts/output2.png "output2")
 
