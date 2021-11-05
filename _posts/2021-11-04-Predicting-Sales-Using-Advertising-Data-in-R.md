@@ -8,7 +8,7 @@ How can we predict how much increase in sales will we get after spending money o
 
 ---
 
-Let's import the data and take a look. On the output below we can see that we have 3 predictors (TV, radio, newspaper) and 1 responce variable - sales
+Let's import the Advertising data and take a look. On the output below we can see that we have 3 predictors (TV, radio, newspaper) and 1 responce variable - sales
 ```R
 Advertising <- read.csv("Advertising.csv", head=TRUE)
 head(Advertising)
