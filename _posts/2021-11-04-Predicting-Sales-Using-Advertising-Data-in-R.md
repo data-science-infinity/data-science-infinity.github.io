@@ -8,7 +8,7 @@ How can we predict how much increase in sales will we get after spending money o
 
 ---
 
-Let's import the Advertising data and take a look. On the output below we can see that we have 3 predictors (TV, radio, newspaper) and 1 response variable - sales.
+Let's import the Advertising data and take a look. On the output below we can see that we have 3 predictors (TV, radio, newspaper) and 1 response variable - sales and the sample size is 200, data from two hundred cities.
 ```R
 Advertising <- read.csv("Advertising.csv", head=TRUE)
 head(Advertising)
@@ -19,8 +19,7 @@ head(Advertising)
 #### We will be answering 7 questions
 ##### Question 1: Is there a relationship between advertising and sales?
 
-
-To answer this question, we will then fit the multiple regression model to test the Ho hypothese. We use ***F-statistic*** for this, we can see on the output1 below that the p-value(2.2e-16=0.00000000000000022) corresponding to the F-statistic(570.3) is very close to zero, indicating clear evidence of a relationship between advertising and sales.
+To answer this question, we will then fit the multiple regression model to test the Ho hypothese. We use ***F-statistic*** for this, there is a relationship between the response and predictors when F-statistic is greater than 1. But how big is big? When the p-value is less than 0.05, we can conclude that there is a relationship. As we can see on the output1 below the p-value(2.2e-16=0.00000000000000022) corresponding to the F-statistic(570.3) is very close to zero, indicating clear evidence of a relationship between advertising and sales.
 ```R
 attach(Advertising)
 advertising_fit <- lm(sales ~ TV + radio + newspaper)
@@ -63,5 +62,16 @@ advertising_fit_newspaper <- lm(sales ~ newspaper)
 ![output6](/img/posts/output6.png "output6")
 
 #### Question 5: How accurately can we predict future sales?
+The response can be predicted using the following formula (this is not our final model and we will also ignore newspaper variable as it's not important)
+```
+sales = 2.938889 + 0.045765 x TV + 0.188530 x radio + e
+```
 
+The accuracy associated
+with this estimate depends on whether we wish to predict an
+individual response, Y = f(X) + , or the average response, f(X)
+(Section 3.2.2). If the former, we use a prediction interval, and if the
+latter, we use a confidence interval. Prediction intervals will always
+be wider than confidence intervals because they account for the uncertainty
+associated with , the irreducible error.
 
