@@ -106,7 +106,11 @@ summary(advertising_fit_int)
 
 ---
 
-We have properly fitted the ***multiple linear regression model*** with the interaction term to the model, we can make predictions.
+We have properly fitted the ***multiple linear regression model*** with the interaction term to the model, we can make predictions using the following formula:
 
+
+```
+sales = 6.750e+00 + 1.910e-02 x TV + 2.886e-02 x radio +  1.086e-03 x TV x radio + e
+```
 
 
