@@ -43,7 +43,7 @@ confint(advertising_fit)
 ###### OUTPUT 2:
 ![output2](/img/posts/output2.png "output2")
 
-We will examine this further to see if ***collinearity*** be the reason that the confidence interval associated with newspaper is so wide? From the output 3 we can see that the VIF scores are 1.005, 1.145, and 1.145 for TV, radio, and newspaper, suggesting no evidence of collinearity.
+We will examine this further to see if ***collinearity*** be the reason that the confidence interval associated with newspaper is so wide? As a ***rule of thumb***, a VIF value that is bigger than 5 or 10 indicates a problematic of collinearity. From the output 3 we can see that the VIF scores are 1.005, 1.145, and 1.145 for TV, radio, and newspaper, suggesting no evidence of collinearity.
 ```R
 library(car)
 vif(advertising_fit)
