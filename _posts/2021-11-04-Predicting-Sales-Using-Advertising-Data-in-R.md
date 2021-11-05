@@ -92,7 +92,7 @@ plot(advertising_fit, lwd=3)
 ![output8](/img/posts/output8.png "output8")
 
 #### Question 7: Is there synergy among the advertising media?
-The standard linear regression model assumes an additive relationship between the predictors and the response, meaning that the effect of changes in one of the predictors (let's say money spent on TV ads) on the response (sales) is independent of the values of the other predictors (radio and newspaper). An additive model is easy to interpret. However, the additive assumption may be unrealistic for certain data sets. Output9 suggested that the Advertising data may not be additive. A small p-value associated with the interaction term indicates the presence of such relationships. Including an interaction term in the model results in a substantial increase in R-squared, from around 90% to almost 97%!
+The standard linear regression model assumes an additive relationship between the predictors and the response, meaning that the effect of changes in one of the predictors (let's say money spent on TV ads) on the response (sales) is independent of the values of the other predictors (radio and newspaper). An additive model is easy to interpret. However, the additive assumption may be unrealistic for certain data sets. Output9 suggested that the Advertising data may not be additive. A small p-value (output10) associated with the interaction term indicates the presence of such relationships. Including an interaction term in the model results in a substantial increase in R-squared, from around 90% to almost 97%!
 
 ###### OUTPUT 9:
 ![output9](/img/posts/output9.png "output9")
