@@ -46,9 +46,20 @@ confint(advertising_fit)
 
 We will examine this further to see if ***collinearity*** be the reason that the confidence interval associated with newspaper is so wide? From the output 3 we can see that the VIF scores are 1.005, 1.145, and 1.145 for TV, radio, and newspaper, suggesting no evidence of collinearity.
 
+###### OUTPUT 3:
 ![output3](/img/posts/output3.png "output3")
 
-
-
+In order to assess the association of each medium individually on sales, we can fit three separate ***simple linear regression models***. Results are shown on output4 and output5. There is evidence of an ***extremely strong association*** between TV and sales and between radio and sales. There is evidence of a ***mild association*** between newspaper and sales (output6), when the values of TV and radio are ignored.
+```R
+advertising_fit_TV <- lm(sales ~ TV)
+advertising_fit_radio <- lm(sales ~ radio)
+advertising_fit_newpaper <- lm(sales ~ newspaper)
+```
+###### OUTPUT 4:
+![output4](/img/posts/output4.png "output4")
+###### OUTPUT 5:
+![output5](/img/posts/output5.png "output5")
+###### OUTPUT 6:
+![output6](/img/posts/output6.png "output6")
 
 
