@@ -1,9 +1,11 @@
-
 ---
 layout: post
-title: Finding Prime Numbers with Python
-image: "/posts/primes_image.jpeg"
-tags: [Data Analysis]
+title: Answering Business Questions with SQL
+image: "/posts/john_schnobrich_unsplash.jpg"
+tags: [SQL, Data Analysis]
+---
+
+
 ---
 
 
