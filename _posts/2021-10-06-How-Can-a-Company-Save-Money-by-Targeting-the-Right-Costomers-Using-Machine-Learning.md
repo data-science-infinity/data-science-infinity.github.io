@@ -58,7 +58,6 @@ OUTPUT:
 0    0.689535
 1    0.310465
 ```
-
 ###### OUTPUT:
 ![output](/img/posts/outpu.png "output")
 
