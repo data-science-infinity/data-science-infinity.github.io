@@ -118,19 +118,38 @@ X_test.drop(categorical_vars, axis=1, inplace=True)
 We will use a ***RundomForestClassifier*** function to do this
 
 ```python
-# ***n_estimators*** is the number of trees in the forest, default=100
-# ***max_features*** is how many randomly selected variable to keep every time, by default RandomForestClassifier will keep all of them
+# n_estimators is the number of trees in the forest, default=100
+# max_features is how many randomly selected variable to keep every time, by default RandomForestClassifier will keep all of them
 clf=RandomForestClassifier(random_state=42, n_estimators=500, max_features=5)
 clf.fit(X_train, y_train)
+```
+##### Step 10: Assess Model Accuracy
+In classification we don't use R-squared, but just the ratio of our correct predictions devided by all our predictions. We will look at the ***Confusion Matrix***.
+```python
+y_pred_class=clf.predict(X_test)
+y_pred_prob=clf.predict_proba(X_test)[:,1]
+
+conf_matrix=confusion_matrix(y_test, y_pred_class)
+
+# code for plotting the confusion matrix
+plt.style.use('seaborn-poster')
+plt.matshow(conf_matrix, cmap='coolwarm')
+plt.gca().xaxis.tick_bottom()
+plt.title('Confusion Matrix')
+plt.ylabel('Actual Class')
+plt.xlabel('Predicted Class')
+for (i,j), corr_value in np.ndenumerate(conf_matrix):
+    plt.text(j,i,corr_value,ha='center', va='center', fontsize=70)
+plt.show()
+
 ```
 
 
 
 
 
-
 ###### OUTPUT:
-![output](/img/posts/outpu.png "output")
+![confusion_matrix](/img/posts/confusion_matrix.png "confusion_matrix")
 
 #### We will be answering 7 questions
 ##### Question 1: Is there a relationship between advertising and sales?
