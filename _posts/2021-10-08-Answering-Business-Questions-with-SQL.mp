@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Answering Business Questions with SQL
-image: "/posts/sarah_elizabeth_unsplash.jpg"
+image: "/posts/coffee_python.jpg"
 tags: [SQL, Data Analytics]
 ---
 
