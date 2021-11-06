@@ -9,9 +9,10 @@ In this example we are using Machine Learning algorithm called Random Forests to
 
 ---
 
-Data first! In order to be able to use a ML argorithm we should have collected data on cutromer's behavour for at least some customers for a curtain ammount of time. In our example we have the data for 870 customers collected through 3 months period. The software used is Python (Anaconda, Spider). The sample data is already saved as pickle file.
+Data first! In order to be able to use a ML argorithm we should have collected data on cutromer's behavour for at least some customers for a curtain ammount of time. In our example we have the data for 870 customers collected through 3 months period.  
 
 ##### Step 1: Import required packages
+The software used is Python (Anaconda, Spider) so we don't need to install anything, just import.
 
 ```python
 import pandas as pd
@@ -27,11 +28,13 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.inspection import permutation_importance
 ```
 ##### Step 2: Import Data
+The sample data is already saved as pickle file.
 
 ```python
 data_for_model=pickle.load(open('Data/abc_classification_modelling.p', 'rb'))
 ```
 ##### Step 3: Drop Uneccessary columns
+We don't need the customer_id column.
 
 ```python
 data_for_model.drop(['customer_id'], axis=1, inplace=True)
@@ -42,6 +45,7 @@ data_for_model.drop(['customer_id'], axis=1, inplace=True)
 data_for_model=shuffle(data_for_model, random_state=42)
 ```
 ##### Step 4: Check Class Balance
+As we can see on the output below, 69% of our data belongs to class 0 and 31% to class 1. This is not perfectly balanced data, but we should not have any problems.
 
 ```python
 data_for_model['signup_flag'].value_counts()
@@ -58,6 +62,28 @@ OUTPUT:
 0    0.689535
 1    0.310465
 ```
+##### Step 5: Dealing with Missing Values
+
+```python
+data_for_model.isna().sum()
+
+OUTPUT:
+signup_flag             0
+distance_from_store     5
+gender                  5
+credit_score            8
+total_sales             0
+total_items             0
+transaction_count       0
+product_area_count      0
+average_basket_value    0
+
+# We have only 18 missing values in the data set with the sample size 870, we shouldn't have a problem if we drop them all. We are now left with 847 rows.
+
+data_for_model.dropna(how='any', inplace=True)
+```
+
+
 ###### OUTPUT:
 ![output](/img/posts/outpu.png "output")
 
