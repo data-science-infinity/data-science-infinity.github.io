@@ -31,6 +31,7 @@ from sklearn.inspection import permutation_importance
 ```python
 data_for_model=pickle.load(open('Data/abc_classification_modelling.p', 'rb'))
 ```
+
 ###### OUTPUT:
 ![output](/img/posts/output.png "output")
 
