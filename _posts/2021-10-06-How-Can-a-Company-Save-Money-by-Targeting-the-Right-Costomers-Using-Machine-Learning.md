@@ -52,7 +52,6 @@ OUTPUT:
 
 # In order to see the % use (normalize=True)
 
-```python
 data_for_model['signup_flag'].value_counts(normalize=True)
 
 OUTPUT:
