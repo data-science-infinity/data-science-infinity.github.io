@@ -82,6 +82,51 @@ average_basket_value    0
 
 data_for_model.dropna(how='any', inplace=True)
 ```
+##### Step 6: Split Our Data into Imput and Output Variables
+
+```python
+X=data_for_model.drop(['signup_flag'], axis=1)
+y=data_for_model['signup_flag']
+```
+##### Step 7: Split Out Training and Data Sets
+
+```python
+X_train, X_test, y_train, y_test=train_test_split(X,y, test_size=0.2, random_state=42, stratify=y)
+```
+##### Step 8: Deal with Categorical Variables
+We have one categorical variable which is gender, F and M, we will turn this to 0 for female (this is our so called ***dummy variable***) and 1 for male.
+```python
+categorical_vars=['gender']
+one_hot_encoder=OneHotEncoder(sparse=False, drop='first')
+
+X_train_encoded=one_hot_encoder.fit_transform(X_train[categorical_vars])
+X_test_encoded=one_hot_encoder.transform(X_test[categorical_vars])
+
+# but the above doesn't have names, we are adding now, fist create names
+encoder_feature_names=one_hot_encoder.get_feature_names(categorical_vars)
+
+# and add the names to the categorical variable columns
+X_train_encoded=pd.DataFrame(X_train_encoded, columns=encoder_feature_names)
+X_train=pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis=1)
+X_train.drop(categorical_vars, axis=1, inplace=True)
+
+X_test_encoded=pd.DataFrame(X_test_encoded, columns=encoder_feature_names)
+X_test=pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis=1)
+X_test.drop(categorical_vars, axis=1, inplace=True)
+```
+##### Step 9: Model Training
+We will use a ***RundomForestClassifier*** function to do this
+
+```python
+# ***n_estimators*** is the number of trees in the forest, default=100
+# ***max_features*** is how many randomly selected variable to keep every time, by default RandomForestClassifier will keep all of them
+clf=RandomForestClassifier(random_state=42, n_estimators=500, max_features=5)
+clf.fit(X_train, y_train)
+```
+
+
+
+
 
 
 ###### OUTPUT:
