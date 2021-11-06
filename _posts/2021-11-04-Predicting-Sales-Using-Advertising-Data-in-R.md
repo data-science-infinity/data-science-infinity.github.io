@@ -8,7 +8,7 @@ How can we predict how much increase in sales will we get after spending money o
 
 ---
 
-Let's import the Advertising data and take a look. On the output below we can see that we have 3 predictors TV, radio, newspaper (the columns showing the amount of money spent on ads for those respective categories in $1000. The response variable is sales again in $1000. For example, the values 10.4 in the second row of the sales' column is equivalent to $10,400 sales. The sample size is 200, it's the data from two hundred cities.
+Let's import the Advertising data and take a look. On the output below we can see that we have 3 predictors TV, radio, newspaper. The corresponding columns showing the amount of money spent on ads for each advertising type. The response variable is sales. All values are in $1000, for example, the values 10.4 in the second row of the sales' column is equivalent to $10,400 sales. The sample size is 200, it's the data collected from two hundred cities.
 ```R
 Advertising <- read.csv("Advertising.csv", head=TRUE)
 head(Advertising)
