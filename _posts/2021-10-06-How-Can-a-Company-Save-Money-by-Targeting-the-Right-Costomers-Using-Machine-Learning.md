@@ -124,7 +124,8 @@ clf=RandomForestClassifier(random_state=42, n_estimators=500, max_features=5)
 clf.fit(X_train, y_train)
 ```
 ##### Step 10: Assess Model Accuracy
-In classification we don't use R-squared, but just the ratio of our correct predictions devided by all our predictions. We will look at the ***Confusion Matrix***.
+In classification we don't use R-squared, but just the ratio of our correct predictions devided by all our predictions. We will look at the ***Confusion Matrix*** and the ***accuracy_score***. And because our data is not perfectly balanced, we need to make sure our ***presicion_score***, ***recall_score***, and ***f1_score*** are also high. 
+
 ```python
 y_pred_class=clf.predict(X_test)
 y_pred_prob=clf.predict_proba(X_test)[:,1]
@@ -144,12 +145,35 @@ plt.show()
 
 ```
 
-
-
-
-
 ###### OUTPUT:
 ![confusion_matrix](/img/posts/confusion_matrix.png "confusion_matrix")
 
-#### We will be answering 7 questions
-##### Question 1: Is there a relationship between advertising and sales?
+```python
+# model accuracy (the number of correct classifications out of all attempt classifications), we got 94% here!
+accuracy_score(y_test, y_pred_class)
+
+OUTPUT:
+0.9352941176470588
+
+precision_score(y_test, y_pred_class)
+
+OUTPUT:
+0.8867924528301887
+
+recall_score(y_test, y_pred_class)
+
+OUTPUT:
+0.9038461538461539
+
+f1_score(y_test, y_pred_class)
+
+OUTPUT:
+0.8952380952380953
+
+
+
+
+
+
+
+```
