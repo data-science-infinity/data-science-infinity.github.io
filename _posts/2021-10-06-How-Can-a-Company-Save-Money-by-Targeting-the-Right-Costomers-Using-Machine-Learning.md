@@ -124,7 +124,7 @@ clf=RandomForestClassifier(random_state=42, n_estimators=500, max_features=5)
 clf.fit(X_train, y_train)
 ```
 ##### Step 10: Assess Model Accuracy
-In classification we don't use R-squared, but just the ratio of our correct predictions devided by all our predictions. We will look at the ***Confusion Matrix*** and the ***accuracy_score***. And because our data is not perfectly balanced, we need to make sure our ***presicion_score***, ***recall_score***, and ***f1_score*** are also high. 
+In classification we don't use R-squared, but just the ratio of our correct predictions devided by all our predictions. We will look at the ***Confusion Matrix*** and the ***accuracy_score***. And because our data is not perfectly balanced, we need to make sure our ***presicion_score***, ***recall_score***, and ***f1_score*** are also high. As we can see on the output below, we got f1_score 90%, this is a good result! 
 
 ```python
 y_pred_class=clf.predict(X_test)
@@ -142,7 +142,6 @@ plt.xlabel('Predicted Class')
 for (i,j), corr_value in np.ndenumerate(conf_matrix):
     plt.text(j,i,corr_value,ha='center', va='center', fontsize=70)
 plt.show()
-
 ```
 
 ###### OUTPUT:
@@ -169,11 +168,4 @@ f1_score(y_test, y_pred_class)
 
 OUTPUT:
 0.8952380952380953
-
-
-
-
-
-
-
 ```
