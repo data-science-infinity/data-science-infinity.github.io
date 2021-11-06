@@ -6,3 +6,12 @@ tags: [Python, Random Forests, Classification Model]
 ---
 
 ---
+```python
+Advertising <- read.csv("Advertising.csv", head=TRUE)
+head(Advertising)
+```
+###### OUTPUT:
+![output](/img/posts/output.png "output")
+
+#### We will be answering 7 questions
+##### Question 1: Is there a relationship between advertising and sales?
