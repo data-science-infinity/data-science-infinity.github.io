@@ -45,6 +45,8 @@ data_for_model=shuffle(data_for_model, random_state=42)
 
 ```python
 data_for_model['signup_flag'].value_counts()
+>>> 0    593
+    1    267
 ```
 >>> 0    593
 1    267
