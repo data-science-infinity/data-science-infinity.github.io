@@ -148,7 +148,6 @@ plt.show()
 ![confusion_matrix](/img/posts/confusion_matrix.png "confusion_matrix")
 
 ```python
-# model accuracy (the number of correct classifications out of all attempt classifications), we got 94% here!
 accuracy_score(y_test, y_pred_class)
 
 OUTPUT:
@@ -169,3 +168,37 @@ f1_score(y_test, y_pred_class)
 OUTPUT:
 0.8952380952380953
 ```
+##### Which viriables are important?
+We are done, but we can use the results to do one more thing, answer the quesion which varible were important for the algorithm. The best method to use here is the method which uses ***permutation_importance***.
+
+```python
+result=permutation_importance(clf, X_test, y_test, n_repeats=10, random_state=42)
+
+permutation_importance=pd.DataFrame(result['importances_mean'])
+feature_names=pd.DataFrame(X.columns)
+permutation_importance_summary=pd.concat([feature_names, permutation_importance], axis=1)
+permutation_importance_summary.columns=['input_variable','permutation_importance']
+permutation_importance_summary.sort_values(by='permutation_importance', inplace=True)# descending sorting 
+
+# plotting the results
+plt.barh(permutation_importance_summary['input_variable'],permutation_importance_summary['permutation_importance'])
+plt.title('Permutaion Importance of Random Forest')
+plt.xlabel('Permutaion Importance')
+plt.tight_layout()
+plt.show()
+```
+OUTPUT:
+![confusion_matrix](/img/posts/confusion_matrix.png "confusion_matrix")
+
+
+
+
+
+
+
+
+
+
+
+
+
