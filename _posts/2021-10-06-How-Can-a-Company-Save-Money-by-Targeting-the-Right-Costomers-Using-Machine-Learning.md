@@ -45,17 +45,21 @@ data_for_model=shuffle(data_for_model, random_state=42)
 
 ```python
 data_for_model['signup_flag'].value_counts()
+
 OUTPUT:
 0    593
 1    267
 
-In order to see the % use (normalize=True)
+# In order to see the % use (normalize=True)
 
 ```python
 data_for_model['signup_flag'].value_counts(normalize=True)
-```
->>>0    0.689535
+
+OUTPUT:
+0    0.689535
 1    0.310465
+```
+
 ###### OUTPUT:
 ![output](/img/posts/outpu.png "output")
 
