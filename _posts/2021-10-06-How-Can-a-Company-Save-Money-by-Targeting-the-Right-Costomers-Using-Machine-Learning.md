@@ -188,7 +188,7 @@ plt.tight_layout()
 plt.show()
 ```
 OUTPUT:
-![confusion_matrix](/img/posts/confusion_matrix.png "confusion_matrix")
+![permutation_importance](/img/posts/permutation_importance.png "permutation_importance")
 
 
 
