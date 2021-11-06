@@ -26,14 +26,37 @@ from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, r
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.inspection import permutation_importance
 ```
-##### Step 2: Import data
+##### Step 2: Import Data
 
 ```python
 data_for_model=pickle.load(open('Data/abc_classification_modelling.p', 'rb'))
 ```
+##### Step 3: Drop Uneccessary columns
 
+```python
+data_for_model.drop(['customer_id'], axis=1, inplace=True)
+```
+##### Step 3: Shuffle Data
+
+```python
+data_for_model=shuffle(data_for_model, random_state=42)
+```
+##### Step 4: Check Class Balance
+
+```python
+data_for_model['signup_flag'].value_counts()
+```
+>>> 0    593
+1    267
+In order to see the % use (normalize=True)
+
+```python
+data_for_model['signup_flag'].value_counts(normalize=True)
+```
+>>>0    0.689535
+1    0.310465
 ###### OUTPUT:
-![output](/img/posts/output.png "output")
+![output](/img/posts/outpu.png "output")
 
 #### We will be answering 7 questions
 ##### Question 1: Is there a relationship between advertising and sales?
