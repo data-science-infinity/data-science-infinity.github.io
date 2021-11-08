@@ -37,7 +37,23 @@ order by
 #### Question 2: Return a list of customers who spent more than $500 and had 5 or more ***unique transactions*** in the month of August 2020
 
 ```sql
-
+select
+ customer_id,
+ sum(sales_cost) as total_sales,
+ count(distinct(transaction_id)) as total_trans
+ 
+from
+ grocery_db.transactions
+ 
+where 
+ transaction_date between '2020-08-01' and '2020-08-31'
+ 
+group by
+ customer_id
+ 
+having
+ sum(sales_cost) > 500 and
+ count(distinct(transaction_id)) >= 5;
 ```
 ###### RESULT 2:
 ![sql2](/img/posts/sql2.png "sql2")
