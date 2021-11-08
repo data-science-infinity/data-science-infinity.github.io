@@ -76,16 +76,33 @@ fit10=arima(x,c(1,0,3))
 
 ![goals5](/img/posts/goals5.png "goals5")
 
-#### We can perform a model diagnostics for fit10, by using ***tsdiag*** 
+#### We can perform a model diagnostics for fit10, by using ***tsdiag*** which uses the old ***Ljung-Box test statistics***
 
 ```r
 tsdiag(fit10)
 ```
 ![goals6](/img/posts/goals6.png "goals6")
 
+#### But the best goodness of fit test is ***Weighted Monti test*** as it is the most powerful
 
 
+```r
+install.packages('WeightedPortTest')
+library('WeightedPortTest')
+Weighted.Box.test(residuals(fit10), lag = 10, 
+                  type = "Monti",
+                  fitdf = 0, weighted = TRUE)
+```
+![goals7](/img/posts/goals7.png "goals7")
 
+#### Now when we have the best model, we can ***forecast*** for let's say 4 future Premier League seasons
+
+```r
+forecast(fit10, h=4)
+plot(forecast(fit10, h=4))
+```r
+![goals8](/img/posts/goals8.png "goals8")
+![goals9](/img/posts/goals9.png "goals9")
 
 
 
