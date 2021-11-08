@@ -69,7 +69,7 @@ else:
     print(f'As our chi-square statistic of {chi2_statistic} is lower than our critical value {critical_value}, we retain the null hypothesis and conclude that: {null_hypothesis}')
 
 OUTPUT:
-As our chi-square statistic of 1.9414468614812481 is lower than our critical value 3.841458820694124, we retain the null hypothesis and conclude that: There is no relationship between the mailer type and signup rate. They are independent.
+As our chi-square statistic of 1.94 is lower than our critical value 3.84, we retain the null hypothesis and conclude that: There is no relationship between the mailer type and signup rate. They are independent.
 ```   
 
 #### PRINT THE RESULTS (P_VALUE)
@@ -81,7 +81,7 @@ else:
     print(f'As our p-value of {p_value} is higher than our acceptance_criteria {acceptance_criteria}, we retain the null hypothesis and conclude that: {null_hypothesis}')
     
 OUTPUT:
-As our p-value of 0.16351152223398197 is higher than our acceptance_criteria 0.05, we retain the null hypothesis and conclude that: There is no relationship between the mailer type and signup rate. They are independent.
+As our p-value of 0.16 is higher than our acceptance_criteria 0.05, we retain the null hypothesis and conclude that: There is no relationship between the mailer type and signup rate. They are independent.
 ```
 
 
