@@ -61,7 +61,27 @@ having
 #### Question 3: Return data showing, for each ***product area name*** - the ***total sales***, and the percentage of ***overall sales*** that each product area makes up
 
 ```sql
+with sales as (
+select
+ b.product_area_name,
+ sum(a.sales_cost) as total_sales
+ 
+from
+ grocery_db.transactions a
+ inner join grocery_db.product_areas b on a.product_area_id=b.product_area_id
+ 
+group by
+ b.product_area_name
+ 
+)
 
+select
+ product_area_name,
+ total_sales,
+ total_sales / (select sum(total_sales) from sales) as total_sales_pc
+ 
+from 
+ sales;
 ```
 ###### RESULT 3:
 ![sql3](/img/posts/sql3.png "sql3")
