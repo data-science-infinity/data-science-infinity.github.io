@@ -14,7 +14,7 @@ What were the total sales for each productareaname for July 2020.Return these in
 
 ###### SQL CODE:
 
-```SQL
+```sql
 select
  b.product_area_name,
  sum(a.sales_cost) as total_sales
