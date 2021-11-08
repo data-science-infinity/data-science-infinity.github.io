@@ -17,28 +17,24 @@ Code and output in RStudio:
 weedcontrol<- read.table("weedcontrol.txt", header=TRUE)
 weedcontrol
 summary(weedcontrol)
-weedcontrol$fblock <- factor(weedcontrol$block)
-weedcontrol$fherbicide <- factor(weedcontrol$herbicide)
-weedcontrol$fnitrogen <- factor(weedcontrol$nitrogen)
-weedcontrol$fpotassium <- factor(weedcontrol$potassium)
+```
 
+###### OUTPUT 1:
+![exp1](/img/posts/exp1.png "exp1")
+
+```r
 aov1 <- aov(yield ~ fblock + fherbicide * fnitrogen * fpotassium,
 data=weedcontrol)
 
 summary(aov1)
-
-OUTPUT:
-
-Df Sum Sq Mean Sq F value Pr(>F)
-fblock 2 0.05 0.03 0.115 0.8912
-fherbicide 1 133.73 133.73 604.233 < 2e-16 ***
-fnitrogen 3 53.06 17.69 79.913 < 2e-16 ***
-fpotassium 4 276.75 69.19 312.602 < 2e-16 ***
-fherbicide:fnitrogen 3 61.75 20.58 92.999 < 2e-16 ***
-fherbicide:fpotassium 4 17.30 4.33 19.546 3.56e-11 ***
-fnitrogen:fpotassium 12 6.94 0.58 2.612 0.0056 **
-fherbicide:fnitrogen:fpotassium 12 12.27 1.02 4.620 1.30e-05 ***
-Residuals 78 17.26 0.22
----
-Signif. codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
+###### OUTPUT 2:
+![exp2](/img/posts/exp2.png "exp2")
+
+```r
+par(mfrow=c(2,2))
+plot(aov1)
+```
+###### OUTPUT 2:
+![exp3](/img/posts/exp3png "exp3")
+
