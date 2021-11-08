@@ -100,7 +100,7 @@ Weighted.Box.test(residuals(fit10), lag = 10,
 ```r
 forecast(fit10, h=4)
 plot(forecast(fit10, h=4))
-```r
+```
 ![goals8](/img/posts/goals8.png "goals8")
 ![goals9](/img/posts/goals9.png "goals9")
 
