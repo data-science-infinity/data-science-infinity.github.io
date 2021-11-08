@@ -107,6 +107,7 @@ $contrasts
 
 ###### OUTPUT 8:
 ![exp7](/img/posts/exp7.png "exp7")
+
 ![exp7a](/img/posts/exp7a.png "exp7a")
 
 ```r
