@@ -39,7 +39,7 @@ acf(Premierleague_goals[,4])
 ```
 ![goals2](/img/posts/goals2.png "goals2")
 
-#### As the ACF for Premierleague_goals[,4] data is ***decaying linearly***, we have evidence of a ***unit root*** so we need to ***difference***. The differenced data seem to exhibit more stationary features. 
+#### As the ***ACF*** for Premierleague_goals[,4] data is ***decaying linearly***, we have evidence of a ***unit root*** so we need to ***difference***. The differenced data seem to exhibit more stationary features. 
 
 ```r
 ts.plot(diff(Premierleague_goals[,4]))
@@ -56,3 +56,21 @@ x=x[-(1:4)]
 tsdisplay(x)
 ```
 ![goals4](/img/posts/goals4.png "goals4")
+
+#### Since the ***ACF*** and ***PACF*** seems to suggest some spikes of order p = 3, q = 3, we might like to consider those values together with the smaller models. We use ***arima*** command which uses ***Maximum Likelihood Estimation*** to calculate the coefficietns
+
+```r
+# arima ~ command is that of the MLE, maximum likelihood estimator for the coefficients
+fit1=arima(x,c(1,0,1))
+fit2=arima(x,c(2,0,1))
+fit3=arima(x,c(3,0,1))
+fit4=arima(x,c(3,0,0))
+fit5=arima(x,c(3,0,2))
+fit6=arima(x,c(2,0,2))
+fit7=arima(x,c(1,0,2))
+fit8=arima(x,c(0,0,2))
+fit9=arima(x,c(0,0,3))
+fit10=arima(x,c(1,0,3))
+```
+![goals4](/img/posts/goals4.png "goals4")
+
