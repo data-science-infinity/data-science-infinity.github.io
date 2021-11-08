@@ -71,7 +71,6 @@ fit8=arima(x,c(0,0,2))
 fit9=arima(x,c(0,0,3))
 fit10=arima(x,c(1,0,3))
 ```
-![goals5](/img/posts/goals5.png "goals5")
 
 #### We are choosing the model with the smallest ***AIC***. It is observed for model 10: fit10=arima(x,c(1,0,3))
 
