@@ -38,3 +38,20 @@ ts.plot(Premierleague_goals[,4])
 acf(Premierleague_goals[,4])
 ```
 ![goals2](/img/posts/goals2.png "goals2")
+
+#### As the ACF for Premierleague_goals[,4] data is ***decaying linearly***, we have evidence of a ***unit root*** so we need to ***difference***. The differenced data seem to exhibit more stationary features. 
+
+```r
+ts.plot(diff(Premierleague_goals[,4]))
+acf(diff(Premierleague_goals[,4]))
+```
+
+![goals2](/img/posts/goals2.png "goals2")
+
+#### We will also remove the first 4 observations as they seem a bit out-of-line with the rest of the data and look at the plots
+
+```r
+x=diff(Premierleague_goals[,4])
+x=x[-(1:4)]
+tsdisplay(x)
+```
