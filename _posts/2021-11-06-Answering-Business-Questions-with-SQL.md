@@ -28,7 +28,8 @@ group by
 order by
   total_sales desc;
 ```
-
+###### RESULT 1:
+![SQL1](/img/posts/sql1.png "sql1")
 
 #### Question 2: eturn a list of customers who spent more than$500 and had 5 or more unique transactions in themonth of August 20204) Return a list of duplicate credit scores that existin the customer_details table5) Return the customer_id(s) for the customer(s) whohas/have the 2nd highest credit score. Make sureyour code would work for the Nth highest creditscore as well
 
