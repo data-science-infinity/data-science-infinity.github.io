@@ -20,7 +20,7 @@ head(Advertising)
 #### Question 1: Is there a relationship between advertising and sales?
 
 To answer this question, we will then fit the multiple regression model to test the Ho hypothese. We use ***F-statistic*** for this, there is a relationship between the response and predictors when F-statistic is greater than 1. But how big is big? When the p-value is less than 0.05, we can conclude that there is a relationship. As we can see on the output1 below the p-value(2.2e-16=0.00000000000000022) corresponding to the F-statistic(570.3) is very close to zero, indicating clear evidence of a relationship between advertising and sales.
-```R
+```r
 attach(Advertising)
 advertising_fit <- lm(sales ~ TV + radio + newspaper)
 summary(advertising_fit)
