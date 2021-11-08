@@ -9,7 +9,7 @@ We will be answering important business quiestions using SQL. This is very easy 
 
 ---
 
-#### Question 1: What were the total sales for each ***product are aname*** for July 2020.Return these in the order ofhighest sales to lowest sales
+#### Question 1: What were the total sales for each ***product area name*** for July 2020.Return these in the order of highest sales to lowest sales
 ###### SQL CODE:
 
 ```sql
@@ -32,9 +32,21 @@ order by
 ```
 
 ###### RESULT 1:
-![SQL1](/img/posts/sql1.png "sql1")
+![sql1](/img/posts/sql1.png "sql1")
 
-#### Question 2: Return a list of customers who spent more than$500 and had 5 or more unique transactions in themonth of August 2020
+#### Question 2: Return a list of customers who spent more than $500 and had 5 or more ***unique transactions*** in the month of August 2020
 
+```sql
 
-#### Question 3: Return data showing, for each product_area_name - thetotal sales, and the percentage of overall sales that eachproduct area makes up
+```
+###### RESULT 2:
+![sql2](/img/posts/sql2.png "sql2")
+
+#### Question 3: Return data showing, for each ***product area name*** - the ***total sales***, and the percentage of ***overall sales*** that each product area makes up
+
+```sql
+
+```
+###### RESULT 3:
+![sql3](/img/posts/sql3.png "sql3")
+
