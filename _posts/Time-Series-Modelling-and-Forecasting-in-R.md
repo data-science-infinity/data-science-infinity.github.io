@@ -7,7 +7,7 @@ tags: [R, Time Series, Forecasting]
 We will be modeling data om average number of goals for English Premier League and forecasting for the future years
 
 ---
-We will need the following packages and libraries
+##### We will need the following packages and libraries
 
 ```r
 library(forecast)
@@ -16,7 +16,7 @@ library(timeSeries)
 library(fBasics)
 library(fGarch)
 ```
-Importing data and removing the fists columns which is just numbering the rows
+##### Importing data and removing the fists columns which is just numbering the rows
 
 
 ```r
@@ -25,3 +25,16 @@ head(Premierleague_goals)
 
 ```
 ![goals1](/img/posts/goals1.png "goals1")
+
+#### View our data and its ***acf*** plots
+
+```r
+par(mfrow=c(3,2))
+ts.plot(Premierleague_goals[,2])
+acf(Premierleague_goals[,2])
+ts.plot(Premierleague_goals[,3])
+acf(Premierleague_goals[,3])
+ts.plot(Premierleague_goals[,4])
+acf(Premierleague_goals[,4])
+```
+![goals2](/img/posts/goals2.png "goals2")
