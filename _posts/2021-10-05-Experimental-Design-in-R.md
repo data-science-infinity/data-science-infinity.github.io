@@ -53,8 +53,6 @@ weedcontrol$y<-log(weedcontrol$yield)
 aov2 <- aov(y ~ fblock + fherbicide * fnitrogen * fpotassium,
 data=weedcontrol)
 
-summary(aov2)
-
 plot(aov2)
 ```
 
@@ -70,3 +68,61 @@ Construct an ANOVA table and test for treatment effects.
 
 ###### OUTPUT 5:
 ![exp4](/img/posts/exp4.png "exp4")
+
+```r
+aov2 <- aov(y ~ fblock + fherbicide * fnitrogen * fpotassium,
+data=weedcontrol)
+
+summary(aov2)
+```
+
+
+###### OUTPUT 6:
+![exp5](/img/posts/exp5.png "exp5")
+
+First, we need to look at the second order interaction (we start from the
+bottom) to see if it’s significant, in our case it’s not, then we move up
+to the first order interactions, in our case only herbicide with nitrogen
+interaction is significant, which means that we will look further only at
+potassium’s main effect. It turns out that potassium’s main effect is
+significant.
+
+(c) Compare treatments to recommend an optimum treatment combination
+To compare treatments and find an optimum treatment, we need to compare means and interpret
+
+
+```r
+library(emmeans)
+emmeans(aov2, pairwise ~ fherbicide:fnitrogen)
+emmeans(aov2, pairwise ~ fpotassium)
+$emmeans
+```
+
+###### OUTPUT 7:
+![exp6](/img/posts/exp6.png "exp6")
+
+```r
+$contrasts
+```
+
+###### OUTPUT 8:
+![exp7](/img/posts/exp7.png "exp7")
+![exp7a](/img/posts/exp7a.png "exp7a")
+
+```r
+emmeans(aov2, pairwise ~ fpotassium)
+# NOTE: Results may be misleading due to involvement in interactions
+$emmeans
+```
+
+###### OUTPUT 9:
+![exp8](/img/posts/exp8.png "exp8")
+
+```r
+$contrasts
+```
+###### OUTPUT 10:
+![exp9](/img/posts/exp9.png "exp9")
+
+
++ text
