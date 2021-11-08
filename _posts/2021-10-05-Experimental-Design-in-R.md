@@ -20,7 +20,7 @@ summary(weedcontrol)
 ```
 
 ###### OUTPUT 1:
-![exp1](/img/posts/exp1.png "exp1")
+![exp](/img/posts/exp.png "exp")
 
 ```r
 aov1 <- aov(yield ~ fblock + fherbicide * fnitrogen * fpotassium,
@@ -29,12 +29,12 @@ data=weedcontrol)
 summary(aov1)
 ```
 ###### OUTPUT 2:
-![exp2](/img/posts/exp2.png "exp2")
+![exp1](/img/posts/exp1.png "exp1")
 
 ```r
 par(mfrow=c(2,2))
 plot(aov1)
 ```
-###### OUTPUT 2:
-![exp3](/img/posts/exp3png "exp3")
+###### OUTPUT 3:
+![exp2](/img/posts/exp2.png "exp2")
 
