@@ -9,7 +9,11 @@ We will be answering important business quiestions using SQL. This is very easy 
 
 ---
 
-#### Question 1: What were the total sales for each productareaname for July 2020.Return these in the order ofhighest sales to lowest sales5) Return a list of all customer_id's that do NOT havea loyalty score (i.e. they are in the customer_detailstable, but not in the loyalty_scores table)
+#### Question 1: 
+What were the total sales for each productareaname for July 2020.Return these in the order ofhighest sales to lowest sales5) Return a list of all customer_id's that do NOT havea loyalty score (i.e. they are in the customer_detailstable, but not in the loyalty_scores table)
+
+###### SQL CODE:
+
 ```SQL
 select
  b.product_area_name,
@@ -28,6 +32,7 @@ group by
 order by
   total_sales desc;
 ```
+
 ###### RESULT 1:
 ![SQL1](/img/posts/sql1.png "sql1")
 
