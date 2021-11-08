@@ -99,9 +99,14 @@ Weighted.Box.test(residuals(fit10), lag = 10,
 
 ```r
 forecast(fit10, h=4)
+
+![goals8](/img/posts/goals8.png "goals8")
+```
+#### Now let's look at the final plot!
+
+```r
 plot(forecast(fit10, h=4))
 ```
-![goals8](/img/posts/goals8.png "goals8")
 ![goals9](/img/posts/goals9.png "goals9")
 
 
