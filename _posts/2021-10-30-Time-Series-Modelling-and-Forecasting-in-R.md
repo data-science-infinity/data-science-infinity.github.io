@@ -71,26 +71,18 @@ fit8=arima(x,c(0,0,2))
 fit9=arima(x,c(0,0,3))
 fit10=arima(x,c(1,0,3))
 ```
-![goals4](/img/posts/goals4.png "goals4")
+![goals5](/img/posts/goals5.png "goals5")
 
 #### We are choosing the model with the smallest ***AIC***. It is observed for model 10: fit10=arima(x,c(1,0,3))
 
-```r
-fit1$aic
-fit2$aic
-fit3$aic
-fit4$aic
-fit5$aic
-fit6$aic
-fit7$aic
-fit8$aic
-fit9$aic
-fit10$aic
-```
 ![goals5](/img/posts/goals5.png "goals5")
 
+#### We can perform a model diagnostics for fit10, by using ***tsdiag*** 
 
-
+```r
+tsdiag(fit10)
+```
+![goals6](/img/posts/goals6.png "goals6")
 
 
 
