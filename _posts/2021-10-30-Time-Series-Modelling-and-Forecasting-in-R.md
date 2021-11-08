@@ -46,7 +46,7 @@ ts.plot(diff(Premierleague_goals[,4]))
 acf(diff(Premierleague_goals[,4]))
 ```
 
-![goals2](/img/posts/goals2.png "goals2")
+![goals3](/img/posts/goals3.png "goals3")
 
 #### We will also remove the first 4 observations as they seem a bit out-of-line with the rest of the data and look at the plots
 
@@ -55,3 +55,4 @@ x=diff(Premierleague_goals[,4])
 x=x[-(1:4)]
 tsdisplay(x)
 ```
+![goals4](/img/posts/goals4.png "goals4")
