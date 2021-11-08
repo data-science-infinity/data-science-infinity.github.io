@@ -57,10 +57,9 @@ tsdisplay(x)
 ```
 ![goals4](/img/posts/goals4.png "goals4")
 
-#### Since the ***ACF*** and ***PACF*** seems to suggest some spikes of order p = 3, q = 3, we might like to consider those values together with the smaller models. We use ***arima*** command which uses ***Maximum Likelihood Estimation*** to calculate the coefficietns
+#### Since the ***ACF*** and ***PACF*** seems to suggest some spikes of order p = 3, q = 3, we might like to consider those values together with the smaller models. We use ***arima*** command which uses ***Maximum Likelihood Estimation*** to calculate the coefficients
 
 ```r
-# arima ~ command is that of the MLE, maximum likelihood estimator for the coefficients
 fit1=arima(x,c(1,0,1))
 fit2=arima(x,c(2,0,1))
 fit3=arima(x,c(3,0,1))
@@ -73,4 +72,32 @@ fit9=arima(x,c(0,0,3))
 fit10=arima(x,c(1,0,3))
 ```
 ![goals4](/img/posts/goals4.png "goals4")
+
+#### We are choosing the model with the smallest ***AIC***. It is observed for model 10: fit10=arima(x,c(1,0,3))
+
+```r
+fit1$aic
+fit2$aic
+fit3$aic
+fit4$aic
+fit5$aic
+fit6$aic
+fit7$aic
+fit8$aic
+fit9$aic
+fit10$aic
+```
+![goals5](/img/posts/goals5.png "goals5")
+
+
+
+
+
+
+
+
+
+
+
+
 
