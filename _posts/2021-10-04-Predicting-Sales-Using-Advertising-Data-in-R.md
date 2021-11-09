@@ -145,7 +145,10 @@ predict(advertising_fit_int, newdata1, interval = 'confidence')
 
 
 This kind of information is very useful for a business as now they know how much to spend and on what media to increase sales, not waste money and time anymore. 
+
 If I had more time, I would look more at the linearity assumptions and would made some transformations and use ***LOOCV***(Leave-One-Out Cross-Validation) to choose the right model. This would further improve the model performance meaning more accurate predictions.
+
+---
 
 Most of the things I showed here I learnt from the book 'An Introduction to Statistical Learning' by Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshiriani
 
