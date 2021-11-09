@@ -129,6 +129,9 @@ What the farmers could do in order to control weed the best and increase the yie
 
 
 ---
-Dr A. Laurence 'Principles of Data Collection Experimental Design', Lecture notes, University of Kent.
+References
 
+Dr A. Laurence 'Principles of Data Collection - Experimental Design', Lecture notes, University of Kent.
+
+Photo source: chuttersnap/Unsplash
 
