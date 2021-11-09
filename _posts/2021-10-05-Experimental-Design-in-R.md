@@ -133,5 +133,7 @@ References
 
 Dr A. Laurence 'Principles of Data Collection - Experimental Design', Lecture notes, University of Kent.
 
+---
+
 Photo source: chuttersnap/Unsplash
 
