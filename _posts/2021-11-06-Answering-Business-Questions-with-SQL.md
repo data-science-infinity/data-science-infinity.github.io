@@ -86,3 +86,10 @@ from
 ###### RESULT 3:
 ![sql3](/img/posts/sql3.png "sql3")
 
+---
+References
+
+Andrew Jones, Data Science Infinity Course, <https://www.data-science-infinity.com/>
+
+---
+Photo source: john_schnobrich/Unsplash
