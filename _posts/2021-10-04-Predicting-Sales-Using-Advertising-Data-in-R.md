@@ -4,7 +4,7 @@ title: Predicting Sales Using Advertising Data in R
 image: "/posts/slidebean_unsplash.jpg"
 tags: [R, Multiple Linear Regression]
 ---
-How can we predict how much increase in sales will we get after spending money on different types of ads? I am using Advertising data here to show this and any company can collect this kind of data maybe from different branches and answer the question: For how much are we going to increase sales spending the curtain amount on ads or how much money do the company needs to spend on ads to increase sales by X amount of dollars? 
+How can we predict how much increase in sales will we get after spending money on different types of ads? I am using Advertising data here to show this and any company can collect this kind of data maybe from different branches and answer the questions: For how much are we going to increase sales spending the curtain amount of money on ads? How much money do the company needs to spend on ads to increase sales by X amount of dollars? Which media, TV, radio or newspaper is effective? I used liner regression to answer these quesions and according to our linear regression formula, if we spend $1000 on TV we increase sales by 19 units plus spending $1000 on radio give us additional 29 units plus the synergy effect 1.1 units, total 49 units. If we spend $2000 on both media, get increase in sales by 100 units. The output11 and output12 show total sales, not just incease in sales as we were already selling 6,750 units and now we will be selling 6,850 units, 100 more. Also, we are more confident about this value of 6.85 for all 200 cities where the confidence intervals are (6.396, 7.305) than for the particular city where the prediction intervals are (4.935, 8.766).
 
 ---
 I did this project while I was reading the book 'An Introduction to Statistical Learning' and wanted to understand how we can predict sales using our previously collected data and the linear regression formula after we have fitted the data. There is a guidance in the book, but the actual code for this data is not given, so I wrote it myself. I wanted to use the linear regression because it's the only method which gives the outcome which is easy to interprete. But in order to use it we need to have data for which the adiitivity and linearity assumptions hold, otherwise we still use linear regression, but need to transform the data. So, this is what we do before we fit the data, clean it and check if our assumptions hold.
@@ -145,7 +145,7 @@ predict(advertising_fit_int, newdata1, interval = 'confidence')
 
 This kind of information is very useful for a business as now they know how much to spend and on what media to increase sales, not waste money and time anymore.
 
-If I had more time, I would look more at the linearity assumptions and would made some transformations to further imporve the model performance meaning more accurate preditions.
+If I had more time, I would look more at the linearity assumptions and would made some transformations and use ***LOOCV***(Leave-One-Out Cross-Validation) to choose the right model. This would to further imporve the model performance meaning more accurate preditions.
 
 
 Most of the things I showed here I leart from the book 'An Introduction to Statistical Learning' by Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshiriani
