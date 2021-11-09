@@ -90,7 +90,7 @@ From the data we have so far, we can see that it's not necessary to spend money 
 ---
 References
 
-Andrew Jones, Data Science Infinity Course, <https://www.data-science-infinity.com/>
+Andrew Jones, Data Science Infinity Course, [link](https://www.data-science-infinity.com/)
 
 ---
 Photo source: mika_baumeister/Unsplash
