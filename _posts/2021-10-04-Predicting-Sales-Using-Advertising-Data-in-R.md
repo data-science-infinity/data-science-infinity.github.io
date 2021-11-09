@@ -149,9 +149,11 @@ This kind of information is very useful for a business as now they know how much
 If I had more time, I would look more at the linearity assumptions and would made some transformations and use ***LOOCV***(Leave-One-Out Cross-Validation) to choose the right model. This would further improve the model performance meaning more accurate predictions.
 
 ---
+
 References
 
 'An Introduction to Statistical Learning' by Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshiriani
+
 ---
 
 Photo source: slidebean/Unsplash
