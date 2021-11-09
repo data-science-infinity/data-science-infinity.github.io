@@ -115,7 +115,7 @@ summary(advertising_fit_int)
 
 ---
 
-We have properly fitted the ***multiple linear regression model*** with the interaction term to the model, we can make predictions using the following formula. The interaction term makes our predictions little bit more trickier but still easy.
+We have properly fitted the ***multiple linear regression model*** with the interaction term to the model, we can make predictions using the following formula. The interaction term makes our predictions little bit more trickier but still easy. According to our linear regression formula, if we spend $1000 on TV we increase sales by 19 units, plus if we spend $1000 on radio, we increase sales by 49 units. If we spend double, 100 units. To increase sales by 1000 units. The output11 and 12 shows total sales, not just incease in sales.
 
 ```
 sales = 6.75 + 0.0191 x TV + 0.0289 x radio +  0.0011 x TV x radio + e
