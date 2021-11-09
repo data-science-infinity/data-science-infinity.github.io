@@ -128,4 +128,7 @@ To estimate the effect on yield of our optimum treatment we can compare it with 
 What the farmers could do in order to control weed the best and increase the yield is to use herbicide spray and combine it with nitrogen level 1(low) and potassium level 3(high) This way they could get almost five times more yield during the harvest time.
 
 
+---
+Dr A. Laurence 'Principles of Data Collection Experimental Design', Lecture notes, University of Kent.
+
 
