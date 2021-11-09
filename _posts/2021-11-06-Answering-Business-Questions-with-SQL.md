@@ -9,7 +9,7 @@ We will be answering important business quiestions using SQL. This is very easy 
 
 ---
 
-#### Question 1: What were the total sales for each ***product area name*** for July 2020.Return these in the order of highest sales to lowest sales
+#### Question 1: What were the total sales for each ***product area name*** for July 2020. Return these in the order of highest sales to lowest sales
 ###### SQL CODE:
 
 ```sql
