@@ -5,7 +5,7 @@ image: "/posts/mika_baumeister_unsplash.jpg"
 tags: [Python, A/B Test]
 ---
 
-In this project we are perfoming a so called A/B test to assess the sigh up rate of two groups using ***Chi-Square test for independence***. Summary for the business, for the data we have so far, we can see that it's not nessecary to spend money for the expensive mailing and keep the simpler and cheeper one.
+The aim of this project was to help the business decide if they should spend money on the expensive mailing. We conducted the A/B test to assess the signup rate of two groups using the data from the previous marketing campaign of the company. Our results from the ***Chi-Square test for independence*** showed that it's not necessary to spend money on the expensive mailing and keep the simpler and cheaper one. This helps the company to save money while being effective during their future marketing campaigns.
 
 ---
 
@@ -85,7 +85,7 @@ As our p-value of 0.16 is higher than our acceptance_criteria 0.05, we retain th
 ```
 #### OUR RESULTS
 
-For the data we have so far, we can see that it's not nessecary to spend money for the expensive mailing and keep the simpler and cheeper one.
+From the data we have so far, we can see that it's not necessary to spend money on the expensive mailing and keep the simpler and cheaper one.
 
 ---
 References
@@ -93,4 +93,4 @@ References
 Andrew Jones, Data Science Infinity Course, https://www.data-science-infinity.com/
 
 ---
-
+Photo source: mika_baumeister/Unsplash
