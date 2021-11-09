@@ -4,11 +4,8 @@ title: Time Series Modelling and Forecasting in R
 image: "/posts/chris_liverani_unsplash.jpg"
 tags: [R, Time Series, Forecasting]
 ---
-In this project We will be modeling data om average number of goals for English Premier League and forecasting for the future years
 
----
-
-The aim of this project is to ***forecast*** the avarage number of goals for English Premier League using data for the previous years. 
+The aim of this project is to ***forecast*** the average  number of goals for the English Premier League using data for the previous years. I used R programming language to choose the right model, conduct diagnostics and forecast. The data showed the average number of goals is decreasing with time, our model predicted that the average number of goals for the future four years will stay low.
 
 ---
 
@@ -61,7 +58,7 @@ tsdisplay(x)
 ```
 ![goals4](/img/posts/goals4.png "goals4")
 
-#### On the plot above we can see that the average number of goals is decreasing with time. The ***ACF*** and ***PACF*** suggest some spikes of order p = 3, q = 3, we might like to consider those values together with the smaller models and fit 10 different models. We use ***arima*** command which uses ***Maximum Likelihood Estimation*** to calculate the coefficients
+#### In the plot above we can see that the average number of goals is decreasing with time. The ***ACF*** and ***PACF*** suggest some spikes of order p = 3, q = 3, we might like to consider those values together with the smaller models and fit 10 different models. We use ***arima*** command which uses ***Maximum Likelihood Estimation*** to calculate the coefficients
 
 ```r
 fit1=arima(x,c(1,0,1))
@@ -87,7 +84,7 @@ tsdiag(fit10)
 ```
 ![goals6](/img/posts/goals6.png "goals6")
 
-#### But the best goodness of fit test is ***Weighted Monti test*** as it is the most powerful. I know this as this was the topic of my dissertaion project for my MSc Statistical Data Science course
+#### But the best goodness of fit test is ***Weighted Monti test*** as it is the most powerful. I know this as this was the topic of my dissertation project for my MSc Statistical Data Science course
 
 ```r
 install.packages('WeightedPortTest')
@@ -115,7 +112,7 @@ plot(forecast(fit10, h=4))
 
 #### Our Results 
 
-We have seen that the average number of goals was decreasing with time, our model predicts that the number will stay low.
+We have seen that the average number of goals is decreasing with time, our model predicts that the number will stay low.
 
 ---
 
