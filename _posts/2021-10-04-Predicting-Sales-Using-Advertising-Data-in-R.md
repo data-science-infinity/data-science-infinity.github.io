@@ -135,6 +135,7 @@ predict(advertising_fit_int, newdata1, interval = 'confidence')
 newdata1=data.frame(TV = 2, radio = 2)
 predict(advertising_fit_int, newdata1, interval = 'prediction')
 predict(advertising_fit_int, newdata1, interval = 'confidence')
+```
 
 ###### OUTPUT 12:
 ![output12](/img/posts/output12.png "output12")
