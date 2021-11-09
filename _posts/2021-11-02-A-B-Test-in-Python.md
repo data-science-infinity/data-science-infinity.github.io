@@ -83,5 +83,14 @@ else:
 OUTPUT:
 As our p-value of 0.16 is higher than our acceptance_criteria 0.05, we retain the null hypothesis and conclude that: There is no relationship between the mailer type and signup rate. They are independent.
 ```
+#### OUR RESULTS
 
+For the data we have so far, we can see that it's not nessecary to spend money for the expensive mailing and keep the simpler and cheeper one.
+
+---
+References
+
+Andrew Jones, Data Science Infinity Course, https://www.data-science-infinity.com/
+
+---
 
