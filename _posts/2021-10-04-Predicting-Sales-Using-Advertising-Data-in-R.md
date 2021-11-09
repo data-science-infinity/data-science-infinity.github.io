@@ -151,7 +151,7 @@ If I had more time, I would look more at the linearity assumptions and would mad
 ---
 References
 
-Most of the things I showed here I learnt from the book 'An Introduction to Statistical Learning' by Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshiriani
+'An Introduction to Statistical Learning' by Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshiriani
 ---
 
 Photo source: slidebean/Unsplash
