@@ -4,9 +4,14 @@ title: Time Series Modelling and Forecasting in R
 image: "/posts/chris_liverani_unsplash.jpg"
 tags: [R, Time Series, Forecasting]
 ---
-We will be modeling data om average number of goals for English Premier League and forecasting for the future years
+In this project We will be modeling data om average number of goals for English Premier League and forecasting for the future years
 
 ---
+
+The aim of this project is to ***forecast*** the avarage number of goals for English Premier League using data for the previous years. 
+
+---
+
 ##### We will need the following packages and libraries
 
 ```r
@@ -16,8 +21,7 @@ library(timeSeries)
 library(fBasics)
 library(fGarch)
 ```
-##### Importing data and removing the fists columns which is just numbering the rows
-
+##### We will first importing data and remove the first column which is just numbering the rows and is not useful for us
 
 ```r
 Premierleague_goals <- read.csv("Premierleague_goals.csv", header=FALSE, comment.char="#")[,-1]
@@ -76,15 +80,14 @@ fit10=arima(x,c(1,0,3))
 
 ![goals5](/img/posts/goals5.png "goals5")
 
-#### We can perform a model diagnostics for fit10, by using ***tsdiag*** which uses the old ***Ljung-Box test statistics***
+#### Now we need to perform a model diagnostics for fit10, by using ***tsdiag*** which uses the old ***Ljung-Box test statistics***
 
 ```r
 tsdiag(fit10)
 ```
 ![goals6](/img/posts/goals6.png "goals6")
 
-#### But the best goodness of fit test is ***Weighted Monti test*** as it is the most powerful
-
+#### But the best goodness of fit test is ***Weighted Monti test*** as it is the most powerful. I know this as this was the topic of my dissertaion project
 
 ```r
 install.packages('WeightedPortTest')
