@@ -79,6 +79,7 @@ library(emmeans)
 emmeans(aov2, pairwise ~ fherbicide:fnitrogen)
 emmeans(aov2, pairwise ~ fpotassium)
 $emmeans
+# The components with the higest yield is combination of herbicide (sprayed) and nitrogen level 1 which is 1.79
 ```
 
 ###### OUTPUT 7:
@@ -86,6 +87,7 @@ $emmeans
 
 ```r
 $contrasts
+# We can check the means for herbicide and nitrogen combination and see that herbicide sprayed with nitrogen level l doesn’t differ significantly with herbicide sprayed with nitrogen level 2 (t.ratio =-0.147, p.value=1.0000), but in this case using level 1 of nitrogen is cheaper
 ```
 
 ###### OUTPUT 8:
@@ -97,6 +99,7 @@ $contrasts
 emmeans(aov2, pairwise ~ fpotassium)
 # NOTE: Results may be misleading due to involvement in interactions
 $emmeans
+#The components with the higest yield is potassium level 4 which is 1.724. 
 ```
 
 ###### OUTPUT 9:
@@ -104,9 +107,26 @@ $emmeans
 
 ```r
 $contrasts
+# Because from the analysis of contrasts we know that potassium level 3 don’t differ significantly from level 4 (t.ratio =-0.395, p.value = 0.9948) we can suggest as best treatment level 3 as it is smaller amount so it’s cheaper!
 ```
 ###### OUTPUT 10:
 ![exp9](/img/posts/exp9.png "exp9")
 
+ So, our ***optimum treatment*** combination would be potassium
+level 3 and combination of herbicide sprayed and nitrogen level 1.
 
-+ text
+###### Report our analysis 
+
+Looking at our interaction, second order interaction is not significant, from the first class interactions only herbicide with nitrogen interaction is significant as well as the main effect of potassium. The components with the highest yield are potassium level 4 which is 1.724 and the combination of herbicide (sprayed) and nitrogen level 1
+which is 1.79. Because from the analysis of contrasts we know that potassium level 3 don’t differ significantly from level 4 (t.ratio =-0.395, p.value = 0.9948) we can suggest as best treatment level 3 as it is smaller amount so it’s cheaper. The same way we checked the means for herbicide and nitrogen combination and saw that herbicide sprayed with nitrogen level l doesn’t differ significantly with herbicide sprayed with nitrogen level 2 (t.ratio =-0.147, p.value=1.0000), but in this case using level 1 of nitrogen is cheaper. So, our optimum treatment combination would be potassium level 3 and combination of herbicide sprayed and nitrogen level 1.
+
+###### Estimate of the effect on yield of applying your optimum treatment combination when compared with the effect of no additives
+
+To estimate the effect on yield of our optimum treatment we can compare it with the yield when no additives used. We can do it comparing means. The average yield mean if applying our optimum treatment will be (6.92 + 9.41 + 8.58)/3 = 8.30 and the average yield mean with no additives will be (1.78 + 1.69 + 1.71)/3 = 1.73, so the difference is 6.57, almost 5 times bigger!
+
+###### Summary paragraph on conclusions for the ***nontechnical reader***
+
+What the farmers could do in order to control weed the best and increase the yield is to use herbicide spray and combine it with nitrogen level 1(low) and potassium level 3(high) This way they could get almost five time more yield during the harvest time.
+
+
+
