@@ -125,7 +125,6 @@ Dr A. Kume 'Stochastic Processes and Time Series', PC class, University of Kent
 
 ---
 
-chris_liverani_unsplash
-
+Photo source: chris_liverani/Unsplash
 
 
