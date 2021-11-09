@@ -9,7 +9,7 @@ How can we predict how much increase in sales will we get after spending money o
 ---
 I did this project while I was reading the book 'An Introduction to Statistical Learning' and wanted to understand how we can predict sales using our previously collected data and the linear regression formula after we have fitted the data. There is a guidance in the book, but the actual code for this data is not given, so I wrote it myself. I wanted to use the linear regression because it's the only method which gives the outcome which is easy to interprete. But in order to use it we need to have data for which the adiitivity and linearity assumptions hold, otherwise we still use linear regression, but need to transform the data. So, this is what we do before we fit the data, clean it and check if our assumptions hold.
 
-Let's import the Advertising data and take a look. On the output below we can see that we have 3 predictors TV, radio, newspaper. The corresponding columns show the amount of money spent on ads for each advertising type. The response variable is sales. All values are in $1000, for example, the values 10.4 in the second row of the sales' column is equivalent to $10,400 sales. The sample size is 200, it's the data collected from two hundred cities.
+Let's import the Advertising data and take a look. On the output below we can see that we have 3 predictors TV, radio, newspaper. The corresponding columns show the amount of money spent on ads for each advertising type. The response variable is sales. All values are in 1000s, for example, the values 10.4 in the second row of the sales' column is equivalent to 10,400 units sold and 44.5 fot TV means $44,500 spent on this media. The sample size is 200, it's the data collected from two hundred cities.
 
 ```r
 Advertising <- read.csv("Advertising.csv", head=TRUE)
@@ -98,7 +98,10 @@ plot(advertising_fit, lwd=3)
 ![output8](/img/posts/output8.png "output8")
 
 #### Question 7: Is there synergy among the advertising media?
-The standard linear regression model assumes an additive relationship between the predictors and the response, meaning that the effect of changes in one of the predictors (let's say money spent on TV ads) on the response (sales) is independent of the values of the other predictors (radio and newspaper). An additive model is easy to interpret. However, the additive assumption may be unrealistic for certain data sets. Output9 suggested that the Advertising data may not be additive. A small p-value (output10) associated with the interaction term indicates the presence of such relationships. Including an interaction term in the model results in a substantial increase in R-squared, from around 90% to almost 97%!
+The standard linear regression model assumes an additive relationship between the predictors and the response, meaning that the effect of changes in one of the predictors (let's say money spent on TV ads) on the response (sales) is independent of the values of the other predictors (radio and newspaper). An additive model is easy to interpret. However, the additive assumption may be unrealistic for certain data sets. Output9 suggested that the Advertising data may not be additive. We see that some observations lie above and some observations lie below the least squares regression plane. In particular, the linear model seems to overestimate sales for instances in which most of the advertising money
+was spent exclusively on either TV or radio. It underestimates sales for instances where the budget was split between the two media. This pronounced non-linear pattern cannot be modeled accurately using lineagression. It suggests a ***synergy***(phenomenon known in business) or ***interaction effect***(term used in statistics) between the advertising media, whereby ***combining the media together*** results in a bigger boost to sales than using any single medium. Very interesting insight to know!
+
+A small p-value (output10) associated with the interaction term indicates the presence of such relationships. Including an interaction term in the model results in a substantial increase in R-squared, from around 90% to almost 97%!
 
 ###### OUTPUT 9:
 ![output9](/img/posts/output9.png "output9")
@@ -112,11 +115,30 @@ summary(advertising_fit_int)
 
 ---
 
-We have properly fitted the ***multiple linear regression model*** with the interaction term to the model, we can make predictions using the following formula:
-
+We have properly fitted the ***multiple linear regression model*** with the interaction term to the model, we can make predictions using the following formula. The interaction term makes our predictions little bit more trickier but still easy.
 
 ```
-sales = 6.75 + 1.910e-02 x TV + 2.886e-02 x radio +  1.086e-03 x TV x radio + e
+sales = 6.75 + 0.0191 x TV + 0.0289 x radio +  0.0011 x TV x radio + e
 ```
+
+```r
+# prediction intervals(1 city) and confidence intervals (all 200 cities)
+newdata1=data.frame(TV = 1, radio = 1)
+predict(advertising_fit_int, newdata1, interval = 'prediction')
+predict(advertising_fit_int, newdata1, interval = 'confidence')
+```
+###### OUTPUT 11:
+![output11](/img/posts/output11.png "output11")
+
+```r
+# prediction intervals(1 city) and confidence intervals (all 200 cities)
+newdata1=data.frame(TV = 2, radio = 2)
+predict(advertising_fit_int, newdata1, interval = 'prediction')
+predict(advertising_fit_int, newdata1, interval = 'confidence')
+
+###### OUTPUT 12:
+![output12](/img/posts/output12.png "output12")
+
+
 
 
