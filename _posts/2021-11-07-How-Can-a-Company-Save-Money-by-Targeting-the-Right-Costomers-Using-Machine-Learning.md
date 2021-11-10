@@ -5,10 +5,11 @@ image: "/posts/markus_winkler_unsplash.jpg"
 tags: [Python, Random Forests, Classification Model]
 ---
 
-In this example we are using Machine Learning algorithm called Random Forests to find out which customers have high probability to sign up for the Delivery Club so the company targets only those customers and reduces the costs of the future campaigns. 
+In this project we are helping the company reduce costs of the future campaigns by targeting only those customers who are more likely to sign up. We are using Machine Learning algorithm called ***Random Forests*** to find out which customers have high probability to sign up for the Delivery Club. We have correctly classified all customers into two groups with low and high probability of signing up. Now the company can contact only the second group and reduce marketing costs.
 
 ---
 
+In this project we are helping the company reduce costs of the future campaigns by targeting only those customers who are more likely to sign up. We are using Machine Learning algorithm called ***Random Forests*** to find out which customers have high probability to sign up for the Delivery Club as this algorithm is appropriate for this data and it's the most accurate.  
 Data first! In order to be able to use a ML argorithm we should have collected data on cutromer's behavour for at least some customers for a curtain ammount of time. In our example we have the data for 870 customers collected through 3 months period.  
 
 ##### Step 1: Import required packages
@@ -168,6 +169,10 @@ f1_score(y_test, y_pred_class)
 OUTPUT:
 0.8952380952380953
 ```
+
+##### Our Results
+We have correctly classified all customers into two groups with low and high probability of signing up, in the future the company can contact only the second group and reduce marketing costs.
+
 ##### Which viriables are important?
 We are done, but we can use the results to do one more thing, answer the quesion which varible were important for the algorithm. The best method to use here is the method which uses ***permutation_importance***.
 
@@ -187,6 +192,7 @@ plt.xlabel('Permutaion Importance')
 plt.tight_layout()
 plt.show()
 ```
+
 OUTPUT:
 ![permutation_importance](/img/posts/permutation_importance.png "permutation_importance")
 
