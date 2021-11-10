@@ -8,9 +8,8 @@ tags: [Python, Random Forests, Classification Model]
 In this project we are helping the company reduce costs of the future campaigns by targeting only those customers who are more likely to sign up. We are using Machine Learning algorithm called ***Random Forests*** to find out which customers have high probability to sign up for the Delivery Club. We have correctly classified all customers into two groups with low and high probability of signing up. Now the company can contact only the second group and reduce marketing costs.
 
 ---
+Data first! In order to be able to use a ML algorithm we should have collected data on cutromer's behaviour for at least some customers for a certain amount of time. In our example we have the data for 870 customers collected through a 3 months period.  
 
-In this project we are helping the company reduce costs of the future campaigns by targeting only those customers who are more likely to sign up. We are using Machine Learning algorithm called ***Random Forests*** to find out which customers have high probability to sign up for the Delivery Club as this algorithm is appropriate for this data and it's the most accurate.  
-Data first! In order to be able to use a ML argorithm we should have collected data on cutromer's behavour for at least some customers for a curtain ammount of time. In our example we have the data for 870 customers collected through 3 months period.  
 
 ##### Step 1: Import required packages
 The software used is Python (Anaconda, Spider) so we don't need to install anything, just import.
@@ -29,12 +28,12 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.inspection import permutation_importance
 ```
 ##### Step 2: Import Data
-The sample data is already saved as pickle file.
+The sample data is already saved as a pickle file.
 
 ```python
 data_for_model=pickle.load(open('Data/abc_classification_modelling.p', 'rb'))
 ```
-##### Step 3: Drop Uneccessary columns
+##### Step 3: Drop Unnecessary columns
 We don't need the customer_id column.
 
 ```python
@@ -83,7 +82,7 @@ average_basket_value    0
 
 data_for_model.dropna(how='any', inplace=True)
 ```
-##### Step 6: Split Our Data into Imput and Output Variables
+##### Step 6: Split Our Data into Input and Output Variables
 
 ```python
 X=data_for_model.drop(['signup_flag'], axis=1)
@@ -125,7 +124,7 @@ clf=RandomForestClassifier(random_state=42, n_estimators=500, max_features=5)
 clf.fit(X_train, y_train)
 ```
 ##### Step 10: Assess Model Accuracy
-In classification we don't use R-squared, but just the ratio of our correct predictions devided by all our predictions. We will look at the ***Confusion Matrix*** and the ***accuracy_score***. And because our data is not perfectly balanced, we need to make sure our ***presicion_score***, ***recall_score***, and ***f1_score*** are also high. As we can see on the output below, we got f1_score 90%, this is a good result! 
+In classification we don't use R-squared, but just the ratio of our correct predictions divided by all our predictions. We will look at the ***Confusion Matrix*** and the ***accuracy_score***. And because our data is not perfectly balanced, we need to make sure our ***presicion_score***, ***recall_score***, and ***f1_score*** are also high. As we can see on the output below, we got a f1_score 90%, this is a good result! 
 
 ```python
 y_pred_class=clf.predict(X_test)
@@ -174,7 +173,7 @@ OUTPUT:
 We have correctly classified all customers into two groups with low and high probability of signing up, in the future the company can contact only the second group and reduce marketing costs.
 
 ##### Which viriables are important?
-We are done, but we can use the results to do one more thing, answer the quesion which varible were important for the algorithm. The best method to use here is the method which uses ***permutation_importance***.
+We are done, but we can use the results to do one more thing, answer the question which variable were important for the algorithm. The best method to use here is the method which uses ***permutation_importance***.
 
 ```python
 result=permutation_importance(clf, X_test, y_test, n_repeats=10, random_state=42)
@@ -187,8 +186,8 @@ permutation_importance_summary.sort_values(by='permutation_importance', inplace=
 
 # plotting the results
 plt.barh(permutation_importance_summary['input_variable'],permutation_importance_summary['permutation_importance'])
-plt.title('Permutaion Importance of Random Forest')
-plt.xlabel('Permutaion Importance')
+plt.title('Permutation Importance of Random Forest')
+plt.xlabel('Permutation Importance')
 plt.tight_layout()
 plt.show()
 ```
