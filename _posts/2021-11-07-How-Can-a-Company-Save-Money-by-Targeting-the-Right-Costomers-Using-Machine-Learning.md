@@ -172,8 +172,8 @@ OUTPUT:
 ##### Our Results
 We have correctly classified all customers into two groups with low and high probability of signing up, in the future the company can contact only the second group and reduce marketing costs.
 
-##### Which viriables are important?
-We are done, but we can use the results to do one more thing, answer the question which variable were important for the algorithm. The best method to use here is the method which uses ***permutation_importance***.
+##### Which variables are important?
+We are done, but we can use the results to do one more thing, answer the question which variables were important for the algorithm. The best method to use here is the method which uses ***permutation_importance***.
 
 ```python
 result=permutation_importance(clf, X_test, y_test, n_repeats=10, random_state=42)
