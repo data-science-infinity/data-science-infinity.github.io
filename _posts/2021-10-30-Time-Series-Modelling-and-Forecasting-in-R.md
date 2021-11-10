@@ -116,11 +116,7 @@ We have seen that the average number of goals is decreasing with time, our model
 
 ---
 
-References
-
-Dr A. Kume 'Stochastic Processes and Time Series', PC class, University of Kent
-
----
+Most of the tools I have used for this project I have learnt from my professor Dr A. Kume, University of Kent
 
 Photo source: chris_liverani/Unsplash
 
