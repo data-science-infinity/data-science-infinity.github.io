@@ -18,7 +18,7 @@ library(timeSeries)
 library(fBasics)
 library(fGarch)
 ```
-##### We will first importing data and remove the first column which is just numbering the rows and is not useful for us
+##### We will first importing data and remove the first column which is not useful for us
 
 ```r
 Premierleague_goals <- read.csv("Premierleague_goals.csv", header=FALSE, comment.char="#")[,-1]
@@ -58,7 +58,7 @@ tsdisplay(x)
 ```
 ![goals4](/img/posts/goals4.png "goals4")
 
-#### In the plot above we can see that the average number of goals is decreasing with time. The ***ACF*** and ***PACF*** suggest some spikes of order p = 3, q = 3, we might like to consider those values together with the smaller models and fit 10 different models. We use ***arima*** command which uses ***Maximum Likelihood Estimation*** to calculate the coefficients
+#### In the plot above we can see that the average number of goals is decreasing with time. The ***ACF*** and ***PACF*** suggest some spikes of order p = 3, q = 3, we might like to consider those values together with the smaller models so we fit 10 different models. We use ***arima*** command which uses ***Maximum Likelihood Estimation*** to calculate the coefficients
 
 ```r
 fit1=arima(x,c(1,0,1))
