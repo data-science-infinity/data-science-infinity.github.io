@@ -150,11 +150,7 @@ If I had more time, I would look more at the linearity assumptions and would mad
 
 ---
 
-References
-
-'An Introduction to Statistical Learning' by Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshiriani
-
----
+Most of the tools I have used for this project I have learnt from the book 'An Introduction to Statistical Learning' by Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshiriani.
 
 Photo source: slidebean/Unsplash
 
