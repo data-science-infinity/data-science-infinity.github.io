@@ -9,7 +9,7 @@ The aim of this project is to help the business answer questions about their tot
 
 ---
 
-#### Question 1: What were the total sales for each ***product area name*** for July 2020. Return these in the order of highest sales to lowest sales
+#### Question 1: What were the total sales for each ***product area name*** for July 2020? Returning these in the order of highest sales to lowest sales
 ###### SQL CODE:
 
 ```sql
@@ -34,7 +34,8 @@ order by
 ###### RESULT 1:
 ![sql1](/img/posts/sql1.png "sql1")
 
-#### Question 2: Return a list of customers who spent more than $500 and had 5 or more ***unique transactions*** in the month of August 2020
+#### Question 2: Returning a list of customers who spent more than $500 and had 5 or more ***unique transactions*** in the month of August 2020
+###### SQL CODE:
 
 ```sql
 select
@@ -58,7 +59,8 @@ having
 ###### RESULT 2:
 ![sql2](/img/posts/sql2.png "sql2")
 
-#### Question 3: Return data showing, for each ***product area name*** - the ***total sales***, and the percentage of ***overall sales*** that each product area makes up
+#### Question 3: Returning data showing, for each ***product area name*** - the ***total sales***, and the percentage of ***overall sales*** that each product area makes up
+###### SQL CODE:
 
 ```sql
 with sales as (
