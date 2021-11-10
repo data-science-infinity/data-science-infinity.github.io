@@ -1,6 +1,6 @@
 ---
 layout: post
-title: A/B Test 
+title: Marketing Optimisation Using A/B Testing
 image: "/posts/mika_baumeister_unsplash.jpg"
 tags: [Python, A/B Test]
 ---
