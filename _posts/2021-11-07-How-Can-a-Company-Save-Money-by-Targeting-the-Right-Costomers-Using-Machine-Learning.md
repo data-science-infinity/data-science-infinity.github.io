@@ -94,7 +94,7 @@ y=data_for_model['signup_flag']
 X_train, X_test, y_train, y_test=train_test_split(X,y, test_size=0.2, random_state=42, stratify=y)
 ```
 ##### Step 8: Deal with Categorical Variables
-We have one categorical variable which is gender, F and M, we will turn this to 0 for female (this is our so called ***dummy variable***) and 1 for male.
+We have one categorical variable which is gender, F and M, we will turn this to 0 for female and 1 for male (this is our so called ***dummy variable***).
 ```python
 categorical_vars=['gender']
 one_hot_encoder=OneHotEncoder(sparse=False, drop='first')
