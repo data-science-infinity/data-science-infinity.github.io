@@ -15,7 +15,7 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
 #-------------------------------
 # About Section
-subtitle: Data Science <span style="color:#f58506"> Portfolio </span>
+subtitle: <span style="color:#9925be"> Data Science Portfolio </span>
 location: "Westboro, WI USA"
 resume_url: /_posts/Resume_MelissaMetz.docx.pdf
 avatar_image: /img/posts/Metz Melissa-10641.jpg
@@ -52,4 +52,4 @@ defaults:
 #   - vendor/ruby/
 
 
-theme: jekyll-theme-tactile
+theme: jekyll-theme-architect
