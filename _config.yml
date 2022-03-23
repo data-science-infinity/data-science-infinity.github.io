@@ -8,7 +8,7 @@ plugins:
 
 #-------------------------------
 # General Site Settings
-title: <span style="color:#9925be"> Melissa Metz
+title: Melissa Metz
 description: "Hi I'm Melissa, and I'm starting my journey in data science.  My portfolio focuses on interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
@@ -17,7 +17,7 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 # About Section
 subtitle: Data Science Portfolio </span>
 location: "Westboro, WI USA"
-resume_url: <span style="color:#9925be"> /_posts/Resume_MelissaMetz.docx.pdf
+resume_url:  /_posts/Resume_MelissaMetz.docx.pdf
 avatar_image: /img/posts/Metz Melissa-10641.jpg
 
 #-------------------------------
