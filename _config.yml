@@ -1,5 +1,6 @@
 # Remote theme directory
-remote_theme: analytics-link/analytics-link.github.io
+# remote_theme: analytics-link/analytics-link.github.io
+remote_theme: vszhub/not-pure-poole
 
 plugins:
   - jekyll-paginate
