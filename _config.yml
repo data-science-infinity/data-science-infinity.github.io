@@ -9,7 +9,8 @@ plugins:
 #-------------------------------
 # General Site Settings
 title: Khatuna Kurdovanidze
-description: "Hi I'm Khatuna Kurdovanidze, and I'm a Data Scientist.  My portfolio focuses on interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!"
+description: "I hold a UK MSc in Statistical Data Science and a BA in Psychology. Since 2022, I have been continuously training to become a data analyst, honing my expertise in this field. I love solving problems using data andenjoy expressing my creativity by designing presentations and dashboards.
+In my 3-year tenure as abehavioral therapist, I developed valuable soft skills for data roles, including effective communication toexplain technical concepts to non-technical audiences and collaborate with diverse teams, adaptability for changing project requirements, and effective collaboration fostering a positive work environment. I have a UK settled status and available for immediate start. I hold a full UK driving licence and have my own transport."
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
