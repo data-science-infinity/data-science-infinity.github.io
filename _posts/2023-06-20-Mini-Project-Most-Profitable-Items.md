@@ -23,5 +23,8 @@ The data was provided by the head of data.
 •	I used Power BI to create a Profit variable using the following formula /
 •	Profit = Squiddle_Sales[Quantity]*Squiddle_Sales[ProductPrice]-Squiddle_Sales[Quantity]*Squiddle_Sales[ProductCost] 
 
+## AN INTERACTIVE DASHBOARD
+![dashboard](/img/posts/Dashboard.png "Dashboard") 
+
 
 
