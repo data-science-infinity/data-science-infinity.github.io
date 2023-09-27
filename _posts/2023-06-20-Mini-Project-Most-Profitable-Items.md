@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Mini Project - eCommerce PowerBI Interactive Dashboard 
-image: "/posts/Dashboard.jpg"
+image: "/posts/dashboard.jpg"
 tags: [PowerBI]
 ---
 
@@ -24,7 +24,7 @@ The data was provided by the head of data.
 •	Profit = Squiddle_Sales[Quantity]*Squiddle_Sales[ProductPrice]-Squiddle_Sales[Quantity]*Squiddle_Sales[ProductCost] 
 
 #### AN INTERACTIVE DASHBOARD
-![dashboard](/img/posts/Dashboard.png "Dashboard") 
+![dashboard](/img/posts/dashboard.png "Dashboard") 
 
 #### Recommendations
 Recommendations:
