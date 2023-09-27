@@ -11,20 +11,21 @@ In this mini project I analysed data of an eCommerce company. Because of the nee
 
 #### SUMMARY
 ##### Conclusions: 
-Most profitable clothing items of all times are Full-Finger Gloves, Women's Tights, Men's Bib-Shorts, Men's Sports Shorts, and Long-Sleeve Logo Jersey \
+Most profitable clothing items of all times are Full-Finger Gloves, Women's Tights, Men's Bib-Shorts, Men's Sports Shorts, and Long-Sleeve Logo Jersey 
 ##### Challenges:
 The only challenge I had while working on this project was time, as I had only one day. 
 ##### Data:
 Data was provided by the head of data in Excel format. 
 ---
-
+---
 #### DATA MANIPULATION
 After making sure that all the variable types are suitable for the analysis, I used Power BI to create a 'Profit' variable using the following formula\
 •	Profit = Squiddle_Sales[Quantity]*Squiddle_Sales[ProductPrice]-Squiddle_Sales[Quantity]*Squiddle_Sales[ProductCost] 
 
-
+---
 #### ANALYSIS
 I created a bar chart of the top 5 profitable items and these are: Most profitable clothing items of all times are Full-Finger Gloves, Women's Tights, Men's Bib-Shorts, Men's Sports Shorts, and Long-Sleeve Logo Jersey. Then I created a table
+---
 
 #### RECOMMENDATIONS:
 • Most profitable clothing items of all times are Full-Finger Gloves, Women's Tights, Men's Bib-Shorts, Men's Sports Shorts, and Long-Sleeve Logo Jersey\
