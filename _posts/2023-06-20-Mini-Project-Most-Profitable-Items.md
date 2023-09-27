@@ -32,7 +32,7 @@ The data was provided by the head of data.
 • For the autumn collection (Q3), we will need Women's Tights, black, S, M, L sizes, Full-Finger Gloves black S, M, L sizes, and Men's Sport Shorts black, S, M, L sizes.
 
 
-
+Photo source: pathdigital/Unsplash
 
 
 
