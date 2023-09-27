@@ -5,7 +5,7 @@ image: "/posts/mika_baumeister_unsplash.jpg"
 tags: [Python, A/B Test]
 ---
 
-The aim of this project was to help the business decide if they should spend money on the expensive mailing. We conducted the A/B test to assess the signup rate of two groups using the data from the previous marketing campaign of the company. Our results from the ***Chi-Square test for independence*** showed that it's not necessary to spend money on the expensive mailing and keep the simpler and cheaper one. This helps the company to save money while being effective during their future marketing campaigns.
+The aim of this project was to help the business decide if they should spend money on the expensive mailing. I conducted the A/B test to assess the signup rate of two groups using the data from the previous marketing campaign of the company. The results from the ***Chi-Square test for independence*** showed that it's not necessary to spend money on the expensive mailing and we should keep the simpler and cheaper one. This helps the company to save money while being effective during their future marketing campaigns.
 
 ---
 
