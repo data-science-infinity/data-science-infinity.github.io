@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Mini Project - PowerBI Dashboard of the Most Profitable Clothing Items
-image: "/posts/Dashboard.jpg"
+image: "/posts/Dashboard.png"
 tags: [PowerBI]
 ---
 
