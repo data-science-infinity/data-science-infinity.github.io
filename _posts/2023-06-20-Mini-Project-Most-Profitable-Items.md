@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Mini Project - eCommerce PowerBI Interactive Dashboard 
-image: "/img/posts/dashboard.jpg"
+image: "/img/posts/dashboard1.jpg"
 tags: [PowerBI]
 ---
 
@@ -24,7 +24,7 @@ The data was provided by the head of data.
 •	Profit = Squiddle_Sales[Quantity]*Squiddle_Sales[ProductPrice]-Squiddle_Sales[Quantity]*Squiddle_Sales[ProductCost] 
 
 #### AN INTERACTIVE DASHBOARD
-![dashboard](/img/posts/dashboard.png "dashboard") 
+![dashboard](/img/posts/dashboard1.png "dashboard") 
 
 #### Recommendations
 • Most profitable clothing items of all times are Full-Finger Gloves, Women's Tights, Men's Bib-Shorts, Men's Sports Shorts, and Long-Sleeve Logo Jersey\
