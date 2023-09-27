@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Mini Project - eCommerce Company PowerBI Interactive Dashboard 
-image: "/posts/PostPic.png"
+image: "/posts/path-digital-tR0jvlsmCuQ-unsplash.jpg"
 tags: [PowerBI]
 ---
 
