@@ -5,33 +5,26 @@ image: "/posts/path-digital-tR0jvlsmCuQ-unsplash.jpg"
 tags: [PowerBI]
 ---
 
-Because of the need to significantly increase inventory of the most profitable clothing items for the next seasons, I created a PowerBI dashboard and made recommendations based on my analysis as requested by the head of data and insights.
+In this mini project I analysed data of an eCommerce company. Because of the need to significantly increase inventory of the most profitable clothing items for the next season, I created a PowerBI dashboard and made recommendations based on my analysis as requested by the head of data and insights.
 
 ---
 
 #### SUMMARY
 ##### Conclusions: 
-Most profitable clothing items of all times are Women's Tights, small and large size. Men's Sports Shorts, medium size, Men's Bib-Shorts, medium size
-##### Challenges: 
-The only challenge I had was time, I had only one day to finish this mini project.
-##### Techniques used: 
-I used Power BI to calculate the profit.
-#### Data
-The data was provided by the head of data.
+Most profitable clothing items of all times are Full-Finger Gloves, Women's Tights, Men's Bib-Shorts, Men's Sports Shorts, and Long-Sleeve Logo Jersey\
 
-#### CALCULATING PROFIT USING POWER BI
-•	I used Power BI to create a Profit variable using the following formula \
+The only #### challenge I had while working on this project was time, as I had only one day. The #### data was provided by the head of data in Excel format. After making sure that all the variable types are suitable for the analysis, I used Power BI to create a 'Profit' variable using the following formula\
 •	Profit = Squiddle_Sales[Quantity]*Squiddle_Sales[ProductPrice]-Squiddle_Sales[Quantity]*Squiddle_Sales[ProductCost] 
 
-#### A PICTURE OF THE DASHBOARD
+#### HERE IS THE PICTURE OF THE DASHBOARD
 ![dashboard](/img/posts/dashboard2.png "dashboard") 
 
-#### Recommendations
+After analysing the data, I came up with the following ####recommendations:
 • Most profitable clothing items of all times are Full-Finger Gloves, Women's Tights, Men's Bib-Shorts, Men's Sports Shorts, and Long-Sleeve Logo Jersey\
 • To increase inventory of the most profitable clothing items for Q2 2023, we need to order Full-Finger Gloves, black S, M, L sizes, Men's Sports Shorts, black S, M, L sizes, Long-Sleeve Logo Jersey, multi colour, M, L, X sizes\
 • For the autumn collection (Q3), we will need Women's Tights, black, S, M, L sizes, Full-Finger Gloves black S, M, L sizes, and Men's Sport Shorts black, S, M, L sizes.
 
-#### AN INTERACTIVE DASHBOARD
+#### HERE IS THE INTERACTIVE DASHBOARD
 <iframe title="Dashboard day project" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=67ccd2f0-b1b4-4995-afdb-9f1a65317abd&autoAuth=true&ctid=15830474-cef0-4326-88db-96e5ab019d8a" frameborder="0" allowFullScreen="true"></iframe>
 
 Banner photo source: pathdigital/Unsplash
