@@ -18,8 +18,7 @@ After making sure that all the variable types are suitable for the analysis, I u
 •	Profit = Squiddle_Sales[Quantity]XSquiddle_Sales[ProductPrice]-Squiddle_Sales[Quantity]XSquiddle_Sales[ProductCost] 
 
 #### Analysis
-I created a bar chart of the top 5 profitable items and these are: Most profitable clothing items of all times are Full-Finger Gloves, Women's Tights, Men's Bib-Shorts, Men's Sports Shorts, and Long-Sleeve Logo Jersey. Then I created a table showing the product SKU which also contains the sizes, key, product name, colour, and sum of profit. Finally, I created a grouped bar chart showing the product name and a profit over time. The dashboard is interactive, so in order to come up with the recommendations for the Q2 and Q3 stock, we can click on the highest bar and look up in the table as the elements on the dashboard have filters.
-
+I created a bar chart displaying the top 5 most profitable items: Full-Finger Gloves, Women’s Tights, Men’s Bib-Shorts, Men’s Sports Shorts, and Long-Sleeve Logo Jersey. Next, I generated a table that includes product SKUs (with sizes), keys, product names, colors, and total profits. Finally, I designed a grouped bar chart to visualize the product names and their profits over time. The dashboard is interactive, allowing us to click on the bars and refer to the table for the product information (SKUs, color, size, etc.) regarding Q2 and Q3 stock, for example.
 #### Dashboard
 ![dashboard](/img/posts/dashboard2.png "dashboard") 
 
