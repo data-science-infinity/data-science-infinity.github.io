@@ -132,5 +132,5 @@ What the farmers could do in order to control weed the best and increase the yie
 
 Most of the tools I have used for this project I have learnt from my professor Dr A. Laurence, University of Kent
 
-Photo source: chuttersnap/Unsplash
+Banner photo source: chuttersnap/Unsplash
 
