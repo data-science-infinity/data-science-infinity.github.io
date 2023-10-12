@@ -118,6 +118,6 @@ We have seen that the average number of goals is decreasing with time, our model
 
 Most of the tools I have used for this project I have learnt from my professor Dr A. Kume, University of Kent
 
-Photo source: chris_liverani/Unsplash
+Banner photo source: chris_liverani/Unsplash
 
 
