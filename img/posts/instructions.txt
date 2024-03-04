@@ -1,0 +1,23 @@
+To add this project to your portfolio!
+
+01:  Go to our <your github username>.github.io repository
+02:  Navigate into the "_posts" folder
+03:  Click "Add File" and then "Upload Files"
+04:  Select the "2022-01-19-enhancing-targeting-accuracy.md" file by either dragging it in, or choose it from the pop-up explorer
+05:  Once this has been selected & loaded, make sure you click "commit changes"
+06:  Navigate into the "img" folder, and then into the "posts" folder
+07:  Click "Add File" and then "Upload Files"
+08:  Upload all image files associated with this project
+09:  Wait until all images have been selected & loaded - then make sure you click "commit changes"
+
+This project should be now be available on your github portfolio at https://<your github username>.github.io/
+
+Important:  It may take around 1 minute for it to become available
+
+Feel free to change the date (YYYY-MM-DD) of the filename.  The portfolio site puts projects in the order of "newest first"
+
+To change the date:
+
+01:  Select the markdown (.md) file for the project that you loaded into your "_posts" folder
+02:  Click the edit/pencil button on the right side of screen and you will have the option to change the name (and anything else in the file)
+03:  When finished, make sure you click "Commit Changes"
