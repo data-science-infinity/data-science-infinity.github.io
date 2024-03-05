@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Tracking Earthquakes with Tableau!
-image: "/posts/Napa_Valley_quake.jpg"
+title: Earthquake Dashboard using Tableau
+image: "/posts/tableau-map-image.png"
 
 tags: [Tableau, Data Visualization]
 ---
