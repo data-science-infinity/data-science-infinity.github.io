@@ -596,27 +596,31 @@ Just like we did for Logistic Regression - our code also investigates the class 
 ```python
 
 # import required packages
-import pandas as pd
+import pandas as pd # pandas<2.0.0,>=1.0.0
+import numpy as np
 import pickle
 import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.tree import DecisionTreeClassifier, plot_tree
-from sklearn.utils import shuffle
+
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
-from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
+from sklearn.utils import shuffle
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
 from sklearn.preprocessing import OneHotEncoder
 
-# import modeling data
-data_for_model = pickle.load(open("data/delivery_club_modeling.p", "rb"))
 
-# drop uneccessary columns
-data_for_model.drop("customer_id", axis = 1, inplace = True)
+# load the data for modeling
+with open('./data/abc_classification_modeling.pkl', 'rb') as f:
+    df_signup = pickle.load(f)
+    
+    
+# drop the customer_id column
+df_signup = df_signup.drop('customer_id', axis=1)
 
-# shuffle data
-data_for_model = shuffle(data_for_model, random_state = 42)
+# shuffle the data
+df_signup = shuffle(df_signup, random_state=42)
 
-# assess class balance of dependent variable
-data_for_model["signup_flag"].value_counts(normalize = True)
+# view the value counts
+df_signup['signup_flag'].value_counts(normalize=True)
 
 ```
 <br>
@@ -634,9 +638,8 @@ The number of missing values in the data was extremely low, so instead of applyi
 
 ```python
 
-# remove rows where values are missing
-data_for_model.isna().sum()
-data_for_model.dropna(how = "any", inplace = True)
+# drop missing values since only a few are present
+df_signup = df_signup.dropna()
 
 ```
 
@@ -651,12 +654,12 @@ Once we have done this, we split our data into training and test sets to ensure 
 <br>
 ```python
 
-# split data into X and y objects for modeling
-X = data_for_model.drop(["signup_flag"], axis = 1)
-y = data_for_model["signup_flag"]
+# create X and y
+X = df_signup.drop('signup_flag', axis=1)
+y = df_signup['signup_flag']
 
-# split out training & test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42, stratify = y)
+# split the data from trainig and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
 ```
 
@@ -672,27 +675,23 @@ As *gender* doesn't have any explicit *order* to it, in other words, Male isn't 
 <br>
 ```python
 
-# list of categorical variables that need encoding
-categorical_vars = ["gender"]
+# one hot encode the categorical columns
+cat_cols = ['gender']
+one_hot = OneHotEncoder(drop='first', sparse=False)
+one_hot.fit(X_train[cat_cols])
+X_train_encoded = one_hot.transform(X_train[cat_cols])
+encoded_feat_names = one_hot.get_feature_names_out(cat_cols)
+X_train_encoded = pd.DataFrame(X_train_encoded, columns=encoded_feat_names)
+X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis=1)
+X_train.drop(cat_cols, axis=1, inplace=True)
 
-# instantiate OHE class
-one_hot_encoder = OneHotEncoder(sparse=False, drop = "first")
+# encode the test data
+X_test_encoded = one_hot.transform(X_test[cat_cols])
+X_test_encoded = pd.DataFrame(X_test_encoded, columns=encoded_feat_names)
+X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis=1)
+X_test.drop(cat_cols, axis=1, inplace=True)
 
-# apply OHE
-X_train_encoded = one_hot_encoder.fit_transform(X_train[categorical_vars])
-X_test_encoded = one_hot_encoder.transform(X_test[categorical_vars])
 
-# extract feature names for encoded columns
-encoder_feature_names = one_hot_encoder.get_feature_names_out(categorical_vars)
-
-# turn objects back to pandas dataframe
-X_train_encoded = pd.DataFrame(X_train_encoded, columns = encoder_feature_names)
-X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis = 1)
-X_train.drop(categorical_vars, axis = 1, inplace = True)
-
-X_test_encoded = pd.DataFrame(X_test_encoded, columns = encoder_feature_names)
-X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis = 1)
-X_test.drop(categorical_vars, axis = 1, inplace = True)
 
 ```
 
@@ -703,11 +702,9 @@ Instantiating and training our Decision Tree model is done using the below code.
 
 ```python
 
-# instantiate our model object
-clf = DecisionTreeClassifier(random_state = 42, max_depth = 5)
-
-# fit our model using our training & test sets
-clf.fit(X_train, y_train)
+# train the model
+model = DecisionTreeClassifier(random_state=42, max_depth=5)
+model.fit(X_train, y_train)
 
 ```
 
@@ -722,9 +719,11 @@ In the code below we create one object to hold the binary 1/0 predictions, and a
 
 ```python
 
-# predict on the test set
-y_pred_class = clf.predict(X_test)
-y_pred_prob = clf.predict_proba(X_test)[:,1]
+# predict the test set
+y_pred = model.predict(X_test)
+
+# predict the probabilities
+y_pred_prob = model.predict_proba(X_test)[:, 1]
 
 ```
 
@@ -737,18 +736,18 @@ The below code creates the Confusion Matrix using the *confusion_matrix* functio
 
 ```python
 
-# create the confusion matrix
-conf_matrix = confusion_matrix(y_test, y_pred_class)
+# create confusion matrix
+conf_matrix = confusion_matrix(y_test, y_pred)
 
 # plot the confusion matrix
-plt.style.use("seaborn-poster")
-plt.matshow(conf_matrix, cmap = "coolwarm")
+plt.style.use('seaborn-poster')
+plt.matshow(conf_matrix, cmap='coolwarm', alpha=0.7)
 plt.gca().xaxis.tick_bottom()
-plt.title("Confusion Matrix")
-plt.ylabel("Actual Class")
-plt.xlabel("Predicted Class")
-for (i, j), corr_value in np.ndenumerate(conf_matrix):
-    plt.text(j, i, corr_value, ha = "center", va = "center", fontsize = 20)
+plt.title('Confusion Matrix')
+plt.ylabel('Actual')
+plt.xlabel('Predicted')
+for (i, j), val in np.ndenumerate(conf_matrix):
+    plt.text(j, i, f'{val}', ha='center', va='center', fontsize=20)
 plt.show()
 
 ```
@@ -772,17 +771,21 @@ In the code below, we utilise in-built functionality from scikit-learn to calcul
 
 ```python
 
-# classification accuracy
-accuracy_score(y_test, y_pred_class)
+# accuracy score
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy}')
 
-# precision
-precision_score(y_test, y_pred_class)
+# precision score
+precision = precision_score(y_test, y_pred)
+print(f'Precision: {precision}')
 
-# recall
-recall_score(y_test, y_pred_class)
+# recall score
+recall = recall_score(y_test, y_pred)
+print(f'Recall: {recall}')
 
-# f1-score
-f1_score(y_test, y_pred_class)
+# f1 score
+f1 = f1_score(y_test, y_pred)
+print(f'F1: {f1}')
 
 ```
 <br>
@@ -804,13 +807,13 @@ To see the decisions that have been made in the tree, we can use the plot_tree f
 <br>
 ```python
 
-# plot the nodes of the decision tree
-plt.figure(figsize=(25,15))
-tree = plot_tree(clf,
-                 feature_names = X.columns,
-                 filled = True,
-                 rounded = True,
-                 fontsize = 16)
+# view the decision tree nodes
+plt.figure(figsize=(25, 15))
+tree = plot_tree(model, 
+                 feature_names=X_train.columns, 
+                 filled=True,
+                 rounded=True,
+                 fontsize=16)
 
 ```
 <br>
@@ -836,34 +839,31 @@ We initially trained our model with a placeholder depth of 5, but unfortunately,
 <br>
 ```python
 
-# finding the best max_depth
+# find the best max_depth
+max_depths = list(range(1, 15))
+f1_results = []
 
-# set up range for search, and empty list to append accuracy scores to
-max_depth_list = list(range(1,15))
-accuracy_scores = []
-
-# loop through each possible depth, train and validate model, append test set f1-score
-for depth in max_depth_list:
+for max_depth in max_depths:
+    model = DecisionTreeClassifier(max_depth=max_depth, random_state=42)
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    f1 = f1_score(y_test, y_pred)
+    f1_results.append(f1)
     
-    clf = DecisionTreeClassifier(max_depth = depth, random_state = 42)
-    clf.fit(X_train,y_train)
-    y_pred = clf.predict(X_test)
-    accuracy = f1_score(y_test,y_pred)
-    accuracy_scores.append(accuracy)
-    
-# store max accuracy, and optimal depth    
-max_accuracy = max(accuracy_scores)
-max_accuracy_idx = accuracy_scores.index(max_accuracy)
-optimal_depth = max_depth_list[max_accuracy_idx]
+max_f1 = max(f1_results)
+best_max_depth = max_depths[f1_results.index(max_f1)]
+print(f'Best max_depth: {best_max_depth}')
+print(f'Best F1: {max_f1}')
 
-# plot accuracy by max depth
-plt.plot(max_depth_list,accuracy_scores)
-plt.scatter(optimal_depth, max_accuracy, marker = "x", color = "red")
-plt.title(f"Accuracy (F1 Score) by Max Depth \n Optimal Tree Depth: {optimal_depth} (F1 Score: {round(max_accuracy,4)})")
-plt.xlabel("Max Depth of Decision Tree")
-plt.ylabel("Accuracy (F1 Score)")
+# plot the f1 results for max_depth
+plt.plot(max_depths, f1_results)
+plt.scatter(best_max_depth, max_f1, color='red', marker='x')
+plt.title(f'F1 Score vs Max Depth\n Optimal Max Depth: {best_max_depth} (F1: {round(max_f1,2)})')
+plt.xlabel('Max Depth of Decision Tree')
+plt.ylabel('F1 Score')
 plt.tight_layout()
 plt.show()
+    
 
 ```
 <br>
@@ -897,24 +897,26 @@ As this is the exact same process we ran for both Logistic Regression & the Deci
 
 # import required packages
 import pandas as pd
+import numpy as np
 import pickle
 import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.utils import shuffle
+
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
-from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
+from sklearn.utils import shuffle
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.inspection import permutation_importance
 
-# import modeling data
-data_for_model = pickle.load(open("data/delivery_club_modeling.p", "rb"))
+# load the data for modeling
+with open('./data/abc_classification_modeling.pkl', 'rb') as f:
+    df_signup = pickle.load(f)
+    
+# drop the customer_id column
+df_signup = df_signup.drop('customer_id', axis=1)
 
-# drop uneccessary columns
-data_for_model.drop("customer_id", axis = 1, inplace = True)
-
-# shuffle data
-data_for_model = shuffle(data_for_model, random_state = 42)
+# shuffle the data
+df_signup = shuffle(df_signup, random_state=42)
 
 ```
 <br>
@@ -932,9 +934,8 @@ The number of missing values in the data was extremely low, so instead of applyi
 
 ```python
 
-# remove rows where values are missing
-data_for_model.isna().sum()
-data_for_model.dropna(how = "any", inplace = True)
+# drop missing values since only a few are present
+df_signup = df_signup.dropna(how='any')
 
 ```
 
@@ -948,12 +949,12 @@ Once we have done this, we split our data into training and test sets to ensure 
 <br>
 ```python
 
-# split data into X and y objects for modeling
-X = data_for_model.drop(["signup_flag"], axis = 1)
-y = data_for_model["signup_flag"]
+# create X and y
+X = df_signup.drop('signup_flag', axis=1)
+y = df_signup['signup_flag']
 
-# split out training & test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42, stratify = y)
+# split the data from trainig and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
 ```
 
@@ -969,27 +970,22 @@ As *gender* doesn't have any explicit *order* to it, in other words, Male isn't 
 <br>
 ```python
 
-# list of categorical variables that need encoding
-categorical_vars = ["gender"]
+# one hot encode the categorical columns
+cat_cols = ['gender']
+one_hot = OneHotEncoder(drop='first', sparse=False)
+one_hot.fit(X_train[cat_cols])
+X_train_encoded = one_hot.transform(X_train[cat_cols])
+encoded_feat_names = one_hot.get_feature_names_out(cat_cols)
+X_train_encoded = pd.DataFrame(X_train_encoded, columns=encoded_feat_names)
+X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis=1)
+X_train.drop(cat_cols, axis=1, inplace=True)
 
-# instantiate OHE class
-one_hot_encoder = OneHotEncoder(sparse=False, drop = "first")
+# encode the test data
+X_test_encoded = one_hot.transform(X_test[cat_cols])
+X_test_encoded = pd.DataFrame(X_test_encoded, columns=encoded_feat_names)
+X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis=1)
+X_test.drop(cat_cols, axis=1, inplace=True)
 
-# apply OHE
-X_train_encoded = one_hot_encoder.fit_transform(X_train[categorical_vars])
-X_test_encoded = one_hot_encoder.transform(X_test[categorical_vars])
-
-# extract feature names for encoded columns
-encoder_feature_names = one_hot_encoder.get_feature_names_out(categorical_vars)
-
-# turn objects back to pandas dataframe
-X_train_encoded = pd.DataFrame(X_train_encoded, columns = encoder_feature_names)
-X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis = 1)
-X_train.drop(categorical_vars, axis = 1, inplace = True)
-
-X_test_encoded = pd.DataFrame(X_test_encoded, columns = encoder_feature_names)
-X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis = 1)
-X_test.drop(categorical_vars, axis = 1, inplace = True)
 
 ```
 
@@ -1004,11 +1000,9 @@ Lastly, since the default scikit-learn implementation of Random Forests does not
 
 ```python
 
-# instantiate our model object
-clf = RandomForestClassifier(random_state = 42, n_estimators = 500, max_features = 5)
-
-# fit our model using our training & test sets
-clf.fit(X_train, y_train)
+# train the model
+model = RandomForestClassifier(n_estimators=500, random_state=42, max_features=5)
+model.fit(X_train, y_train)
 
 ```
 
@@ -1023,9 +1017,11 @@ In the code below we create one object to hold the binary 1/0 predictions, and a
 
 ```python
 
-# predict on the test set
-y_pred_class = clf.predict(X_test)
-y_pred_prob = clf.predict_proba(X_test)[:,1]
+# predict the test set
+y_pred = model.predict(X_test)
+
+# predict the probabilities
+y_pred_prob = model.predict_proba(X_test)[:, 1]
 
 ```
 
@@ -1038,18 +1034,18 @@ The below code creates the Confusion Matrix using the *confusion_matrix* functio
 
 ```python
 
-# create the confusion matrix
-conf_matrix = confusion_matrix(y_test, y_pred_class)
+# create confusion matrix
+conf_matrix = confusion_matrix(y_test, y_pred)
 
 # plot the confusion matrix
-plt.style.use("seaborn-poster")
-plt.matshow(conf_matrix, cmap = "coolwarm")
+plt.style.use('seaborn-poster')
+plt.matshow(conf_matrix, cmap='coolwarm', alpha=0.7)
 plt.gca().xaxis.tick_bottom()
-plt.title("Confusion Matrix")
-plt.ylabel("Actual Class")
-plt.xlabel("Predicted Class")
-for (i, j), corr_value in np.ndenumerate(conf_matrix):
-    plt.text(j, i, corr_value, ha = "center", va = "center", fontsize = 20)
+plt.title('Confusion Matrix')
+plt.ylabel('Actual')
+plt.xlabel('Predicted')
+for (i, j), val in np.ndenumerate(conf_matrix):
+    plt.text(j, i, f'{val}', ha='center', va='center', fontsize=20)
 plt.show()
 
 ```
@@ -1073,17 +1069,21 @@ In the code below, we utilise in-built functionality from scikit-learn to calcul
 
 ```python
 
-# classification accuracy
-accuracy_score(y_test, y_pred_class)
+# accuracy score
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy}')
 
-# precision
-precision_score(y_test, y_pred_class)
+# precision score
+precision = precision_score(y_test, y_pred)
+print(f'Precision: {precision}')
 
-# recall
-recall_score(y_test, y_pred_class)
+# recall score
+recall = recall_score(y_test, y_pred)
+print(f'Recall: {recall}')
 
-# f1-score
-f1_score(y_test, y_pred_class)
+# f1 score
+f1 = f1_score(y_test, y_pred)
+print(f'F1: {f1}')
 
 ```
 <br>
@@ -1128,32 +1128,31 @@ Let's put them both in place, and plot the results...
 <br>
 ```python
 
-# calculate feature importance
-feature_importance = pd.DataFrame(clf.feature_importances_)
+# view feature importance
+feature_importance = pd.DataFrame(model.feature_importances_)
 feature_names = pd.DataFrame(X.columns)
-feature_importance_summary = pd.concat([feature_names,feature_importance], axis = 1)
-feature_importance_summary.columns = ["input_variable","feature_importance"]
-feature_importance_summary.sort_values(by = "feature_importance", inplace = True)
-
-# plot feature importance
-plt.barh(feature_importance_summary["input_variable"],feature_importance_summary["feature_importance"])
-plt.title("Feature Importance of Random Forest")
-plt.xlabel("Feature Importance")
+feature_importance_summary = pd.concat([feature_names, feature_importance], axis=1)
+feature_importance_summary.columns = ['input_variable', 'feature_importance']
+feature_importance_summary.sort_values(by='feature_importance', inplace=True)
+# plot the feature importance
+plt.barh(feature_importance_summary['input_variable'], feature_importance_summary['feature_importance'])
+plt.xlabel('Importance')
+plt.ylabel('Feature')
+plt.title('Feature Importance - Random Forest Regression')
 plt.tight_layout()
 plt.show()
 
-# calculate permutation importance
-result = permutation_importance(clf, X_test, y_test, n_repeats = 10, random_state = 42)
-permutation_importance = pd.DataFrame(result["importances_mean"])
-feature_names = pd.DataFrame(X.columns)
-permutation_importance_summary = pd.concat([feature_names,permutation_importance], axis = 1)
-permutation_importance_summary.columns = ["input_variable","permutation_importance"]
-permutation_importance_summary.sort_values(by = "permutation_importance", inplace = True)
+# view the permutation importance
+perm_importance = permutation_importance(model, X_test, y_test, random_state=42, n_repeats=10)
+permutation_importance = pd.DataFrame(perm_importance['importances_mean'])
+features = pd.DataFrame(X.columns)
+permutation_importance_summary = pd.concat([features, permutation_importance], axis=1)
+permutation_importance_summary.columns = ['input_variable', 'permutation_importance']
+permutation_importance_summary.sort_values(by='permutation_importance', inplace=True)
 
-# plot permutation importance
-plt.barh(permutation_importance_summary["input_variable"],permutation_importance_summary["permutation_importance"])
-plt.title("Permutation Importance of Random Forest")
-plt.xlabel("Permutation Importance")
+plt.barh(permutation_importance_summary['input_variable'], permutation_importance_summary['permutation_importance'])
+plt.ylabel('Feature')
+plt.title('Permutation Importance - Random Forest Regression')
 plt.tight_layout()
 plt.show()
 
@@ -1196,28 +1195,25 @@ As with the other approaches, we also investigate the class balance of our depen
 ```python
 
 # import required packages
-import pandas as pd
-import pickle
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
-from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
+from sklearn.utils import shuffle
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
 from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
 from sklearn.feature_selection import RFECV
 
-# import modeling data
-data_for_model = pickle.load(open("data/delivery_club_modeling.p", "rb"))
 
-# drop uneccessary columns
-data_for_model.drop("customer_id", axis = 1, inplace = True)
+# load the data for modeling
+with open('./data/abc_classification_modeling.pkl', 'rb') as f:
+    df_signup = pickle.load(f)
+    
+    
+# drop the customer_id column
+df_signup = df_signup.drop('customer_id', axis=1)
 
-# shuffle data
-data_for_model = shuffle(data_for_model, random_state = 42)
-
-# assess class balance of dependent variable
-data_for_model["signup_flag"].value_counts(normalize = True)
+# shuffle the data
+df_signup = shuffle(df_signup, random_state=42)
 
 ```
 <br>
@@ -1241,9 +1237,8 @@ The number of missing values in the data was extremely low, so instead of applyi
 
 ```python
 
-# remove rows where values are missing
-data_for_model.isna().sum()
-data_for_model.dropna(how = "any", inplace = True)
+# drop missing values since only a few are present
+df_signup = df_signup.dropna()
 
 ```
 
@@ -1282,23 +1277,20 @@ We do this using the "boxplot approach" where we remove any rows where the value
 <br>
 ```python
 
-outlier_investigation = data_for_model.describe()
-outlier_columns = ["distance_from_store", "total_sales", "total_items"]
+# create function to remove outliers based on 2.0 IQR
+def remove_outliers(df, column):
+    q1 = df[column].quantile(0.25)
+    q3 = df[column].quantile(0.75)
+    iqr = q3 - q1
+    lower_bound = q1 - 2 * iqr
+    upper_bound = q3 + 2 * iqr
+    outliers_df = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+    df = df.drop(outliers_df.index, axis=0).reset_index(drop=True)
+    return df
 
-# boxplot approach
-for column in outlier_columns:
-    
-    lower_quartile = data_for_model[column].quantile(0.25)
-    upper_quartile = data_for_model[column].quantile(0.75)
-    iqr = upper_quartile - lower_quartile
-    iqr_extended = iqr * 2
-    min_border = lower_quartile - iqr_extended
-    max_border = upper_quartile + iqr_extended
-    
-    outliers = data_for_model[(data_for_model[column] < min_border) | (data_for_model[column] > max_border)].index
-    print(f"{len(outliers)} outliers detected in column {column}")
-    
-    data_for_model.drop(outliers, inplace = True)
+# drop oultiers
+for col in ['distance_from_store', 'total_sales', 'total_items']:
+    df_signup = remove_outliers(df_signup, col)
 
 ```
 
@@ -1312,12 +1304,12 @@ Once we have done this, we split our data into training and test sets to ensure 
 <br>
 ```python
 
-# split data into X and y objects for modeling
-X = data_for_model.drop(["signup_flag"], axis = 1)
-y = data_for_model["signup_flag"]
+# create X and y
+X = df_signup.drop('signup_flag', axis=1)
+y = df_signup['signup_flag']
 
-# split out training & test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42, stratify = y)
+# split the data from trainig and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
 ```
 
@@ -1341,27 +1333,22 @@ For ease, after we have applied One Hot Encoding, we turn our training and test 
 <br>
 ```python
 
-# list of categorical variables that need encoding
-categorical_vars = ["gender"]
+# one hot encode the categorical columns
+cat_cols = ['gender']
+one_hot = OneHotEncoder(drop='first', sparse=False)
+one_hot.fit(X_train[cat_cols])
+X_train_encoded = one_hot.transform(X_train[cat_cols])
+encoded_feat_names = one_hot.get_feature_names_out(cat_cols)
+X_train_encoded = pd.DataFrame(X_train_encoded, columns=encoded_feat_names)
+X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis=1)
+X_train.drop(cat_cols, axis=1, inplace=True)
 
-# instantiate OHE class
-one_hot_encoder = OneHotEncoder(sparse=False, drop = "first")
+# encode the test data
+X_test_encoded = one_hot.transform(X_test[cat_cols])
+X_test_encoded = pd.DataFrame(X_test_encoded, columns=encoded_feat_names)
+X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis=1)
+X_test.drop(cat_cols, axis=1, inplace=True)
 
-# apply OHE
-X_train_encoded = one_hot_encoder.fit_transform(X_train[categorical_vars])
-X_test_encoded = one_hot_encoder.transform(X_test[categorical_vars])
-
-# extract feature names for encoded columns
-encoder_feature_names = one_hot_encoder.get_feature_names_out(categorical_vars)
-
-# turn objects back to pandas dataframe
-X_train_encoded = pd.DataFrame(X_train_encoded, columns = encoder_feature_names)
-X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis = 1)
-X_train.drop(categorical_vars, axis = 1, inplace = True)
-
-X_test_encoded = pd.DataFrame(X_test_encoded, columns = encoder_feature_names)
-X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis = 1)
-X_test.drop(categorical_vars, axis = 1, inplace = True)
 
 ```
 
@@ -1383,14 +1370,10 @@ In the code, we also make sure to apply *fit_transform* to the training set, but
 <br>
 ```python
 
-# create our scaler object
-scale_norm = MinMaxScaler()
-
-# normalise the training set (using fit_transform)
-X_train = pd.DataFrame(scale_norm.fit_transform(X_train), columns = X_train.columns)
-
-# normalise the test set (using transform only)
-X_test = pd.DataFrame(scale_norm.transform(X_test), columns = X_test.columns)
+# min max scale the data between 0 and 1
+scaler = MinMaxScaler()
+X_train = pd.DataFrame(scaler.fit_transform(X_train), columns=X_train.columns)
+X_test = pd.DataFrame(scaler.transform(X_test), columns=X_test.columns)
 
 ```
 
@@ -1408,21 +1391,19 @@ For our task here we are again going to apply *Recursive Feature Elimination Wit
 <br>
 ```python
 
-# instantiate RFECV & the model type to be utilised
-from sklearn.ensemble import RandomForestClassifier
-clf = RandomForestClassifier(random_state = 42)
-feature_selector = RFECV(clf)
+# use the feature selection of recurvise feature elimination with cross validation
+rf_clf = RandomForestClassifier(random_state=42)
+rfecv = RFECV(estimator=rf_clf)
+fit = rfecv.fit(X_train, y_train)
 
-# fit RFECV onto our training & test data
-fit = feature_selector.fit(X_train,y_train)
+optimal_feature_count = rfecv.n_features_
+print(f'Total number of features: {X_train.shape[1]}')
+print(f'Optimal number of features: {optimal_feature_count}')
+print(f'Optimal features: {X_train.columns[fit.support_]}')
 
-# extract & print the optimal number of features
-optimal_feature_count = feature_selector.n_features_
-print(f"Optimal number of features: {optimal_feature_count}")
-
-# limit our training & test sets to only include the selected variables
-X_train = X_train.loc[:, feature_selector.get_support()]
-X_test = X_test.loc[:, feature_selector.get_support()]
+# create X_train and X_test with the optimal features
+X_train = X_train.iloc[:, fit.support_]
+X_test = X_test.iloc[:, fit.support_]
 
 ```
 
@@ -1431,11 +1412,11 @@ The below code then produces a plot that visualises the cross-validated classifi
 
 ```python
 
-plt.style.use('seaborn-poster')
-plt.plot(range(1, len(fit.cv_results_['mean_test_score']) + 1), fit.cv_results_['mean_test_score'], marker = "o")
-plt.ylabel("Classification Accuracy")
-plt.xlabel("Number of Features")
-plt.title(f"Feature Selection using RFECV \n Optimal number of features is {optimal_feature_count} (at score of {round(max(fit.cv_results_['mean_test_score']),4)})")
+# plot the feature selection
+plt.plot(range(1, len(fit.grid_scores_) + 1), grid_scores, marker='o')
+plt.ylabel('R2 Score')
+plt.xlabel('Number of Features')
+plt.title(f'Feature Selection using RFE \n Optimal number of features is {optimal_feature_count} (at score of {round(rfecv.grid_scores_.max(), 2)})')
 plt.tight_layout()
 plt.show()
 
@@ -1459,11 +1440,9 @@ Instantiating and training our KNN model is done using the below code.  At this 
 
 ```python
 
-# instantiate our model object
-clf = KNeighborsClassifier()
-
-# fit our model using our training & test sets
-clf.fit(X_train, y_train)
+# train the model
+model = KNeighborsClassifier()
+model.fit(X_train, y_train)
 
 ```
 
@@ -1478,9 +1457,11 @@ In the code below we create one object to hold the binary 1/0 predictions, and a
 
 ```python
 
-# predict on the test set
-y_pred_class = clf.predict(X_test)
-y_pred_prob = clf.predict_proba(X_test)[:,1]
+# predict the test set
+y_pred = model.predict(X_test)
+
+# predict the probabilities
+y_pred_prob = model.predict_proba(X_test)[:, 1]
 
 ```
 
@@ -1493,18 +1474,18 @@ The below code creates the Confusion Matrix using the *confusion_matrix* functio
 
 ```python
 
-# create the confusion matrix
-conf_matrix = confusion_matrix(y_test, y_pred_class)
+# create confusion matrix
+conf_matrix = confusion_matrix(y_test, y_pred)
 
 # plot the confusion matrix
-plt.style.use("seaborn-poster")
-plt.matshow(conf_matrix, cmap = "coolwarm")
+plt.style.use('seaborn-poster')
+plt.matshow(conf_matrix, cmap='coolwarm', alpha=0.7)
 plt.gca().xaxis.tick_bottom()
-plt.title("Confusion Matrix")
-plt.ylabel("Actual Class")
-plt.xlabel("Predicted Class")
-for (i, j), corr_value in np.ndenumerate(conf_matrix):
-    plt.text(j, i, corr_value, ha = "center", va = "center", fontsize = 20)
+plt.title('Confusion Matrix')
+plt.ylabel('Actual')
+plt.xlabel('Predicted')
+for (i, j), val in np.ndenumerate(conf_matrix):
+    plt.text(j, i, f'{val}', ha='center', va='center', fontsize=20)
 plt.show()
 
 ```
@@ -1530,17 +1511,21 @@ In the code below, we utilise in-built functionality from scikit-learn to calcul
 
 ```python
 
-# classification accuracy
-accuracy_score(y_test, y_pred_class)
+# accuracy score
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy}')
 
-# precision
-precision_score(y_test, y_pred_class)
+# precision score
+precision = precision_score(y_test, y_pred)
+print(f'Precision: {precision}')
 
-# recall
-recall_score(y_test, y_pred_class)
+# recall score
+recall = recall_score(y_test, y_pred)
+print(f'Recall: {recall}')
 
-# f1-score
-f1_score(y_test, y_pred_class)
+# f1 score
+f1 = f1_score(y_test, y_pred)
+print(f'F1: {f1}')
 
 ```
 <br>
@@ -1565,30 +1550,27 @@ Here, we will test many potential values for k, and plot the Precision, Recall &
 <br>
 ```python
 
-# set up range for search, and empty list to append accuracy scores to
-k_list = list(range(2,25))
-accuracy_scores = []
-
-# loop through each possible value of k, train and validate model, append test set f1-score
-for k in k_list:
+# find the best value for k
+k_list = list(range(2, 25))
+f1_results = []
+for k_val in k_list:
+    model = KNeighborsClassifier(n_neighbors=k_val)
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    f1 = f1_score(y_test, y_pred)
+    f1_results.append(f1)
     
-    clf = KNeighborsClassifier(n_neighbors = k)
-    clf.fit(X_train,y_train)
-    y_pred = clf.predict(X_test)
-    accuracy = f1_score(y_test,y_pred)
-    accuracy_scores.append(accuracy)
-    
-# store max accuracy, and optimal k value    
-max_accuracy = max(accuracy_scores)
-max_accuracy_idx = accuracy_scores.index(max_accuracy)
-optimal_k_value = k_list[max_accuracy_idx]
+max_f1 = max(f1_results)
+best_k_value = k_list[f1_results.index(max_f1)]
+print(f'Best K value: {best_k_value}')
+print(f'Best F1: {max_f1}')
 
-# plot accuracy by max depth
-plt.plot(k_list,accuracy_scores)
-plt.scatter(optimal_k_value, max_accuracy, marker = "x", color = "red")
-plt.title(f"Accuracy (F1 Score) by k \n Optimal Value for k: {optimal_k_value} (Accuracy: {round(max_accuracy,4)})")
-plt.xlabel("k")
-plt.ylabel("Accuracy (F1 Score)")
+# plot the f1 results for K values
+plt.plot(k_list, f1_results)
+plt.scatter(best_k_value, max_f1, color='red', marker='x')
+plt.title(f'F1 Score vs K Value\n Optimal K Value: {best_k_value} (F1: {round(max_f1,2)})')
+plt.xlabel('K Value for KNN')
+plt.ylabel('F1 Score')
 plt.tight_layout()
 plt.show()
 
