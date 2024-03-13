@@ -142,34 +142,34 @@ In the code below, we:
 <br>
 ```python
 
-# install the required python libraries
-from causalimpact import CausalImpact
+# install necessary packages
 import pandas as pd
+from causalimpact import CausalImpact # pip install pycausalimpact
 
-# import data tables
-transactions = ...
-campaign_data = ...
+# import the data
+transactions = pd.read_excel('../data/ABC_Grocery_Data/grocery_database.xlsx', sheet_name='transactions')
+campaign_data = pd.read_excel('../data/ABC_Grocery_Data/grocery_database.xlsx', sheet_name='campaign_data')
 
-# aggregate transaction data to customer, date level
-customer_daily_sales = transactions.groupby(["customer_id", "transaction_date"])["sales_cost"].sum().reset_index()
+# aggregate the sales data by day
+customer_daily_sales = transactions.groupby(['customer_id', 'transaction_date'])['sales_cost'].sum().reset_index()
 
-# merge on the signup flag
-customer_daily_sales = pd.merge(customer_daily_sales, campaign_data, how = "inner", on = "customer_id")
+# merge with the campaign data
+customer_daily_sales = customer_daily_sales.merge(campaign_data, on='customer_id', how='inner')
 
-# pivot the data to aggregate daily sales by signup group
-causal_impact_df = customer_daily_sales.pivot_table(index = "transaction_date",
-                                                    columns = "signup_flag",
-                                                    values = "sales_cost",
-                                                    aggfunc = "mean")
+# create pivot table
+causal_impact_df = customer_daily_sales.pivot_table(index='transaction_date', 
+                                                    columns='signup_flag', 
+                                                    values='sales_cost', 
+                                                    aggfunc='mean')
 
-# provide a frequency for our DateTimeIndex (avoids a warning message)
+# create daily frequency
 causal_impact_df.index.freq = "D"
 
-# ensure the impacted group is in the first column (the library expects this)
-causal_impact_df = causal_impact_df[[1,0]]
+# put the positive group as the first column
+causal_impact_df = causal_impact_df[[1, 0]]
 
-# rename columns to something lear & meaningful
-causal_impact_df.columns = ["member", "non_member"]
+# rename the columns
+causal_impact_df.columns = ['member', 'non_member'] 
 
 ```
 <br>
@@ -265,7 +265,7 @@ The *pycausalimpact* library also makes interpreting the numbers very easy.  We 
 
 ```python
 
-# results summary
+# print the summary
 print(ci.summary())
 
 Posterior Inference {Causal Impact}
@@ -299,8 +299,8 @@ If we put:
 
 ```python
 
-# results summary - report
-print(ci.summary(output = "report"))
+# print the report
+print(ci.summary(output='report'))
 
 Analysis report {CausalImpact}
 
