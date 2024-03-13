@@ -90,12 +90,12 @@ In the code below, we import Pandas, as well as the apriori algorithm from the a
 <br>
 ```python
 
-# import required Python packages
+# import necessary packages
 import pandas as pd
 from apyori import apriori
 
-# import the sample data
-alcohol_transactions = pd.read_csv("data/sample_data_apriori.csv")
+# load the data
+df = pd.read_csv('../data/sample_data_apriori.csv')
 
 ```
 <br>
@@ -211,12 +211,13 @@ In the code below, we:
 <br>
 ```python
 
-# drop ID column
-alcohol_transactions.drop("transaction_id", axis = 1, inplace = True)
+# drop transaction_id column
+df = df.drop('transaction_id', axis=1)
 
-# modify data for apriori algorithm
+# create a list of lists for apriori
 transactions_list = []
-for index, row in alcohol_transactions.iterrows():
+
+for i, row in df.iterrows():
     transaction = list(row.dropna())
     transactions_list.append(transaction)
     
@@ -254,16 +255,16 @@ This algorithm allows us to specify the association rules that we want.  We set:
 
 ```python
 
-# apply the apriori algorthm and specify required parameters
-apriori_rules = apriori(transactions_list,
-                        min_support = 0.003,
-                        min_confidence = 0.2,
-                        min_lift = 3,
-                        min_length = 2,
-                        max_length = 2)
+# create the apriori model
+association_rules = apriori(transactions_list, 
+                            min_support=0.003, 
+                            min_confidence=0.2, 
+                            min_lift=3, 
+                            min_length=2,
+                            max_length=2)
 
-# convert the output to a list
-apriori_rules = list(apriori_rules)
+# convert the association rules to a list
+apriori_rules = list(association_rules)
 
 # print out the first element
 apriori_rules[0]
@@ -278,19 +279,19 @@ Based upon the parameters we set when applying the algorithm, we get 132 product
 
 ```python
 
-# extract each piece of information
+# get a list of the rules
 product1 = [list(rule[2][0][0])[0] for rule in apriori_rules]
 product2 = [list(rule[2][0][1])[0] for rule in apriori_rules]
 support = [rule[1] for rule in apriori_rules]
 confidence = [rule[2][0][2] for rule in apriori_rules]
 lift = [rule[2][0][3] for rule in apriori_rules]
 
-# compile into a single dataframe
-apriori_rules_df = pd.DataFrame({"product1" : product1,
-                                 "product2" : product2,
-                                 "support" : support,
-                                 "confidence": confidence,
-                                 "lift" : lift})
+# create a dataframe of the rules
+apriori_rules_df = pd.DataFrame({'product1': product1, 
+                         'product2': product2, 
+                         'support': support, 
+                         'confidence': confidence, 
+                         'lift': lift})
 
 ```
 <br>
@@ -321,8 +322,8 @@ Now we have our data in a useable format - let's look at the product pairs with 
 
 ```python
 
-# sort pairs by descending Lift
-apriori_rules_df.sort_values(by = "lift", ascending = False, inplace = True)
+# sort rules by lift
+apriori_rules_df = apriori_rules_df.sort_values(by='lift', ascending=False)
 
 ```
 
@@ -363,8 +364,8 @@ The code below uses a string function to pull back all rows in the DataFrame whe
 
 ```python
 
-# search based upon text
-apriori_rules_df[apriori_rules_df["product1"].str.contains("New Zealand")]
+# view New Zealand wines association rules
+apriori_rules_df[apriori_rules_df['product1'].str.contains('New Zealand')]
 
 ```
 <br>
