@@ -94,39 +94,38 @@ In the code below, we:
 <br>
 ```python
 
-# import required Python packages
+# import required packages
+import pandas as pd
+import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler
-import pandas as pd
 import matplotlib.pyplot as plt
 
-# import tables from database
-transactions = ...
-product_areas = ...
+# load the data
+transactions = pd.read_excel('../data/ABC_Grocery_Data/grocery_database.xlsx', sheet_name='transactions')
+product_areas = pd.read_excel('../data/ABC_Grocery_Data/grocery_database.xlsx', sheet_name='product_areas')
 
-# merge product_area_name on
-transactions = pd.merge(transactions, product_areas, how = "inner", on = "product_area_id")
+# concat the dataframes
+df = pd.merge(transactions, product_areas, how='inner', on='product_area_id')
 
-# drop the non-food category
-transactions.drop(transactions[transactions["product_area_name"] == "Non-Food"].index, inplace = True)
+# drop any non-food categories
+df = df[df['product_area_name'] != 'Non-Food']
 
-# aggregate sales at customer level (by product area)
-transaction_summary = transactions.groupby(["customer_id", "product_area_name"])["sales_cost"].sum().reset_index()
+# aggregate the data
+df_summary = df.groupby(['customer_id', 'product_area_name'])['sales_cost'].sum().reset_index()
 
-# pivot data to place product areas as columns
-transaction_summary_pivot = transactions.pivot_table(index = "customer_id",
-                                                    columns = "product_area_name",
-                                                    values = "sales_cost",
-                                                    aggfunc = "sum",
-                                                    fill_value = 0,
-                                                    margins = True,
-                                                    margins_name = "Total").rename_axis(None,axis = 1)
+# use pivot table
+df_pivot = df.pivot_table(index='customer_id', 
+                                    columns='product_area_name', 
+                                    values='sales_cost', 
+                                    aggfunc='sum',
+                                    fill_value=0,
+                                    margins=True,
+                                    margins_name='Total').rename_axis(None, axis=1)
 
-# transform sales into % sales
-transaction_summary_pivot = transaction_summary_pivot.div(transaction_summary_pivot["Total"], axis = 0)
 
-# drop the "total" column as we don't need that for clustering
-data_for_clustering = transaction_summary_pivot.drop(["Total"], axis = 1)
+# get percentage of sales for each product area
+data_for_cluster = df_pivot.div(df_pivot['Total'], axis=0).drop('Total', axis=1)
 
 ```
 <br>
@@ -215,11 +214,11 @@ The below code uses the in-built MinMaxScaler functionality from scikit-learn to
 
 ```python
 
-# create our scaler object
+# scale the data
 scale_norm = MinMaxScaler()
+data_for_cluster_scaled = scale_norm.fit_transform(data_for_cluster)
+data_for_cluster_scaled = pd.DataFrame(data_for_cluster_scaled, columns=data_for_cluster.columns)
 
-# normalise the data
-data_for_clustering_scaled = pd.DataFrame(scale_norm.fit_transform(data_for_clustering), columns = data_for_clustering.columns)
 
 ```
 
@@ -240,21 +239,20 @@ In the code below we will test multiple values for k, and plot how this WCSS met
 
 ```python
 
-# set up range for search, and empty list to append wcss scores to
-k_values = list(range(1,10))
-wcss_list = []
+# use wcss to find the optimal number of clusters
+wcss = []
+k_list = list(range(1, 11))
 
-# loop through each possible value of k, fit to the data, append the wcss score
-for k in k_values:
-    kmeans = KMeans(n_clusters = k, random_state = 42)
-    kmeans.fit(data_for_clustering_scaled)
-    wcss_list.append(kmeans.inertia_)
-
-# plot wcss by k
-plt.plot(k_values, wcss_list)
-plt.title("Within Cluster Sum of Squares -  by k")
-plt.xlabel("k")
-plt.ylabel("WCSS Score")
+for k in k_list:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(data_for_cluster_scaled)
+    wcss.append(kmeans.inertia_)
+    
+# plot the elbow method
+plt.plot(k_list, wcss)
+plt.title('Within Cluster Sum of Squares - K Means')
+plt.xlabel('K Clusters')
+plt.ylabel('WCSS Score')
 plt.tight_layout()
 plt.show()
 
@@ -275,11 +273,9 @@ The below code will instantiate our k-means object using a value for k equal to 
 
 ```python
 
-# instantiate our k-means object
-kmeans = KMeans(n_clusters = 3, random_state = 42)
-
-# fit to our data
-kmeans.fit(data_for_clustering_scaled)
+# instantiate the model and fit using k = 3
+kmeans = KMeans(n_clusters=3, random_state=42)
+kmeans.fit(data_for_cluster_scaled)
 
 ```
 
@@ -292,8 +288,8 @@ In the code below we tag this cluster number onto our original dataframe.
 
 ```python
 
-# add cluster labels to our original data
-data_for_clustering["cluster"] = kmeans.labels_
+# add the cluster labels to the original data
+data_for_cluster['cluster'] = kmeans.labels_
 
 ```
 
@@ -310,8 +306,8 @@ In the below code we firstly assess the number of customers that fall into each 
 <br>
 ```python
 
-# check cluster sizes
-data_for_clustering["cluster"].value_counts(normalize=True)
+# view cluster sizes
+data_for_cluster["cluster"].value_counts(normalize=True)
 
 ```
 <br>
@@ -332,8 +328,8 @@ To understand what these different behaviours or characteristics are, we can loo
 <br>
 ```python
 
-# profile clusters (mean % sales for each product area)
-cluster_summary = data_for_clustering.groupby("cluster")[["Dairy","Fruit","Meat","Vegetables"]].mean().reset_index()
+# profile clusters
+cluster_profile = data_for_cluster.groupby('cluster')[['Dairy', 'Fruit', 'Meat', 'Vegetables']].mean().reset_index()  
 
 ```
 <br>

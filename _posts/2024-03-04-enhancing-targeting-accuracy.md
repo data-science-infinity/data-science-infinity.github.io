@@ -15,13 +15,13 @@ Our client, a grocery retailer, wants to utilise Machine Learning to reduce mail
     - [Results](#overview-results)
     - [Growth/Next Steps](#overview-growth)
 - [01. Data Overview](#data-overview)
-- [02. Modelling Overview](#modelling-overview)
+- [02. Modeling Overview](#modeling-overview)
 - [03. Logistic Regression](#logreg-title)
 - [04. Decision Tree](#clftree-title)
 - [05. Random Forest](#rf-title)
 - [06. KNN](#knn-title)
-- [07. Modelling Summary](#modelling-summary)
-- [08. Application](#modelling-application)
+- [07. Modeling Summary](#modeling-summary)
+- [08. Application](#modeling-application)
 - [09. Growth & Next Steps](#growth-next-steps)
 
 ___
@@ -45,7 +45,7 @@ We firstly needed to compile the necessary data from tables in the database, gat
 
 Within our historical dataset from the last campaign, we found that 69% of customers did not sign up and 31% did.  This tells us that while the data isn't perfectly balanced at 50:50, it isn't *too* imbalanced either.  Even so, we make sure to not rely on classification accuracy alone when assessing results - also analysing Precision, Recall, and F1-Score.
 
-As we are predicting a binary output, we tested four classification modelling approaches, namely:
+As we are predicting a binary output, we tested four classification modeling approaches, namely:
 
 * Logistic Regression
 * Decision Tree
@@ -97,7 +97,7 @@ Based upon these, the chosen the model is the Random Forest as it was a) the mos
 <br>
 ### Growth/Next Steps <a name="overview-growth"></a>
 
-While predictive accuracy was relatively high - other modelling approaches could be tested, especially those somewhat similar to Random Forest, for example XGBoost, LightGBM to see if even more accuracy could be gained.
+While predictive accuracy was relatively high - other modeling approaches could be tested, especially those somewhat similar to Random Forest, for example XGBoost, LightGBM to see if even more accuracy could be gained.
 
 From a data point of view, further variables could be collected, and further feature engineering could be undertaken to ensure that we have as much useful information available for predicting customer loyalty
 <br>
@@ -112,7 +112,7 @@ The key variables hypothesised to predict this will come from the client databas
 
 We aggregated up customer data from the 3 months prior to the last campaign.
 
-After this data pre-processing in Python, we have a dataset for modelling that contains the following fields...
+After this data pre-processing in Python, we have a dataset for modeling that contains the following fields...
 <br>
 <br>
 
@@ -129,13 +129,13 @@ After this data pre-processing in Python, we have a dataset for modelling that c
 | average_basket_value | Independent | The average spend per transaction for the customer in ABC Grocery - 3 months pre campaign |
 
 <br>
-# Modelling Overview  <a name="modelling-overview"></a>
+# Modeling Overview  <a name="modeling-overview"></a>
 
 We will build a model that looks to accurately predict *signup_flag*, based upon the customer metrics listed above.
 
 If that can be achieved, we can use this model to predict signup & signup probability for future campaigns.  This information can be used to target those more likely to sign-up, reducing marketing costs and thus increasing ROI.
 
-As we are predicting a binary output, we tested three classification modelling approaches, namely:
+As we are predicting a binary output, we tested three classification modeling approaches, namely:
 
 * Logistic Regression
 * Decision Tree
@@ -155,7 +155,7 @@ We utlise the scikit-learn library within Python to model our data using Logisti
 <br>
 ### Data Import <a name="logreg-import"></a>
 
-Since we saved our modelling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
+Since we saved our modeling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
 
 We also investigate the class balance of our dependent variable - which is important when assessing classification accuracy.
 
@@ -163,27 +163,34 @@ We also investigate the class balance of our dependent variable - which is impor
 
 # import required packages
 import pandas as pd
+import numpy as np
 import pickle
 import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.linear_model import LogisticRegression
-from sklearn.utils import shuffle
+
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
-from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
+from sklearn.utils import shuffle
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.feature_selection import RFECV
 
-# import modelling data
-data_for_model = pickle.load(open("data/delivery_club_modelling.p", "rb"))
 
-# drop uneccessary columns
-data_for_model.drop("customer_id", axis = 1, inplace = True)
+# load the data for modeling
+with open('./data/abc_classification_modeling.pkl', 'rb') as f:
+    df_signup = pickle.load(f)
+    
+    
+# drop the customer_id column
+df_signup = df_signup.drop('customer_id', axis=1)
 
-# shuffle data
-data_for_model = shuffle(data_for_model, random_state = 42)
+# shuffle the data
+df_signup = shuffle(df_signup, random_state=42)
 
-# assess class balance of dependent variable
-data_for_model["signup_flag"].value_counts(normalize = True)
+# drop missing values since only a few are present
+df_signup = df_signup.dropna()
+
+# view the value counts for the target variable
+df_signup['signup_flag'].value_counts(normalize=True)
 
 ```
 <br>
@@ -206,9 +213,8 @@ The number of missing values in the data was extremely low, so instead of applyi
 
 ```python
 
-# remove rows where values are missing
-data_for_model.isna().sum()
-data_for_model.dropna(how = "any", inplace = True)
+# drop missing values since only a few are present
+df_signup = df_signup.dropna()
 
 ```
 
@@ -245,28 +251,25 @@ We do this using the "boxplot approach" where we remove any rows where the value
 <br>
 ```python
 
-outlier_investigation = data_for_model.describe()
-outlier_columns = ["distance_from_store", "total_sales", "total_items"]
+# create function to remove outliers based on 2.0 IQR
+def remove_outliers(df, column):
+    q1 = df[column].quantile(0.25)
+    q3 = df[column].quantile(0.75)
+    iqr = q3 - q1
+    lower_bound = q1 - 2 * iqr
+    upper_bound = q3 + 2 * iqr
+    outliers_df = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+    df = df.drop(outliers_df.index, axis=0).reset_index(drop=True)
+    return df
 
-# boxplot approach
-for column in outlier_columns:
-    
-    lower_quartile = data_for_model[column].quantile(0.25)
-    upper_quartile = data_for_model[column].quantile(0.75)
-    iqr = upper_quartile - lower_quartile
-    iqr_extended = iqr * 2
-    min_border = lower_quartile - iqr_extended
-    max_border = upper_quartile + iqr_extended
-    
-    outliers = data_for_model[(data_for_model[column] < min_border) | (data_for_model[column] > max_border)].index
-    print(f"{len(outliers)} outliers detected in column {column}")
-    
-    data_for_model.drop(outliers, inplace = True)
+# drop oultiers
+for col in ['distance_from_store', 'total_sales', 'total_items']:
+    df_signup = remove_outliers(df_signup, col)
 
 ```
 
 <br>
-##### Split Out Data For Modelling
+##### Split Out Data For Modeling
 
 In the next code block we do two things, we firstly split our data into an **X** object which contains only the predictor variables, and a **y** object that contains only our dependent variable.
 
@@ -275,12 +278,12 @@ Once we have done this, we split our data into training and test sets to ensure 
 <br>
 ```python
 
-# split data into X and y objects for modelling
-X = data_for_model.drop(["signup_flag"], axis = 1)
-y = data_for_model["signup_flag"]
+# create X and y
+X = df_signup.drop('signup_flag', axis=1)
+y = df_signup['signup_flag']
 
-# split out training & test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42, stratify = y)
+# split the data from trainig and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
 ```
 
@@ -304,27 +307,21 @@ For ease, after we have applied One Hot Encoding, we turn our training and test 
 <br>
 ```python
 
-# list of categorical variables that need encoding
-categorical_vars = ["gender"]
+# one hot encode the categorical columns
+cat_cols = ['gender']
+one_hot = OneHotEncoder(drop='first', sparse=False)
+one_hot.fit(X_train[cat_cols])
+X_train_encoded = one_hot.transform(X_train[cat_cols])
+encoded_feat_names = one_hot.get_feature_names_out(cat_cols)
+X_train_encoded = pd.DataFrame(X_train_encoded, columns=encoded_feat_names)
+X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis=1)
+X_train.drop(cat_cols, axis=1, inplace=True)
 
-# instantiate OHE class
-one_hot_encoder = OneHotEncoder(sparse=False, drop = "first")
-
-# apply OHE
-X_train_encoded = one_hot_encoder.fit_transform(X_train[categorical_vars])
-X_test_encoded = one_hot_encoder.transform(X_test[categorical_vars])
-
-# extract feature names for encoded columns
-encoder_feature_names = one_hot_encoder.get_feature_names_out(categorical_vars)
-
-# turn objects back to pandas dataframe
-X_train_encoded = pd.DataFrame(X_train_encoded, columns = encoder_feature_names)
-X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis = 1)
-X_train.drop(categorical_vars, axis = 1, inplace = True)
-
-X_test_encoded = pd.DataFrame(X_test_encoded, columns = encoder_feature_names)
-X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis = 1)
-X_test.drop(categorical_vars, axis = 1, inplace = True)
+# encode the test data
+X_test_encoded = one_hot.transform(X_test[cat_cols])
+X_test_encoded = pd.DataFrame(X_test_encoded, columns=encoded_feat_names)
+X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis=1)
+X_test.drop(cat_cols, axis=1, inplace=True)
 
 ```
 
@@ -344,20 +341,16 @@ For our task we applied a variation of Reursive Feature Elimination called *Recu
 <br>
 ```python
 
-# instantiate RFECV & the model type to be utilised
-clf = LogisticRegression(random_state = 42, max_iter = 1000)
-feature_selector = RFECV(clf)
+# create the Logistic Regression model
+model = LogisticRegression(random_state=42, max_iter=1000)
 
-# fit RFECV onto our training & test data
-fit = feature_selector.fit(X_train,y_train)
+# use the feature selection of recurvise feature elimination with cross validation
+rfecv = RFECV(estimator=model)
+fit = rfecv.fit(X_train, y_train)
 
-# extract & print the optimal number of features
-optimal_feature_count = feature_selector.n_features_
-print(f"Optimal number of features: {optimal_feature_count}")
-
-# limit our training & test sets to only include the selected variables
-X_train = X_train.loc[:, feature_selector.get_support()]
-X_test = X_test.loc[:, feature_selector.get_support()]
+# create X_train and X_test with the optimal features
+X_train = X_train.iloc[:, fit.support_]
+X_test = X_test.iloc[:, fit.support_]
 
 ```
 
@@ -366,11 +359,14 @@ The below code then produces a plot that visualises the cross-validated classifi
 
 ```python
 
-plt.style.use('seaborn-poster')
-plt.plot(range(1, len(fit.cv_results_['mean_test_score']) + 1), fit.cv_results_['mean_test_score'], marker = "o")
-plt.ylabel("Classification Accuracy")
-plt.xlabel("Number of Features")
-plt.title(f"Feature Selection using RFECV \n Optimal number of features is {optimal_feature_count} (at score of {round(max(fit.cv_results_['mean_test_score']),4)})")
+# get the mean cross validation score
+grid_scores = [np.mean(vals) for vals in fit.grid_scores_]
+
+# plot the feature selection
+plt.plot(range(1, len(fit.grid_scores_) + 1), grid_scores, marker='o')
+plt.ylabel('R2 Score')
+plt.xlabel('Number of Features')
+plt.title(f'Feature Selection using RFE \n Optimal number of features is {optimal_feature_count} (at score of {round(rfecv.grid_scores_.max(), 2)})')
 plt.tight_layout()
 plt.show()
 
@@ -389,11 +385,9 @@ Instantiating and training our Logistic Regression model is done using the below
 
 ```python
 
-# instantiate our model object
-clf = LogisticRegression(random_state = 42, max_iter = 1000)
-
-# fit our model using our training & test sets
-clf.fit(X_train, y_train)
+# train the model
+model = LogisticRegression(random_state=42, max_iter=1000)
+model.fit(X_train, y_train)
 
 ```
 
@@ -408,9 +402,11 @@ In the code below we create one object to hold the binary 1/0 predictions, and a
 
 ```python
 
-# predict on the test set
-y_pred_class = clf.predict(X_test)
-y_pred_prob = clf.predict_proba(X_test)[:,1]
+# predict the test set
+y_pred = model.predict(X_test)
+
+# predict the probabilities
+y_pred_prob = model.predict_proba(X_test)[:, 1]
 
 ```
 
@@ -423,18 +419,18 @@ The below code creates the Confusion Matrix using the *confusion_matrix* functio
 
 ```python
 
-# create the confusion matrix
-conf_matrix = confusion_matrix(y_test, y_pred_class)
+# create confusion matrix
+conf_matrix = confusion_matrix(y_test, y_pred)
 
 # plot the confusion matrix
-plt.style.use("seaborn-poster")
-plt.matshow(conf_matrix, cmap = "coolwarm")
+plt.style.use('seaborn-poster')
+plt.matshow(conf_matrix, cmap='coolwarm', alpha=0.7)
 plt.gca().xaxis.tick_bottom()
-plt.title("Confusion Matrix")
-plt.ylabel("Actual Class")
-plt.xlabel("Predicted Class")
-for (i, j), corr_value in np.ndenumerate(conf_matrix):
-    plt.text(j, i, corr_value, ha = "center", va = "center", fontsize = 20)
+plt.title('Confusion Matrix')
+plt.ylabel('Actual')
+plt.xlabel('Predicted')
+for (i, j), val in np.ndenumerate(conf_matrix):
+    plt.text(j, i, f'{val}', ha='center', va='center', fontsize=20)
 plt.show()
 
 ```
@@ -487,17 +483,21 @@ In the code below, we utilise in-built functionality from scikit-learn to calcul
 
 ```python
 
-# classification accuracy
-accuracy_score(y_test, y_pred_class)
+# accuracy score
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy}')
 
-# precision
-precision_score(y_test, y_pred_class)
+# precision score
+precision = precision_score(y_test, y_pred)
+print(f'Precision: {precision}')
 
-# recall
-recall_score(y_test, y_pred_class)
+# recall score
+recall = recall_score(y_test, y_pred)
+print(f'Recall: {recall}')
 
-# f1-score
-f1_score(y_test, y_pred_class)
+# f1 score
+f1 = f1_score(y_test, y_pred)
+print(f'F1: {f1}')
 
 ```
 <br>
@@ -522,31 +522,27 @@ Here, we will test many potential classification thresholds, and plot the Precis
 <br>
 ```python
 
-# set up the list of thresholds to loop through
+# get the best probability threshold
 thresholds = np.arange(0, 1, 0.01)
 
-# create empty lists to append the results to
 precision_scores = []
 recall_scores = []
 f1_scores = []
 
-# loop through each threshold - fit the model - append the results
-for threshold in thresholds:
-    
-    pred_class = (y_pred_prob >= threshold) * 1
-    
-    precision = precision_score(y_test, pred_class, zero_division = 0)
+for thresh in thresholds:
+    y_pred_thresh = (y_pred_prob > thresh).astype(int)
+    precision = precision_score(y_test, y_pred_thresh, zero_division=0)
+    recall = recall_score(y_test, y_pred_thresh)
+    f1 = f1_score(y_test, y_pred_thresh)
     precision_scores.append(precision)
-    
-    recall = recall_score(y_test, pred_class)
     recall_scores.append(recall)
-    
-    f1 = f1_score(y_test, pred_class)
     f1_scores.append(f1)
-    
-# extract the optimal f1-score (and it's index)
+
+# get the max f1 score
 max_f1 = max(f1_scores)
-max_f1_idx = f1_scores.index(max_f1)
+max_f1_index = f1_scores.index(max_f1)
+best_thresh = thresholds[max_f1_index]
+print(f'Best Threshold: {best_thresh}')
 
 ```
 <br>
@@ -556,15 +552,15 @@ Now we have run this, we can use the below code to plot the results!
 <br>
 ```python
 
-# plot the results
-plt.style.use("seaborn-poster")
-plt.plot(thresholds, precision_scores, label = "Precision", linestyle = "--")
-plt.plot(thresholds, recall_scores, label = "Recall", linestyle = "--")
-plt.plot(thresholds, f1_scores, label = "F1", linewidth = 5)
-plt.title(f"Finding the Optimal Threshold for Classification Model \n Max F1: {round(max_f1,2)} (Threshold = {round(thresholds[max_f1_idx],2)})")
-plt.xlabel("Threshold")
-plt.ylabel("Assessment Score")
-plt.legend(loc = "lower left")
+# plot the tresholds
+plt.style.use('seaborn-poster')
+plt.plot(thresholds, precision_scores, label='Precision', linestyle='--')
+plt.plot(thresholds, recall_scores, label='Recall', linestyle='--')
+plt.plot(thresholds, f1_scores, label='F1', linewidth=5)
+plt.title(f'Finding the Optimal Threshold for Classification Model \n Max F1: {round(max_f1, 2)} (Threshold at {round(best_thresh, 2)})')
+plt.xlabel('Threshold')
+plt.ylabel('Assessment Score')
+plt.legend(loc='lower left')
 plt.tight_layout()
 plt.show()
 
@@ -593,7 +589,7 @@ We will again utlise the scikit-learn library within Python to model our data us
 <br>
 ### Data Import <a name="clftree-import"></a>
 
-Since we saved our modelling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
+Since we saved our modeling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
 
 Just like we did for Logistic Regression - our code also investigates the class balance of our dependent variable.
 
@@ -610,8 +606,8 @@ from sklearn.model_selection import train_test_split, cross_val_score, KFold
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
 from sklearn.preprocessing import OneHotEncoder
 
-# import modelling data
-data_for_model = pickle.load(open("data/delivery_club_modelling.p", "rb"))
+# import modeling data
+data_for_model = pickle.load(open("data/delivery_club_modeling.p", "rb"))
 
 # drop uneccessary columns
 data_for_model.drop("customer_id", axis = 1, inplace = True)
@@ -645,7 +641,7 @@ data_for_model.dropna(how = "any", inplace = True)
 ```
 
 <br>
-##### Split Out Data For Modelling
+##### Split Out Data For Modeling
 
 In exactly the same way we did for Logistic Regression, in the next code block we do two things, we firstly split our data into an **X** object which contains only the predictor variables, and a **y** object that contains only our dependent variable.
 
@@ -655,7 +651,7 @@ Once we have done this, we split our data into training and test sets to ensure 
 <br>
 ```python
 
-# split data into X and y objects for modelling
+# split data into X and y objects for modeling
 X = data_for_model.drop(["signup_flag"], axis = 1)
 y = data_for_model["signup_flag"]
 
@@ -893,7 +889,7 @@ We will again utlise the scikit-learn library within Python to model our data us
 <br>
 ### Data Import <a name="rf-import"></a>
 
-Again, since we saved our modelling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
+Again, since we saved our modeling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
 
 As this is the exact same process we ran for both Logistic Regression & the Decision Tree - our code also investigates the class balance of our dependent variable
 
@@ -911,8 +907,8 @@ from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, r
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.inspection import permutation_importance
 
-# import modelling data
-data_for_model = pickle.load(open("data/delivery_club_modelling.p", "rb"))
+# import modeling data
+data_for_model = pickle.load(open("data/delivery_club_modeling.p", "rb"))
 
 # drop uneccessary columns
 data_for_model.drop("customer_id", axis = 1, inplace = True)
@@ -943,7 +939,7 @@ data_for_model.dropna(how = "any", inplace = True)
 ```
 
 <br>
-##### Split Out Data For Modelling
+##### Split Out Data For Modeling
 
 In exactly the same way we did for both Logistic Regression & our Decision Tree, in the next code block we do two things, we firstly split our data into an X object which contains only the predictor variables, and a y object that contains only our dependent variable.
 
@@ -952,7 +948,7 @@ Once we have done this, we split our data into training and test sets to ensure 
 <br>
 ```python
 
-# split data into X and y objects for modelling
+# split data into X and y objects for modeling
 X = data_for_model.drop(["signup_flag"], axis = 1)
 y = data_for_model["signup_flag"]
 
@@ -1193,7 +1189,7 @@ We utlise the scikit-learn library within Python to model our data using KNN. Th
 <br>
 ### Data Import <a name="knn-import"></a>
 
-Again, since we saved our modelling data as a pickle file, we import it. We ensure we remove the id column, and we also ensure our data is shuffled.
+Again, since we saved our modeling data as a pickle file, we import it. We ensure we remove the id column, and we also ensure our data is shuffled.
 
 As with the other approaches, we also investigate the class balance of our dependent variable - which is important when assessing classification accuracy.
 
@@ -1211,8 +1207,8 @@ from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, r
 from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
 from sklearn.feature_selection import RFECV
 
-# import modelling data
-data_for_model = pickle.load(open("data/delivery_club_modelling.p", "rb"))
+# import modeling data
+data_for_model = pickle.load(open("data/delivery_club_modeling.p", "rb"))
 
 # drop uneccessary columns
 data_for_model.drop("customer_id", axis = 1, inplace = True)
@@ -1307,7 +1303,7 @@ for column in outlier_columns:
 ```
 
 <br>
-##### Split Out Data For Modelling
+##### Split Out Data For Modeling
 
 In exactly the same way we've done for the other three models, in the next code block we do two things, we firstly split our data into an X object which contains only the predictor variables, and a y object that contains only our dependent variable.
 
@@ -1316,7 +1312,7 @@ Once we have done this, we split our data into training and test sets to ensure 
 <br>
 ```python
 
-# split data into X and y objects for modelling
+# split data into X and y objects for modeling
 X = data_for_model.drop(["signup_flag"], axis = 1)
 y = data_for_model["signup_flag"]
 
@@ -1608,7 +1604,7 @@ In the plot we can see that the *maximum* F1-Score on the test set is found when
 
 ___
 <br>
-# Modelling Summary  <a name="modelling-summary"></a>
+# Modeling Summary  <a name="modeling-summary"></a>
 
 The goal for the project was to build a model that would accurately predict the customers that would sign up for the *delivery club*.  This would allow for a much more targeted approach when running the next iteration of the campaign.  A secondary goal was to understand what the drivers for this are, so the client can get closer to the customers that need or want this service, and enhance their messaging.
 
@@ -1648,7 +1644,7 @@ Based upon these, the chosen the model is the Random Forest as it was a) the mos
 
 ___
 <br>
-# Application <a name="modelling-application"></a>
+# Application <a name="modeling-application"></a>
 
 We now have a model object, and a the required pre-processing steps to use this model for the next *delivery club* campaign.  When this is ready to launch we can aggregate the neccessary customer information and pass it through, obtaining predicted probabilities for each customer signing up.
 
@@ -1658,7 +1654,7 @@ ___
 <br>
 # Growth & Next Steps <a name="growth-next-steps"></a>
 
-While predictive accuracy was relatively high - other modelling approaches could be tested, especially those somewhat similar to Random Forest, for example XGBoost, LightGBM to see if even more accuracy could be gained.
+While predictive accuracy was relatively high - other modeling approaches could be tested, especially those somewhat similar to Random Forest, for example XGBoost, LightGBM to see if even more accuracy could be gained.
 
 We could even look to tune the hyperparameters of the Random Forest, notably regularisation parameters such as tree depth, as well as potentially training on a higher number of Decision Trees in the Random Forest.
 
