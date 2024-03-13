@@ -16,7 +16,7 @@ In this project we apply Chi-Square Test For Independence (a Hypothesis Test) to
 - [01. Concept Overview](#concept-overview)
 - [02. Data Overview & Preparation](#data-overview)
 - [03. Applying Chi-Square Test For Independence](#chi-square-application)
-- [04. Analysing The Results](#chi-square-results)
+- [04. Analyzing The Results](#chi-square-results)
 - [05. Discussion](#discussion)
 
 ___
@@ -162,15 +162,15 @@ In the code below, we:
 <br>
 ```python
 
-# install the required python libraries
+# import the required packages
 import pandas as pd
 from scipy.stats import chi2_contingency, chi2
 
-# import campaign data
-campaign_data = ...
+# import the data
+campaign_data = pd.read_excel('./data/grocery_database.xlsx', sheet_name='campaign_data')
 
-# remove customers who were in the control group
-campaign_data = campaign_data.loc[campaign_data["mailer_type"] != "Control"]
+# remove control data
+campaign_data = campaign_data.loc[campaign_data['mailer_type'] != 'Control']
 
 ```
 <br>
@@ -214,9 +214,9 @@ In the code below we code these in explcitly & clearly so we can utilise them la
 
 ```python
 
-# specify hypotheses & acceptance criteria for test
-null_hypothesis = "There is no relationship between mailer type and signup rate.  They are independent"
-alternate_hypothesis = "There is a relationship between mailer type and signup rate.  They are not independent"
+# hypothesis stated and acceptance criteria for rejecting the null hypothesis
+null_hypothesis = 'There is no relationship between mailer type and signup rate. They are independent.'
+alternative_hypothesis = 'There is a relationship between mailer type and signup rate. They are not independent.'
 acceptance_criteria = 0.05
 
 ```
@@ -240,26 +240,20 @@ The below code:
 
 ```python
 
-# aggregate our data to get observed values
-observed_values = pd.crosstab(campaign_data["mailer_type"], campaign_data["signup_flag"]).values
+# view observed values
+observed_values = pd.crosstab(campaign_data['mailer_type'], campaign_data['signup_flag']).values
 
-# run the chi-square test
-chi2_statistic, p_value, dof, expected_values = chi2_contingency(observed_values, correction = False)
+# calculate the chi-squared statistic
+chi2_statistic, p_value, dof, expected_values = chi2_contingency(observed_values, correction=False)
+print('Chi-squared Statistic:', chi2_statistic)
+>> Chi-squared Statistic: 1.94
+print('P-value:', p_value)
+>> P-value: 0.16
 
-# print chi-square statistic
-print(chi2_statistic)
->> 1.94
-
-# print p-value
-print(p_value)
->> 0.16
-
-# find the critical value for our test
+# find the critical value
 critical_value = chi2.ppf(1 - acceptance_criteria, dof)
-
-# print critical value
-print(critical_value)
->> 3.84
+print('Critical Value:', critical_value)
+>> Critical Value: 3.84
 
 ```
 <br>
@@ -277,7 +271,7 @@ We have a Chi-Square Statistic of **1.94** and a p-value of **0.16**.  The criti
 ___
 
 <br>
-# Analysing The Results <a name="chi-square-results"></a>
+# Analyzing The Results <a name="chi-square-results"></a>
 
 At this point we have everything we need to understand the results of our Chi-Square test - and just from the results above we can see that, since our resulting p-value of **0.16** is *greater* than our Acceptance Criteria of 0.05 then we will _retain_ the Null Hypothesis and conclude that there is no significant difference between the signup rates of Mailer 1 and Mailer 2.
 
@@ -287,22 +281,22 @@ To make this script more dynamic, we can create code to automatically interpret 
 
 ```python
 
-# print the results (based upon p-value)
+# print the p-value results
 if p_value <= acceptance_criteria:
-    print(f"As our p-value of {p_value} is lower than our acceptance_criteria of {acceptance_criteria} - we reject the null hypothesis, and conclude that: {alternate_hypothesis}")
+    print(f'As our p-value of {p_value} is less than our acceptance criteria of {acceptance_criteria} - we reject the null hypothesis, and conclude that: {alternative_hypothesis}')
 else:
-    print(f"As our p-value of {p_value} is higher than our acceptance_criteria of {acceptance_criteria} - we retain the null hypothesis, and conclude that: {null_hypothesis}")
+    print(f'As our p-value of {p_value} is greater than our acceptance criteria of {acceptance_criteria}  - we fail to reject the null hypothesis, and conclude that: {null_hypothesis}')    
 
->> As our p-value of 0.16351 is higher than our acceptance_criteria of 0.05 - we retain the null hypothesis, and conclude that: There is no relationship between mailer type and signup rate.  They are independent
+>> As our p-value of 0.16351 is higher than our acceptance_criteria of 0.05 - we fail to reject the null hypothesis, and conclude that: There is no relationship between mailer type and signup rate. They are independent.
 
 
-# print the results (based upon p-value)
+# print the chi2 results
 if chi2_statistic >= critical_value:
-    print(f"As our chi-square statistic of {chi2_statistic} is higher than our critical value of {critical_value} - we reject the null hypothesis, and conclude that: {alternate_hypothesis}")
+    print(f'As our chi-squared statistic of {chi2_statistic} is greater than our critical value of {critical_value} - we reject the null hypothesis, and conclude that: {alternative_hypothesis}')
 else:
-    print(f"As our chi-square statistic of {chi2_statistic} is lower than our critical value of {critical_value} - we retain the null hypothesis, and conclude that: {null_hypothesis}")
+    print(f'As our chi-squared statistic of {chi2_statistic} is less than our critical value of {critical_value} - we fail to reject the null hypothesis, and conclude that: {null_hypothesis}')    
     
->> As our chi-square statistic of 1.9414 is lower than our critical value of 3.841458820694124 - we retain the null hypothesis, and conclude that: There is no relationship between mailer type and signup rate.  They are independent
+>> As our chi-square statistic of 1.9414 is less than our critical value of 3.841458820694124 - we fail to reject the null hypothesis, and conclude that: There is no relationship between mailer type and signup rate.  They are independent.
 
 ```
 <br>
