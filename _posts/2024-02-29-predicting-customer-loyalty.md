@@ -16,12 +16,12 @@ Our client, a grocery retailer, hired a market research consultancy to append ma
     - [Growth/Next Steps](#overview-growth)
     - [Key Definition](#overview-definition)
 - [01. Data Overview](#data-overview)
-- [02. Modelling Overview](#modelling-overview)
+- [02. Modeling Overview](#modeling-overview)
 - [03. Linear Regression](#linreg-title)
 - [04. Decision Tree](#regtree-title)
 - [05. Random Forest](#rf-title)
-- [06. Modelling Summary](#modelling-summary)
-- [07. Predicting Missing Loyalty Scores](#modelling-predictions)
+- [06. Modeling Summary](#modeling-summary)
+- [07. Predicting Missing Loyalty Scores](#modeling-predictions)
 - [08. Growth & Next Steps](#growth-next-steps)
 
 ___
@@ -41,7 +41,7 @@ To achieve this, we looked to build out a predictive model that will find relati
 
 We firstly needed to compile the necessary data from tables in the database, gathering key customer metrics that may help predict *loyalty score*, appending on the dependent variable, and separating out those who did and did not have this dependent variable present.
 
-As we are predicting a numeric output, we tested three regression modelling approaches, namely:
+As we are predicting a numeric output, we tested three regression modeling approaches, namely:
 
 * Linear Regression
 * Decision Tree
@@ -72,7 +72,7 @@ As the most important outcome for this project was predictive accuracy, rather t
 <br>
 ### Growth/Next Steps <a name="overview-growth"></a>
 
-While predictive accuracy was relatively high - other modelling approaches could be tested, especially those somewhat similar to Random Forest, for example XGBoost, LightGBM to see if even more accuracy could be gained.
+While predictive accuracy was relatively high - other modeling approaches could be tested, especially those somewhat similar to Random Forest, for example XGBoost, LightGBM to see if even more accuracy could be gained.
 
 From a data point of view, further variables could be collected, and further feature engineering could be undertaken to ensure that we have as much useful information available for predicting customer loyalty
 <br>
@@ -94,53 +94,56 @@ We will be predicting the *loyalty_score* metric.  This metric exists (for half 
 
 The key variables hypothesised to predict the missing loyalty scores will come from the client database, namely the *transactions* table, the *customer_details* table, and the *product_areas* table.
 
-Using pandas in Python, we merged these tables together for all customers, creating a single dataset that we can use for modelling.
+Using pandas in Python, we merged these tables together for all customers, creating a single dataset that we can use for modeling.
 
 ```python
 
-# import required packages
+# import requried packages
 import pandas as pd
 import pickle
 
-# import required data tables
-loyalty_scores = ...
-customer_details = ...
-transactions = ...
+# import the data
+loyalty_scores = pd.read_excel('../data/ABC_Grocery_Data/grocery_database.xlsx', sheet_name='loyalty_scores')
+customer_details = pd.read_excel('../data/ABC_Grocery_Data/grocery_database.xlsx', sheet_name='customer_details')
+transactions = pd.read_excel('../data/ABC_Grocery_Data/grocery_database.xlsx', sheet_name='transactions')
 
-# merge loyalty score data and customer details data, at customer level
-data_for_regression = pd.merge(customer_details, loyalty_scores, how = "left", on = "customer_id")
+# merge datasets
+df = pd.merge(customer_details, loyalty_scores, on='customer_id', how='left')
 
-# aggregate sales data from transactions table
-sales_summary = transactions.groupby("customer_id").agg({"sales_cost" : "sum",
-                                                         "num_items" : "sum",
-                                                         "transaction_id" : "nunique",
-                                                         "product_area_id" : "nunique"}).reset_index()
+# column customer_loyalty_score is the target
 
-# rename columns for clarity
-sales_summary.columns = ["customer_id", "total_sales", "total_items", "transaction_count", "product_area_count"]
+# aggregate the transactions data
+sales_summary = transactions.groupby('customer_id').agg({'sales_cost': 'sum', 
+                                                         'num_items': 'sum',
+                                                         'transaction_id': 'count',
+                                                         'product_area_id': 'nunique'}).reset_index()
 
-# engineer an average basket value column for each customer
-sales_summary["average_basket_value"] = sales_summary["total_sales"] / sales_summary["transaction_count"]
+# rename the aggregated columns
+sales_summary.columns = ['customer_id', 'total_sales', 'total_items', 'transaction_count', 'product_area_count']
 
-# merge the sales summary with the overall customer data
-data_for_regression = pd.merge(data_for_regression, sales_summary, how = "inner", on = "customer_id")
+# create average basket amount
+sales_summary['average_basket_value'] = sales_summary['total_sales'] / sales_summary['transaction_count']
 
-# split out data for modelling (loyalty score is present)
-regression_modelling = data_for_regression.loc[data_for_regression["customer_loyalty_score"].notna()]
+df = pd.merge(df, sales_summary, on='customer_id', how='inner')
 
-# split out data for scoring post-modelling (loyalty score is missing)
-regression_scoring = data_for_regression.loc[data_for_regression["customer_loyalty_score"].isna()]
+# split the dataframes into rows with loyalty scores and rows without
+df_with_loyalty = df[df['customer_loyalty_score'].notnull()]
+df_without_loyalty = df[df['customer_loyalty_score'].isnull()]
+# drop the target column from the dataframe without loyalty scores
+df_without_loyalty = df_without_loyalty.drop('customer_loyalty_score', axis=1)
 
-# for scoring set, drop the loyalty score column (as it is blank/redundant)
-regression_scoring.drop(["customer_loyalty_score"], axis = 1, inplace = True)
 
-# save our datasets for future use
-pickle.dump(regression_modelling, open("data/customer_loyalty_modelling.p", "wb"))
-pickle.dump(regression_scoring, open("data/customer_loyalty_scoring.p", "wb"))
+# save the dataframes to pickle file
+with open('./data/df_with_loyalty.pkl', 'wb') as f:
+    pickle.dump(df_with_loyalty, f)
+    
+with open('./data/df_without_loyalty.pkl', 'wb') as f:
+    pickle.dump(df_without_loyalty, f)
+
 
 ```
 <br>
-After this data pre-processing in Python, we have a dataset for modelling that contains the following fields...
+After this data pre-processing in Python, we have a dataset for modeling that contains the following fields...
 <br>
 <br>
 
@@ -158,13 +161,13 @@ After this data pre-processing in Python, we have a dataset for modelling that c
 
 ___
 <br>
-# Modelling Overview
+# Modeling Overview
 
 We will build a model that looks to accurately predict the “loyalty_score” metric for those customers that were able to be tagged, based upon the customer metrics listed above.
 
 If that can be achieved, we can use this model to predict the customer loyalty score for the customers that were unable to be tagged by the agency.
 
-As we are predicting a numeric output, we tested three regression modelling approaches, namely:
+As we are predicting a numeric output, we tested three regression modeling approaches, namely:
 
 * Linear Regression
 * Decision Tree
@@ -184,7 +187,7 @@ We utlise the scikit-learn library within Python to model our data using Linear 
 <br>
 ### Data Import <a name="linreg-import"></a>
 
-Since we saved our modelling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
+Since we saved our modeling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
 
 ```python
 
@@ -192,21 +195,25 @@ Since we saved our modelling data as a pickle file, we import it.  We ensure we 
 import pandas as pd
 import pickle
 import matplotlib.pyplot as plt
+import numpy as np
+
 from sklearn.linear_model import LinearRegression
-from sklearn.utils import shuffle
+from sklearn.utils import shuffle  
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
 from sklearn.metrics import r2_score
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.feature_selection import RFECV
 
-# import modelling data
-data_for_model = pickle.load(open("data/customer_loyalty_modelling.p", "rb"))
 
-# drop uneccessary columns
-data_for_model.drop("customer_id", axis = 1, inplace = True)
+# load the data for modeling
+with open('./data/df_with_loyalty.pkl', 'rb') as f:
+    df_with_loyalty = pickle.load(f)
+    
+# drop the customer_id column
+df_with_loyalty = df_with_loyalty.drop('customer_id', axis=1)
 
-# shuffle data
-data_for_model = shuffle(data_for_model, random_state = 42)
+# shuffle the data
+df_with_loyalty = shuffle(df_with_loyalty, random_state=42)
 
 ```
 <br>
@@ -226,9 +233,8 @@ The number of missing values in the data was extremely low, so instead of applyi
 
 ```python
 
-# remove rows where values are missing
-data_for_model.isna().sum()
-data_for_model.dropna(how = "any", inplace = True)
+# drop missing values since only a few are present
+df_with_loyalty = df_with_loyalty.dropna()
 
 ```
 
@@ -265,28 +271,25 @@ We do this using the "boxplot approach" where we remove any rows where the value
 <br>
 ```python
 
-outlier_investigation = data_for_model.describe()
-outlier_columns = ["distance_from_store", "total_sales", "total_items"]
+# create function to remove outliers based on 2.0 IQR
+def remove_outliers(df, column):
+    q1 = df[column].quantile(0.25)
+    q3 = df[column].quantile(0.75)
+    iqr = q3 - q1
+    lower_bound = q1 - 2 * iqr
+    upper_bound = q3 + 2 * iqr
+    outliers_df = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+    df = df.drop(outliers_df.index, axis=0).reset_index(drop=True)
+    return df
 
-# boxplot approach
-for column in outlier_columns:
-    
-    lower_quartile = data_for_model[column].quantile(0.25)
-    upper_quartile = data_for_model[column].quantile(0.75)
-    iqr = upper_quartile - lower_quartile
-    iqr_extended = iqr * 2
-    min_border = lower_quartile - iqr_extended
-    max_border = upper_quartile + iqr_extended
-    
-    outliers = data_for_model[(data_for_model[column] < min_border) | (data_for_model[column] > max_border)].index
-    print(f"{len(outliers)} outliers detected in column {column}")
-    
-    data_for_model.drop(outliers, inplace = True)
+# drop oultiers
+for col in ['distance_from_store', 'total_sales', 'total_items']:
+    df_with_loyalty = remove_outliers(df_with_loyalty, col)
 
 ```
 
 <br>
-##### Split Out Data For Modelling
+##### Split Out Data For Modeling
 
 In the next code block we do two things, we firstly split our data into an **X** object which contains only the predictor variables, and a **y** object that contains only our dependent variable.
 
@@ -295,12 +298,12 @@ Once we have done this, we split our data into training and test sets to ensure 
 <br>
 ```python
 
-# split data into X and y objects for modelling
-X = data_for_model.drop(["customer_loyalty_score"], axis = 1)
-y = data_for_model["customer_loyalty_score"]
+# create X and y
+X = df_with_loyalty.drop('customer_loyalty_score', axis=1)
+y = df_with_loyalty['customer_loyalty_score']
 
-# split out training & test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+# split the data from trainig and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 ```
 
@@ -324,27 +327,21 @@ For ease, after we have applied One Hot Encoding, we turn our training and test 
 <br>
 ```python
 
-# list of categorical variables that need encoding
-categorical_vars = ["gender"]
+# one hot encode the categorical columns
+cat_cols = ['gender']
+one_hot = OneHotEncoder(drop='first', sparse_output=False)
+one_hot.fit(X_train[cat_cols])
+X_train_encoded = one_hot.transform(X_train[cat_cols])
+encoded_feat_names = one_hot.get_feature_names_out(cat_cols)
+X_train_encoded = pd.DataFrame(X_train_encoded, columns=encoded_feat_names)
+X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis=1)
+X_train.drop(cat_cols, axis=1, inplace=True)
 
-# instantiate OHE class
-one_hot_encoder = OneHotEncoder(sparse=False, drop = "first")
-
-# apply OHE
-X_train_encoded = one_hot_encoder.fit_transform(X_train[categorical_vars])
-X_test_encoded = one_hot_encoder.transform(X_test[categorical_vars])
-
-# extract feature names for encoded columns
-encoder_feature_names = one_hot_encoder.get_feature_names_out(categorical_vars)
-
-# turn objects back to pandas dataframe
-X_train_encoded = pd.DataFrame(X_train_encoded, columns = encoder_feature_names)
-X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis = 1)
-X_train.drop(categorical_vars, axis = 1, inplace = True)
-
-X_test_encoded = pd.DataFrame(X_test_encoded, columns = encoder_feature_names)
-X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis = 1)
-X_test.drop(categorical_vars, axis = 1, inplace = True)
+# encode the test data
+X_test_encoded = one_hot.transform(X_test[cat_cols])
+X_test_encoded = pd.DataFrame(X_test_encoded, columns=encoded_feat_names)
+X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis=1)
+X_test.drop(cat_cols, axis=1, inplace=True)
 
 ```
 
@@ -364,20 +361,21 @@ For our task we applied a variation of Reursive Feature Elimination called *Recu
 <br>
 ```python
 
-# instantiate RFECV & the model type to be utilised
-regressor = LinearRegression()
-feature_selector = RFECV(regressor)
+# create the Linear Regression model
+model = LinearRegression(random_state=42)
 
-# fit RFECV onto our training & test data
-fit = feature_selector.fit(X_train,y_train)
+# use the feature selection of recurvise feature elimination with cross validation
+rfecv = RFECV(estimator=model)
+fit = rfecv.fit(X_train, y_train)
 
-# extract & print the optimal number of features
-optimal_feature_count = feature_selector.n_features_
-print(f"Optimal number of features: {optimal_feature_count}")
+optimal_feature_count = rfecv.n_features_
+print(f'Total number of features: {X_train.shape[1]}')
+print(f'Optimal number of features: {optimal_feature_count}')
+print(f'Optimal features: {X_train.columns[fit.support_]}')
 
-# limit our training & test sets to only include the selected variables
-X_train = X_train.loc[:, feature_selector.get_support()]
-X_test = X_test.loc[:, feature_selector.get_support()]
+# create X_train and X_test with the optimal features
+X_train = X_train.iloc[:, fit.support_]
+X_test = X_test.iloc[:, fit.support_]
 
 ```
 
@@ -386,11 +384,15 @@ The below code then produces a plot that visualises the cross-validated accuracy
 
 ```python
 
-plt.style.use('seaborn-poster')
-plt.plot(range(1, len(fit.cv_results_['mean_test_score']) + 1), fit.cv_results_['mean_test_score'], marker = "o")
-plt.ylabel("Model Score")
-plt.xlabel("Number of Features")
-plt.title(f"Feature Selection using RFE \n Optimal number of features is {optimal_feature_count} (at score of {round(max(fit.cv_results_['mean_test_score']),4)})")
+# get the mean cross validation score
+grid_scores = [np.mean(vals) for vals in fit.grid_scores_]
+
+
+# plot the feature selection
+plt.plot(range(1, len(fit.grid_scores_) + 1), grid_scores, marker='o')
+plt.ylabel('R2 Score')
+plt.xlabel('Number of Features')
+plt.title(f'Feature Selection using RFE \n Optimal number of features is {optimal_feature_count} (at score of {round(rfecv.grid_scores_.max(), 2)})')
 plt.tight_layout()
 plt.show()
 
@@ -409,11 +411,9 @@ Instantiating and training our Linear Regression model is done using the below c
 
 ```python
 
-# instantiate our model object
-regressor = LinearRegression()
-
-# fit our model using our training & test sets
-regressor.fit(X_train, y_train)
+# train the model
+model = LinearRegression()
+model.fit(X_train, y_train)
 
 ```
 
@@ -426,8 +426,8 @@ To assess how well our model is predicting on new data - we use the trained mode
 
 ```python
 
-# predict on the test set
-y_pred = regressor.predict(X_test)
+# predict the test set
+y_pred = model.predict(X_test)
 
 ```
 
@@ -440,9 +440,9 @@ To calculate r-squared, we use the following code where we pass in our *predicte
 
 ```python
 
-# calculate r-squared for our test set predictions
-r_squared = r2_score(y_test, y_pred)
-print(r_squared)
+# use r2 score to evaluate the model
+r2 = r2_score(y_test, y_pred)
+print(f'R2 score: {r2}')
 
 ```
 
@@ -463,10 +463,10 @@ Finally, we take a mean of all four test set results.
 
 ```python
 
-# calculate the mean cross validated r-squared for our test set predictions
-cv = KFold(n_splits = 4, shuffle = True, random_state = 42)
-cv_scores = cross_val_score(regressor, X_train, y_train, cv = cv, scoring = "r2")
-cv_scores.mean()
+# cross validate the model
+cv = KFold(n_splits=4, shuffle=True, random_state=42)
+cv_scores = cross_val_score(model, X_train, y_train, cv=cv, scoring='r2')
+print('Cross Validation Scores:', cv_scores.mean())
 
 ```
 
@@ -481,10 +481,15 @@ When applying Linear Regression with *multiple* input variables, the r-squared m
 
 ```python
 
-# calculate adjusted r-squared for our test set predictions
-num_data_points, num_input_vars = X_test.shape
-adjusted_r_squared = 1 - (1 - r_squared) * (num_data_points - 1) / (num_data_points - num_input_vars - 1)
-print(adjusted_r_squared)
+# use adjusted r2 score to evaluate the model
+n = X_test.shape[0]
+p = X_test.shape[1]
+
+# create the adjusted r2 score function
+def adjusted_r2_score(r2, n, p):
+    return 1 - (1 - r2) * (n - 1) / (n - p - 1)
+
+print(f'Adjusted R2 score: {adjusted_r2_score(r2, n, p)}')
 
 ```
 
@@ -497,14 +502,10 @@ Although our overall goal for this project is predictive accuracy, rather than a
 <br>
 ```python
 
-# extract model coefficients
-coefficients = pd.DataFrame(regressor.coef_)
-input_variable_names = pd.DataFrame(X_train.columns)
-summary_stats = pd.concat([input_variable_names,coefficients], axis = 1)
-summary_stats.columns = ["input_variable", "coefficient"]
-
-# extract model intercept
-regressor.intercept_
+# view the coefficients
+coefs = pd.DataFrame({'variable': X_train.columns, 'coef': model.coef_})
+coefs = coefs.sort_values(by='coef', ascending=False)
+print(coefs)
 
 ```
 <br>
@@ -544,7 +545,7 @@ We will again utlise the scikit-learn library within Python to model our data us
 <br>
 ### Data Import <a name="regtree-import"></a>
 
-Since we saved our modelling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
+Since we saved our modeling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
 
 ```python
 
@@ -552,20 +553,24 @@ Since we saved our modelling data as a pickle file, we import it.  We ensure we 
 import pandas as pd
 import pickle
 import matplotlib.pyplot as plt
+
 from sklearn.tree import DecisionTreeRegressor, plot_tree
-from sklearn.utils import shuffle
+from sklearn.utils import shuffle  
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
 from sklearn.metrics import r2_score
 from sklearn.preprocessing import OneHotEncoder
 
-# import modelling data
-data_for_model = pickle.load(open("data/customer_loyalty_modelling.p", "rb"))
 
-# drop uneccessary columns
-data_for_model.drop("customer_id", axis = 1, inplace = True)
+# load the data for modeling
+with open('./data/df_with_loyalty.pkl', 'rb') as f:
+    df_with_loyalty = pickle.load(f)
+    
+    
+# drop the customer_id column
+df_with_loyalty = df_with_loyalty.drop('customer_id', axis=1)
 
-# shuffle data
-data_for_model = shuffle(data_for_model, random_state = 42)
+# shuffle the data
+df_with_loyalty = shuffle(df_with_loyalty, random_state=42)
 
 ```
 <br>
@@ -583,14 +588,13 @@ The number of missing values in the data was extremely low, so instead of applyi
 
 ```python
 
-# remove rows where values are missing
-data_for_model.isna().sum()
-data_for_model.dropna(how = "any", inplace = True)
+# drop missing values since only a few are present
+df_with_loyalty = df_with_loyalty.dropna()
 
 ```
 
 <br>
-##### Split Out Data For Modelling
+##### Split Out Data For Modeling
 
 In exactly the same way we did for Linear Regression, in the next code block we do two things, we firstly split our data into an **X** object which contains only the predictor variables, and a **y** object that contains only our dependent variable.
 
@@ -599,12 +603,12 @@ Once we have done this, we split our data into training and test sets to ensure 
 <br>
 ```python
 
-# split data into X and y objects for modelling
-X = data_for_model.drop(["customer_loyalty_score"], axis = 1)
-y = data_for_model["customer_loyalty_score"]
+# create X and y
+X = df_with_loyalty.drop('customer_loyalty_score', axis=1)
+y = df_with_loyalty['customer_loyalty_score']
 
-# split out training & test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+# split the data from trainig and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 ```
 
@@ -620,27 +624,22 @@ As *gender* doesn't have any explicit *order* to it, in other words, Male isn't 
 <br>
 ```python
 
-# list of categorical variables that need encoding
-categorical_vars = ["gender"]
+# one hot encode the categorical columns
+cat_cols = ['gender']
+one_hot = OneHotEncoder(drop='first', sparse_output=False)
+one_hot.fit(X_train[cat_cols])
+X_train_encoded = one_hot.transform(X_train[cat_cols])
+encoded_feat_names = one_hot.get_feature_names_out(cat_cols)
+X_train_encoded = pd.DataFrame(X_train_encoded, columns=encoded_feat_names)
+X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis=1)
+X_train.drop(cat_cols, axis=1, inplace=True)
 
-# instantiate OHE class
-one_hot_encoder = OneHotEncoder(sparse=False, drop = "first")
+# encode the test data
+X_test_encoded = one_hot.transform(X_test[cat_cols])
+X_test_encoded = pd.DataFrame(X_test_encoded, columns=encoded_feat_names)
+X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis=1)
+X_test.drop(cat_cols, axis=1, inplace=True)
 
-# apply OHE
-X_train_encoded = one_hot_encoder.fit_transform(X_train[categorical_vars])
-X_test_encoded = one_hot_encoder.transform(X_test[categorical_vars])
-
-# extract feature names for encoded columns
-encoder_feature_names = one_hot_encoder.get_feature_names_out(categorical_vars)
-
-# turn objects back to pandas dataframe
-X_train_encoded = pd.DataFrame(X_train_encoded, columns = encoder_feature_names)
-X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis = 1)
-X_train.drop(categorical_vars, axis = 1, inplace = True)
-
-X_test_encoded = pd.DataFrame(X_test_encoded, columns = encoder_feature_names)
-X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis = 1)
-X_test.drop(categorical_vars, axis = 1, inplace = True)
 
 ```
 
@@ -651,11 +650,11 @@ Instantiating and training our Decision Tree model is done using the below code.
 
 ```python
 
-# instantiate our model object
-regressor = DecisionTreeRegressor(random_state = 42)
+# create the Linear Regression model
+model = DecisionTreeRegressor(random_state=42)
 
-# fit our model using our training & test sets
-regressor.fit(X_train, y_train)
+# train the model
+model.fit(X_train, y_train)
 
 ```
 
@@ -668,8 +667,8 @@ To assess how well our model is predicting on new data - we use the trained mode
 
 ```python
 
-# predict on the test set
-y_pred = regressor.predict(X_test)
+# predict the test set
+y_pred = model.predict(X_test)
 
 ```
 
@@ -680,9 +679,9 @@ To calculate r-squared, we use the following code where we pass in our *predicte
 
 ```python
 
-# calculate r-squared for our test set predictions
-r_squared = r2_score(y_test, y_pred)
-print(r_squared)
+# use r2 score to evaluate the model
+r2 = r2_score(y_test, y_pred)
+print(f'R2 score: {r2}')
 
 ```
 
@@ -703,10 +702,10 @@ Finally, we take a mean of all four test set results.
 
 ```python
 
-# calculate the mean cross validated r-squared for our test set predictions
-cv = KFold(n_splits = 4, shuffle = True, random_state = 42)
-cv_scores = cross_val_score(regressor, X_train, y_train, cv = cv, scoring = "r2")
-cv_scores.mean()
+# cross validate the model
+cv = KFold(n_splits=4, shuffle=True, random_state=42)
+cv_scores = cross_val_score(model, X_train, y_train, cv=cv, scoring='r2')
+print('Cross Validation Scores:', cv_scores.mean())
 
 ```
 
@@ -719,10 +718,15 @@ Just like we did with Linear Regression, we will also calculate the *Adjusted R-
 
 ```python
 
-# calculate adjusted r-squared for our test set predictions
-num_data_points, num_input_vars = X_test.shape
-adjusted_r_squared = 1 - (1 - r_squared) * (num_data_points - 1) / (num_data_points - num_input_vars - 1)
-print(adjusted_r_squared)
+# use adjusted r2 score to evaluate the model
+n = X_test.shape[0]
+p = X_test.shape[1]
+
+# create the adjusted r2 score function
+def adjusted_r2_score(r2, n, p):
+    return 1 - (1 - r2) * (n - 1) / (n - p - 1)
+
+print(f'Adjusted R2 score: {adjusted_r2_score(r2, n, p)}')
 
 ```
 
@@ -740,32 +744,26 @@ Unfortunately, we don't necessarily know the *best* number of splits to use for 
 <br>
 ```python
 
-# finding the best max_depth
-
-# set up range for search, and empty list to append accuracy scores to
-max_depth_list = list(range(1,9))
-accuracy_scores = []
-
-# loop through each possible depth, train and validate model, append test set accuracy
-for depth in max_depth_list:
+# find best max depth
+max_depths = range(1, 9)
+r2_scores = []
+for depth in max_depths:
+    model = DecisionTreeRegressor(max_depth=depth, random_state=42)
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    r2 = r2_score(y_test, y_pred)
+    r2_scores.append(r2)
     
-    regressor = DecisionTreeRegressor(max_depth = depth, random_state = 42)
-    regressor.fit(X_train,y_train)
-    y_pred = regressor.predict(X_test)
-    accuracy = r2_score(y_test,y_pred)
-    accuracy_scores.append(accuracy)
+# find the best max depth
+best_r2_score = max(r2_scores) 
+best_max_depth = max_depths[r2_scores.index(best_r2_score)]   
     
-# store max accuracy, and optimal depth    
-max_accuracy = max(accuracy_scores)
-max_accuracy_idx = accuracy_scores.index(max_accuracy)
-optimal_depth = max_depth_list[max_accuracy_idx]
-
-# plot accuracy by max depth
-plt.plot(max_depth_list,accuracy_scores)
-plt.scatter(optimal_depth, max_accuracy, marker = "x", color = "red")
-plt.title(f"Accuracy by Max Depth \n Optimal Tree Depth: {optimal_depth} (Accuracy: {round(max_accuracy,4)})")
-plt.xlabel("Max Depth of Decision Tree")
-plt.ylabel("Accuracy")
+# plot the max depth vs r2 score
+plt.plot(max_depths, r2_scores)
+plt.scatter(best_max_depth, best_r2_score, color='red', marker='x', label='Best Max Depth')
+plt.xlabel('Max Depth')
+plt.ylabel('R2 Score')
+plt.title(f'Max Depth vs R2 Score \nBest Max Depth: {best_max_depth} \nBest R2 Score: {round(best_r2_score, 3)}')
 plt.tight_layout()
 plt.show()
 
@@ -787,17 +785,17 @@ To see the decisions that have been made in the (re-fitted) tree, we can use the
 <br>
 ```python
 
-# re-fit our model using max depth of 4
-regressor = DecisionTreeRegressor(random_state = 42, max_depth = 4)
-regressor.fit(X_train, y_train)
+## while the max depth of 8 gives the best r-squared, the score is farily flat starting at max depth of 4
+# use max depth of 4
+model = DecisionTreeRegressor(max_depth=4, random_state=42)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+r2 = r2_score(y_test, y_pred)
+print(f'R2 score: {r2}') # performance barely changes with less chance of overfitting
 
-# plot the nodes of the decision tree
-plt.figure(figsize=(25,15))
-tree = plot_tree(regressor,
-                 feature_names = X.columns,
-                 filled = True,
-                 rounded = True,
-                 fontsize = 16)
+# plot the model
+plt.figure(figsize=(20, 10))
+plot_tree(model, filled=True, rounded=True, feature_names=X_train.columns, fontsize=16)
 
 ```
 <br>
@@ -825,7 +823,7 @@ We will again utlise the scikit-learn library within Python to model our data us
 <br>
 ### Data Import <a name="rf-import"></a>
 
-Again, since we saved our modelling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
+Again, since we saved our modeling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
 
 ```python
 
@@ -833,21 +831,24 @@ Again, since we saved our modelling data as a pickle file, we import it.  We ens
 import pandas as pd
 import pickle
 import matplotlib.pyplot as plt
+
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.utils import shuffle
+from sklearn.utils import shuffle  
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
 from sklearn.metrics import r2_score
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.inspection import permutation_importance
 
-# import modelling data
-data_for_model = pickle.load(open("data/customer_loyalty_modelling.p", "rb"))
+# load the data for modeling
+with open('./data/df_with_loyalty.pkl', 'rb') as f:
+    df_with_loyalty = pickle.load(f)
+    
+    
+# drop the customer_id column
+df_with_loyalty = df_with_loyalty.drop('customer_id', axis=1)
 
-# drop uneccessary columns
-data_for_model.drop("customer_id", axis = 1, inplace = True)
-
-# shuffle data
-data_for_model = shuffle(data_for_model, random_state = 42)
+# shuffle the data
+df_with_loyalty = shuffle(df_with_loyalty, random_state=42)
 
 ```
 <br>
@@ -865,14 +866,13 @@ The number of missing values in the data was extremely low, so instead of applyi
 
 ```python
 
-# remove rows where values are missing
-data_for_model.isna().sum()
-data_for_model.dropna(how = "any", inplace = True)
+# drop missing values since only a few are present
+df_with_loyalty = df_with_loyalty.dropna()
 
 ```
 
 <br>
-##### Split Out Data For Modelling
+##### Split Out Data For Modeling
 
 In exactly the same way we did for Linear Regression, in the next code block we do two things, we firstly split our data into an **X** object which contains only the predictor variables, and a **y** object that contains only our dependent variable.
 
@@ -881,12 +881,12 @@ Once we have done this, we split our data into training and test sets to ensure 
 <br>
 ```python
 
-# split data into X and y objects for modelling
-X = data_for_model.drop(["customer_loyalty_score"], axis = 1)
-y = data_for_model["customer_loyalty_score"]
+# create X and y
+X = df_with_loyalty.drop('customer_loyalty_score', axis=1)
+y = df_with_loyalty['customer_loyalty_score']
 
-# split out training & test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+# split the data from trainig and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 ```
 
@@ -902,27 +902,21 @@ As *gender* doesn't have any explicit *order* to it, in other words, Male isn't 
 <br>
 ```python
 
-# list of categorical variables that need encoding
-categorical_vars = ["gender"]
+# one hot encode the categorical columns
+cat_cols = ['gender']
+one_hot = OneHotEncoder(drop='first', sparse_output=False)
+one_hot.fit(X_train[cat_cols])
+X_train_encoded = one_hot.transform(X_train[cat_cols])
+encoded_feat_names = one_hot.get_feature_names_out(cat_cols)
+X_train_encoded = pd.DataFrame(X_train_encoded, columns=encoded_feat_names)
+X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis=1)
+X_train.drop(cat_cols, axis=1, inplace=True)
 
-# instantiate OHE class
-one_hot_encoder = OneHotEncoder(sparse=False, drop = "first")
-
-# apply OHE
-X_train_encoded = one_hot_encoder.fit_transform(X_train[categorical_vars])
-X_test_encoded = one_hot_encoder.transform(X_test[categorical_vars])
-
-# extract feature names for encoded columns
-encoder_feature_names = one_hot_encoder.get_feature_names_out(categorical_vars)
-
-# turn objects back to pandas dataframe
-X_train_encoded = pd.DataFrame(X_train_encoded, columns = encoder_feature_names)
-X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis = 1)
-X_train.drop(categorical_vars, axis = 1, inplace = True)
-
-X_test_encoded = pd.DataFrame(X_test_encoded, columns = encoder_feature_names)
-X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis = 1)
-X_test.drop(categorical_vars, axis = 1, inplace = True)
+# encode the test data
+X_test_encoded = one_hot.transform(X_test[cat_cols])
+X_test_encoded = pd.DataFrame(X_test_encoded, columns=encoded_feat_names)
+X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis=1)
+X_test.drop(cat_cols, axis=1, inplace=True)
 
 ```
 
@@ -935,11 +929,11 @@ We leave the other parameters at their default values, meaning that we will just
 
 ```python
 
-# instantiate our model object
-regressor = RandomForestRegressor(random_state = 42)
+# create the Linear Regression model
+model = RandomForestRegressor(random_state=42)
 
-# fit our model using our training & test sets
-regressor.fit(X_train, y_train)
+# train the model
+model.fit(X_train, y_train)
 
 ```
 
@@ -952,8 +946,8 @@ To assess how well our model is predicting on new data - we use the trained mode
 
 ```python
 
-# predict on the test set
-y_pred = regressor.predict(X_test)
+# predict the test set
+y_pred = model.predict(X_test)
 
 ```
 
@@ -964,9 +958,9 @@ To calculate r-squared, we use the following code where we pass in our *predicte
 
 ```python
 
-# calculate r-squared for our test set predictions
-r_squared = r2_score(y_test, y_pred)
-print(r_squared)
+# use r2 score to evaluate the model
+r2 = r2_score(y_test, y_pred)
+print(f'R2 score: {r2}')
 
 ```
 
@@ -979,10 +973,10 @@ As we did when testing Linear Regression & our Decision Tree, we will again util
 
 ```python
 
-# calculate the mean cross validated r-squared for our test set predictions
-cv = KFold(n_splits = 4, shuffle = True, random_state = 42)
-cv_scores = cross_val_score(regressor, X_train, y_train, cv = cv, scoring = "r2")
-cv_scores.mean()
+# cross validate the model
+cv = KFold(n_splits=4, shuffle=True, random_state=42)
+cv_scores = cross_val_score(model, X_train, y_train, cv=cv, scoring='r2')
+print('Cross Validation Scores:', cv_scores.mean())
 
 ```
 
@@ -995,10 +989,15 @@ Just like we did with Linear Regression & our Decision Tree, we will also calcul
 
 ```python
 
-# calculate adjusted r-squared for our test set predictions
-num_data_points, num_input_vars = X_test.shape
-adjusted_r_squared = 1 - (1 - r_squared) * (num_data_points - 1) / (num_data_points - num_input_vars - 1)
-print(adjusted_r_squared)
+# use adjusted r2 score to evaluate the model
+n = X_test.shape[0]
+p = X_test.shape[1]
+
+# create the adjusted r2 score function
+def adjusted_r2_score(r2, n, p):
+    return 1 - (1 - r2) * (n - 1) / (n - p - 1)
+
+print(f'Adjusted R2 score: {adjusted_r2_score(r2, n, p)}')
 
 ```
 
@@ -1038,32 +1037,27 @@ Let's put them both in place, and plot the results...
 <br>
 ```python
 
-# calculate feature importance
-feature_importance = pd.DataFrame(regressor.feature_importances_)
-feature_names = pd.DataFrame(X.columns)
-feature_importance_summary = pd.concat([feature_names,feature_importance], axis = 1)
-feature_importance_summary.columns = ["input_variable","feature_importance"]
-feature_importance_summary.sort_values(by = "feature_importance", inplace = True)
+# view feature importance
+feature_importance = model.feature_importances_
+feature_names = X_train.columns
+feature_importance_df = pd.DataFrame({'feature': feature_names, 'importance': feature_importance})
+feature_importance_df = feature_importance_df.sort_values('importance', ascending=True)
 
-# plot feature importance
-plt.barh(feature_importance_summary["input_variable"],feature_importance_summary["feature_importance"])
-plt.title("Feature Importance of Random Forest")
-plt.xlabel("Feature Importance")
+# plot the feature importance
+plt.barh(feature_importance_df['feature'], feature_importance_df['importance'])
+plt.xlabel('Importance')
+plt.ylabel('Feature')
+plt.title('Feature Importance - Random Forest Regression')
 plt.tight_layout()
 plt.show()
 
-# calculate permutation importance
-result = permutation_importance(regressor, X_test, y_test, n_repeats = 10, random_state = 42)
-permutation_importance = pd.DataFrame(result["importances_mean"])
-feature_names = pd.DataFrame(X.columns)
-permutation_importance_summary = pd.concat([feature_names,permutation_importance], axis = 1)
-permutation_importance_summary.columns = ["input_variable","permutation_importance"]
-permutation_importance_summary.sort_values(by = "permutation_importance", inplace = True)
-
-# plot permutation importance
-plt.barh(permutation_importance_summary["input_variable"],permutation_importance_summary["permutation_importance"])
-plt.title("Permutation Importance of Random Forest")
-plt.xlabel("Permutation Importance")
+# view the permutation importance
+perm_importance = permutation_importance(model, X_test, y_test, random_state=42)
+sorted_idx = perm_importance.importances_mean.argsort()
+plt.barh(X_test.columns[sorted_idx], perm_importance.importances_mean[sorted_idx])
+plt.xlabel('Permutation Importance')
+plt.ylabel('Feature')
+plt.title('Permutation Importance - Random Forest Regression')
 plt.tight_layout()
 plt.show()
 
@@ -1084,7 +1078,7 @@ There are slight differences in the order or "importance" for the remaining vari
 
 ___
 <br>
-# Modelling Summary  <a name="modelling-summary"></a>
+# Modeling Summary  <a name="modeling-summary"></a>
 
 The most important outcome for this project was predictive accuracy, rather than explicitly understanding the drivers of prediction. Based upon this, we chose the model that performed the best when predicted on the test set - the Random Forest.
 
@@ -1103,10 +1097,10 @@ The most important outcome for this project was predictive accuracy, rather than
 * Linear Regression = 0.853
 
 <br>
-Even though we were not specifically interested in the drivers of prediction, it was interesting to see across all three modelling approaches, that the input variable with the biggest impact on the prediction was *distance_from_store* rather than variables such as *total sales*.  This is interesting information for the business, so discovering this as we went was worthwhile.
+Even though we were not specifically interested in the drivers of prediction, it was interesting to see across all three modeling approaches, that the input variable with the biggest impact on the prediction was *distance_from_store* rather than variables such as *total sales*.  This is interesting information for the business, so discovering this as we went was worthwhile.
 
 <br>
-# Predicting Missing Loyalty Scores <a name="modelling-predictions"></a>
+# Predicting Missing Loyalty Scores <a name="modeling-predictions"></a>
 
 We have selected the model to use (Random Forest) and now we need to make the *loyalty_score* predictions for those customers that the market research consultancy were unable to tag.
 
@@ -1129,29 +1123,33 @@ In the following code, we will
 import pandas as pd
 import pickle
 
-# import customers for scoring
-to_be_scored = ...
+# load in the data to be predicted
+with open('./data/df_without_loyalty.pkl', 'rb') as f:
+    df_to_predict = pickle.load(f)
+    
+# import the model and one hot encoder
+with open('./models/random_forest_regression_loyalty.pkl', 'rb') as f:
+    model = pickle.load(f)
+    
+with open('./models/one_hot_encoder_loyalty.pkl', 'rb') as f:
+    one_hot = pickle.load(f)
+    
+# drop the customer_id column
+df_to_predict = df_to_predict.drop('customer_id', axis=1)
 
-# import model and model objects
-regressor = ...
-one_hot_encoder = ...
+# drop any missing values rows
+df_to_predict = df_to_predict.dropna()
 
-# drop unused columns
-to_be_scored.drop(["customer_id"], axis = 1, inplace = True)
+# one hot encode the categorical columns
+cat_cols = ['gender']
+transformed_array = one_hot.transform(df_to_predict[cat_cols])
+encoded_feat_names = one_hot.get_feature_names_out(cat_cols)
+trans_df = pd.DataFrame(transformed_array, columns=encoded_feat_names)
+df_to_predict = pd.concat([df_to_predict.reset_index(drop=True), trans_df.reset_index(drop=True)], axis=1)
+df_to_predict.drop(cat_cols, axis=1, inplace=True)
 
-# drop missing values
-to_be_scored.dropna(how = "any", inplace = True)
-
-# apply one hot encoding (transform only)
-categorical_vars = ["gender"]
-encoder_vars_array = one_hot_encoder.transform(to_be_scored[categorical_vars])
-encoder_feature_names = one_hot_encoder.get_feature_names(categorical_vars)
-encoder_vars_df = pd.DataFrame(encoder_vars_array, columns = encoder_feature_names)
-to_be_scored = pd.concat([to_be_scored.reset_index(drop=True), encoder_vars_df.reset_index(drop=True)], axis = 1)
-to_be_scored.drop(categorical_vars, axis = 1, inplace = True)
-
-# make our predictions!
-loyalty_predictions = regressor.predict(to_be_scored)
+# make predictions
+predictions = model.predict(df_to_predict)
 
 ```
 <br>
@@ -1161,7 +1159,7 @@ ___
 <br>
 # Growth & Next Steps <a name="growth-next-steps"></a>
 
-While predictive accuracy was relatively high - other modelling approaches could be tested, especially those somewhat similar to Random Forest, for example XGBoost, LightGBM to see if even more accuracy could be gained.
+While predictive accuracy was relatively high - other modeling approaches could be tested, especially those somewhat similar to Random Forest, for example XGBoost, LightGBM to see if even more accuracy could be gained.
 
 We could even look to tune the hyperparameters of the Random Forest, notably regularisation parameters such as tree depth, as well as potentially training on a higher number of Decision Trees in the Random Forest.
 
