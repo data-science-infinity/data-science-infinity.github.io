@@ -17,7 +17,7 @@ In this project we use Causal Impact Analysis to analyse & understand the sales 
 - [01. Causal Impact Analysis Overview](#causal-impact-overview)
 - [02. Data Overview & Preparation](#causal-impact-data-prep)
 - [03. Applying Causal Impact Analysis](#causal-impact-fit)
-- [04. Analysing The Results](#causal-impact-results)
+- [04. Analyzing The Results](#causal-impact-results)
 - [05. Growth & Next Steps](#growth-next-steps)
 
 ___
@@ -87,7 +87,7 @@ But to understand this *robustly & reliably* we really need to understand what *
 
 In most cases the trends *preceding the event in question* isn’t tame, it is filled with lumps and bumps and ups and downs.  When some key event does take place, understanding what *would have happened had the event not taken place* so we can estimate the true impact can be difficult!
 
-In many cases, the event that we’re analysing is part of a randomized & controlled experiment, and this means understanding the difference between the group that was affected by the event can be compared to a control group, that was purposely held back from the effect of the event.
+In many cases, the event that we’re analyzing is part of a randomized & controlled experiment, and this means understanding the difference between the group that was affected by the event can be compared to a control group, that was purposely held back from the effect of the event.
 
 But there are a lot of cases where we just can’t run a randomized experiment, either because it’s expensive, or potentially it’s just impossible.  As an example, in the case of measuring the change in a share price after an event, we don’t really have a direct control group to lean on for comparison purposes.
 
@@ -213,7 +213,7 @@ We can use the created object (called ci above) to examine & plot the results.
 
 ___
 <br>
-# Analysing The Results <a name="causal-impact-results"></a>
+# Analyzing The Results <a name="causal-impact-results"></a>
 
 <br>
 #### Plotting The Results
