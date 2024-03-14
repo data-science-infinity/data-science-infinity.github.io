@@ -5,7 +5,7 @@ image: "/posts/classification-title-img.png"
 tags: [Customer Targeting, Machine Learning, Classification, Python]
 ---
 
-Our client, a grocery retailer, wants to utilise Machine Learning to reduce mailing costs, and improve ROI!
+Our client, a grocery retailer, wants to utilize Machine Learning to reduce mailing costs, and improve ROI!
 
 # Table of contents
 
@@ -43,7 +43,7 @@ Let's use Machine Learning to take on this task!
 
 We firstly needed to compile the necessary data from tables in the database, gathering key customer metrics that may help predict *delivery club* membership.
 
-Within our historical dataset from the last campaign, we found that 69% of customers did not sign up and 31% did.  This tells us that while the data isn't perfectly balanced at 50:50, it isn't *too* imbalanced either.  Even so, we make sure to not rely on classification accuracy alone when assessing results - also analysing Precision, Recall, and F1-Score.
+Within our historical dataset from the last campaign, we found that 69% of customers did not sign up and 31% did.  This tells us that while the data isn't perfectly balanced at 50:50, it isn't *too* imbalanced either.  Even so, we make sure to not rely on classification accuracy alone when assessing results - also analyzing Precision, Recall, and F1-Score.
 
 As we are predicting a binary output, we tested four classification modeling approaches, namely:
 
@@ -108,7 +108,7 @@ ___
 
 We will be predicting the binary *signup_flag* metric from the *campaign_data* table in the client database.
 
-The key variables hypothesised to predict this will come from the client database, namely the *transactions* table, the *customer_details* table, and the *product_areas* table.
+The key variables hypothesized to predict this will come from the client database, namely the *transactions* table, the *customer_details* table, and the *product_areas* table.
 
 We aggregated up customer data from the 3 months prior to the last campaign.
 
@@ -144,7 +144,7 @@ As we are predicting a binary output, we tested three classification modeling ap
 <br>
 # Logistic Regression <a name="logreg-title"></a>
 
-We utlise the scikit-learn library within Python to model our data using Logistic Regression. The code sections below are broken up into 5 key sections:
+We utlize the scikit-learn library within Python to model our data using Logistic Regression. The code sections below are broken up into 5 key sections:
 
 * Data Import
 * Data Preprocessing
@@ -194,7 +194,7 @@ df_signup['signup_flag'].value_counts(normalize=True)
 
 ```
 <br>
-From the last step in the above code, we see that **69% of customers did not sign up and 31% did**.  This tells us that while the data isn't perfectly balanced at 50:50, it isn't *too* imbalanced either.  Because of this, and as you will see, we make sure to not rely on classification accuracy alone when assessing results - also analysing Precision, Recall, and F1-Score.
+From the last step in the above code, we see that **69% of customers did not sign up and 31% did**.  This tells us that while the data isn't perfectly balanced at 50:50, it isn't *too* imbalanced either.  Because of this, and as you will see, we make sure to not rely on classification accuracy alone when assessing results - also analyzing Precision, Recall, and F1-Score.
 
 <br>
 ### Data Preprocessing <a name="logreg-preprocessing"></a>
@@ -221,7 +221,7 @@ df_signup = df_signup.dropna()
 <br>
 ##### Outliers
 
-The ability for a Logistic Regression model to generalise well across *all* data can be hampered if there are outliers present.  There is no right or wrong way to deal with outliers, but it is always something worth very careful consideration - just because a value is high or low, does not necessarily mean it should not be there!
+The ability for a Logistic Regression model to generalize well across *all* data can be hampered if there are outliers present.  There is no right or wrong way to deal with outliers, but it is always something worth very careful consideration - just because a value is high or low, does not necessarily mean it should not be there!
 
 In this code section, we use **.describe()** from Pandas to investigate the spread of values for each of our predictors.  The results of this can be seen in the table below.
 
@@ -344,7 +344,7 @@ For our task we applied a variation of Reursive Feature Elimination called *Recu
 # create the Logistic Regression model
 model = LogisticRegression(random_state=42, max_iter=1000)
 
-# use the feature selection of recurvise feature elimination with cross validation
+# use the feature selection of recursive feature elimination with cross validation
 rfecv = RFECV(estimator=model)
 fit = rfecv.fit(X_train, y_train)
 
@@ -355,7 +355,7 @@ X_test = X_test.iloc[:, fit.support_]
 ```
 
 <br>
-The below code then produces a plot that visualises the cross-validated classification accuracy with each potential number of features
+The below code then produces a plot that visualizes the cross-validated classification accuracy with each potential number of features
 
 ```python
 
@@ -441,7 +441,7 @@ plt.show()
 <br>
 The aim is to have a high proportion of observations falling into the top left cell (predicted non-signup and actual non-signup) and the bottom right cell (predicted signup and actual signup).
 
-Since the proportion of signups in our data was around 30:70 we will next analyse not only Classification Accuracy, but also Precision, Recall, and F1-Score which will help us assess how well our model has performed in reality.
+Since the proportion of signups in our data was around 30:70 we will next analyze not only Classification Accuracy, but also Precision, Recall, and F1-Score which will help us assess how well our model has performed in reality.
 
 <br>
 ##### Classification Performance Metrics
@@ -465,7 +465,7 @@ Recall is a metric that tells us *of all positive observations, how many did we 
 
 Again, referring to the rare disease example, Recall would tell us *of all patients who actually had the disease, how many did we correctly predict*
 
-The tricky thing about Precision & Recall is that it is impossible to optimise both - it's a zero-sum game.  If you try to increase Precision, Recall decreases, and vice versa.  Sometimes however it will make more sense to try and elevate one of them, in spite of the other.  In the case of our rare-disease prediction like we've used in our example, perhaps it would be more important to optimise for Recall as we want to classify as many positive cases as possible.  In saying this however, we don't want to just classify every patient as having the disease, as that isn't a great outcome either!
+The tricky thing about Precision & Recall is that it is impossible to optimize both - it's a zero-sum game.  If you try to increase Precision, Recall decreases, and vice versa.  Sometimes however it will make more sense to try and elevate one of them, in spite of the other.  In the case of our rare-disease prediction like we've used in our example, perhaps it would be more important to optimize for Recall as we want to classify as many positive cases as possible.  In saying this however, we don't want to just classify every patient as having the disease, as that isn't a great outcome either!
 
 So - there is one more metric we will discuss & calculate, which is actually a *combination* of both...
 
@@ -479,7 +479,7 @@ Overall, optimising your model for F1-Score means that you'll get a model that i
 Using all of these metrics in combination gives a really good overview of the performance of a classification model, and gives us an understanding of the different scenarios & considerations!
 
 <br>
-In the code below, we utilise in-built functionality from scikit-learn to calculate these four metrics.
+In the code below, we utilize in-built functionality from scikit-learn to calculate these four metrics.
 
 ```python
 
@@ -569,7 +569,7 @@ plt.show()
 ![alt text](/img/posts/log-reg-optimal-threshold-plot.png "Logistic Regression Optimal Threshold Plot")
 
 <br>
-Along the x-axis of the above plot we have the different classification thresholds that were testing.  Along the y-axis we have the performance score for each of our three metrics.  As per the legend, we have Precision as a blue dotted line, Recall as an orange dotted line, and F1-Score as a thick green line.  You can see the interesting "zero-sum" relationship between Precision & Recall *and* you can see that the point where Precision & Recall meet is where F1-Score is maximised.
+Along the x-axis of the above plot we have the different classification thresholds that were testing.  Along the y-axis we have the performance score for each of our three metrics.  As per the legend, we have Precision as a blue dotted line, Recall as an orange dotted line, and F1-Score as a thick green line.  You can see the interesting "zero-sum" relationship between Precision & Recall *and* you can see that the point where Precision & Recall meet is where F1-Score is maximized.
 
 As you can see at the top of the plot, the optimal F1-Score for this model 0.78 and this is obtained at a classification threshold of 0.44.  This is higher than the F1-Score of 0.734 that we achieved at the default classification threshold of 0.50!
 
@@ -577,7 +577,7 @@ ___
 <br>
 # Decision Tree <a name="clftree-title"></a>
 
-We will again utlise the scikit-learn library within Python to model our data using a Decision Tree. The code sections below are broken up into 6 key sections:
+We will again utlize the scikit-learn library within Python to model our data using a Decision Tree. The code sections below are broken up into 6 key sections:
 
 * Data Import
 * Data Preprocessing
@@ -758,7 +758,7 @@ plt.show()
 <br>
 The aim is to have a high proportion of observations falling into the top left cell (predicted non-signup and actual non-signup) and the bottom right cell (predicted signup and actual signup).
 
-Since the proportion of signups in our data was around 30:70 we will again analyse not only Classification Accuracy, but also Precision, Recall, and F1-Score as they will help us assess how well our model has performed from different points of view.
+Since the proportion of signups in our data was around 30:70 we will again analyze not only Classification Accuracy, but also Precision, Recall, and F1-Score as they will help us assess how well our model has performed from different points of view.
 
 <br>
 ##### Classification Performance Metrics
@@ -767,7 +767,7 @@ Since the proportion of signups in our data was around 30:70 we will again analy
 
 For details on these performance metrics, please see the above section on Logistic Regression.  Using all four of these metrics in combination gives a really good overview of the performance of a classification model, and gives us an understanding of the different scenarios & considerations!
 
-In the code below, we utilise in-built functionality from scikit-learn to calculate these four metrics.
+In the code below, we utilize in-built functionality from scikit-learn to calculate these four metrics.
 
 ```python
 
@@ -796,11 +796,11 @@ Running this code gives us:
 * Recall = **0.885** meaning that of all *actual* delivery club signups, we predicted correctly 88.5% of the time
 * F1-Score = **0.885**
 
-These are all higher than what we saw when applying Logistic Regression, even after we had optimised the classification threshold!
+These are all higher than what we saw when applying Logistic Regression, even after we had optimized the classification threshold!
 
 
 <br>
-### Visualise Our Decision Tree <a name="clftree-visualise"></a>
+### Visualize Our Decision Tree <a name="clftree-visualize"></a>
 
 To see the decisions that have been made in the tree, we can use the plot_tree functionality that we imported from scikit-learn.  To do this, we use the below code:
 
@@ -830,7 +830,7 @@ One interesting thing to note is that the *very first split* appears to be using
 <br>
 ### Decision Tree Regularisation <a name="clftree-model-regularisation"></a>
 
-Decision Tree's can be prone to over-fitting, in other words, without any limits on their splitting, they will end up learning the training data perfectly.  We would much prefer our model to have a more *generalised* set of rules, as this will be more robust & reliable when making predictions on *new* data.
+Decision Tree's can be prone to over-fitting, in other words, without any limits on their splitting, they will end up learning the training data perfectly.  We would much prefer our model to have a more *generalized* set of rules, as this will be more robust & reliable when making predictions on *new* data.
 
 One effective method of avoiding this over-fitting, is to apply a *max depth* to the Decision Tree, meaning we only allow it to split the data a certain number of times before it is required to stop.
 
@@ -867,7 +867,7 @@ plt.show()
 
 ```
 <br>
-That code gives us the below plot - which visualises the results!
+That code gives us the below plot - which visualizes the results!
 
 <br>
 ![alt text](/img/posts/clf-tree-max-depth-plot.png "Decision Tree Max Depth Plot")
@@ -879,7 +879,7 @@ ___
 <br>
 # Random Forest <a name="rf-title"></a>
 
-We will again utlise the scikit-learn library within Python to model our data using a Random Forest. The code sections below are broken up into 4 key sections:
+We will again utlize the scikit-learn library within Python to model our data using a Random Forest. The code sections below are broken up into 4 key sections:
 
 * Data Import
 * Data Preprocessing
@@ -1056,7 +1056,7 @@ plt.show()
 <br>
 The aim is to have a high proportion of observations falling into the top left cell (predicted non-signup and actual non-signup) and the bottom right cell (predicted signup and actual signup).
 
-Since the proportion of signups in our data was around 30:70 we will again analyse not only Classification Accuracy, but also Precision, Recall, and F1-Score as they will help us assess how well our model has performed from different points of view.
+Since the proportion of signups in our data was around 30:70 we will again analyze not only Classification Accuracy, but also Precision, Recall, and F1-Score as they will help us assess how well our model has performed from different points of view.
 
 <br>
 ##### Classification Performance Metrics
@@ -1065,7 +1065,7 @@ Since the proportion of signups in our data was around 30:70 we will again analy
 
 For details on these performance metrics, please see the above section on Logistic Regression.  Using all four of these metrics in combination gives a really good overview of the performance of a classification model, and gives us an understanding of the different scenarios & considerations!
 
-In the code below, we utilise in-built functionality from scikit-learn to calculate these four metrics.
+In the code below, we utilize in-built functionality from scikit-learn to calculate these four metrics.
 
 ```python
 
@@ -1105,7 +1105,7 @@ Because of this, we end up with a powerful and robust model, but because of the 
 
 As we’re using random samples of data, and input variables for each Decision Tree - there are many scenarios where certain input variables are being held back and this enables us a way to compare how accurate the models predictions are if that variable is or isn’t present.
 
-So, at a high level, in a Random Forest we can measure *importance* by asking *How much would accuracy decrease if a specific input variable was removed or randomised?*
+So, at a high level, in a Random Forest we can measure *importance* by asking *How much would accuracy decrease if a specific input variable was removed or randomized?*
 
 If this decrease in performance, or accuracy, is large, then we’d deem that input variable to be quite important, and if we see only a small decrease in accuracy, then we’d conclude that the variable is of less importance.
 
@@ -1119,7 +1119,7 @@ These observations that were not randomly selected for each Decision Tree are kn
 
 For each Decision Tree, all of the *Out of Bag* observations are gathered and then passed through.  Once all of these observations have been run through the Decision Tree, we obtain a classification accuracy score for these predictions.
 
-In order to understand the *importance*, we *randomise* the values within one of the input variables - a process that essentially destroys any relationship that might exist between that input variable and the output variable - and run that updated data through the Decision Tree again, obtaining a second accuracy score.  The difference between the original accuracy and the new accuracy gives us a view on how important that particular variable is for predicting the output.
+In order to understand the *importance*, we *randomize* the values within one of the input variables - a process that essentially destroys any relationship that might exist between that input variable and the output variable - and run that updated data through the Decision Tree again, obtaining a second accuracy score.  The difference between the original accuracy and the new accuracy gives us a view on how important that particular variable is for predicting the output.
 
 *Permutation Importance* is often preferred over *Feature Importance* which can at times inflate the importance of numerical features. Both are useful, and in most cases will give fairly similar results.
 
@@ -1169,7 +1169,7 @@ That code gives us the below plots - the first being for *Feature Importance* an
 <br>
 The overall story from both approaches is very similar, in that by far, the most important or impactful input variables are *distance_from_store* and *transaction_count*
 
-Surprisingly, *average_basket_size* was not as important as hypothesised.
+Surprisingly, *average_basket_size* was not as important as hypothesized.
 
 There are slight differences in the order or "importance" for the remaining variables but overall they have provided similar findings.
 
@@ -1177,7 +1177,7 @@ ___
 <br>
 # K Nearest Neighbours <a name="knn-title"></a>
 
-We utlise the scikit-learn library within Python to model our data using KNN. The code sections below are broken up into 5 key sections:
+We utlize the scikit-learn library within Python to model our data using KNN. The code sections below are broken up into 5 key sections:
 
 * Data Import
 * Data Preprocessing
@@ -1217,7 +1217,7 @@ df_signup = shuffle(df_signup, random_state=42)
 
 ```
 <br>
-From the last step in the above code, we see that **69% of customers did not sign up and 31% did**.  This tells us that while the data isn't perfectly balanced at 50:50, it isn't *too* imbalanced either.  Because of this, and as you will see, we make sure to not rely on classification accuracy alone when assessing results - also analysing Precision, Recall, and F1-Score.
+From the last step in the above code, we see that **69% of customers did not sign up and 31% did**.  This tells us that while the data isn't perfectly balanced at 50:50, it isn't *too* imbalanced either.  Because of this, and as you will see, we make sure to not rely on classification accuracy alone when assessing results - also analyzing Precision, Recall, and F1-Score.
 
 <br>
 ### Data Preprocessing <a name="knn-preprocessing"></a>
@@ -1391,7 +1391,7 @@ For our task here we are again going to apply *Recursive Feature Elimination Wit
 <br>
 ```python
 
-# use the feature selection of recurvise feature elimination with cross validation
+# use the feature selection of recursive feature elimination with cross validation
 rf_clf = RandomForestClassifier(random_state=42)
 rfecv = RFECV(estimator=rf_clf)
 fit = rfecv.fit(X_train, y_train)
@@ -1408,7 +1408,7 @@ X_test = X_test.iloc[:, fit.support_]
 ```
 
 <br>
-The below code then produces a plot that visualises the cross-validated classification accuracy with each potential number of features
+The below code then produces a plot that visualizes the cross-validated classification accuracy with each potential number of features
 
 ```python
 
@@ -1498,7 +1498,7 @@ The aim is to have a high proportion of observations falling into the top left c
 
 The results here are interesting - all of the errors are where the model incorrectly classified *delivery club* signups as non-signups - the model made no errors when classifying non-signups non-signups.
 
-Since the proportion of signups in our data was around 30:70 we will next analyse not only Classification Accuracy, but also Precision, Recall, and F1-Score which will help us assess how well our model has performed in reality.
+Since the proportion of signups in our data was around 30:70 we will next analyze not only Classification Accuracy, but also Precision, Recall, and F1-Score which will help us assess how well our model has performed in reality.
 
 <br>
 ##### Classification Performance Metrics
@@ -1507,7 +1507,7 @@ Since the proportion of signups in our data was around 30:70 we will next analys
 
 For details on these performance metrics, please see the above section on Logistic Regression.  Using all four of these metrics in combination gives a really good overview of the performance of a classification model, and gives us an understanding of the different scenarios & considerations!
 
-In the code below, we utilise in-built functionality from scikit-learn to calculate these four metrics.
+In the code below, we utilize in-built functionality from scikit-learn to calculate these four metrics.
 
 ```python
 
@@ -1536,7 +1536,7 @@ Running this code gives us:
 * Recall = **0.762** meaning that of all *actual* delivery club signups, we predicted correctly 76.2% of the time
 * F1-Score = **0.865**
 
-These are interesting.  The KNN has obtained the highest overall Classification Accuracy & Precision, but the lower Recall score has penalised the F1-Score meaning that is actually lower than what was seen for both the Decision Tree & the Random Forest!
+These are interesting.  The KNN has obtained the highest overall Classification Accuracy & Precision, but the lower Recall score has penalized the F1-Score meaning that is actually lower than what was seen for both the Decision Tree & the Random Forest!
 
 <br>
 ### Finding The Optimal Value For k <a name="knn-opt-k"></a>
@@ -1576,7 +1576,7 @@ plt.show()
 
 ```
 <br>
-That code gives us the below plot - which visualises the results!
+That code gives us the below plot - which visualizes the results!
 
 <br>
 ![alt text](/img/posts/knn-optimal-k-value-plot.png "KNN Optimal k Value Plot")
