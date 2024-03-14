@@ -48,7 +48,7 @@ From there we apply the Apriori algorithm to provide us with several different r
 * Expected Confidence
 * Lift
 
-These metrics examine product relationships in different ways, so we utilise each to put forward ideas that address each of the tasks at hand.  You can read more about these metrics, and the Apriori algorithm in the relevant section below.
+These metrics examine product relationships in different ways, so we utilize each to put forward ideas that address each of the tasks at hand.  You can read more about these metrics, and the Apriori algorithm in the relevant section below.
 
 <br>
 <br>
@@ -75,7 +75,7 @@ As this is first & foremost an exploratory project, we will take back the result
 
 From there we will recommend applying this same logic to all other categories, as well as potentially across the full-product range.
 
-We will also propose the build of the "Keyword Search Engine" which will help Category Managers extract and utilise the insights held within the data.
+We will also propose the build of the "Keyword Search Engine" which will help Category Managers extract and utilize the insights held within the data.
 
 <br>
 <br>
@@ -131,9 +131,9 @@ ___
 <br>
 # Apriori Overview  <a name="apriori-overview"></a>
 
-Association Rule Learning is an approach that discovers the strength of relationships between different data-points.  It is commonly utilised to understand which products are frequently (or infrequently) purchased together.
+Association Rule Learning is an approach that discovers the strength of relationships between different data-points.  It is commonly utilized to understand which products are frequently (or infrequently) purchased together.
 
-In a business sense this can provide some really interesting, and useful information that can help optimise:
+In a business sense this can provide some really interesting, and useful information that can help optimize:
 
 * Product Arrangement/Placement (making the customer journey more efficient)
 * Product Recommendations (customers who purchased product A also purchased product B)
@@ -404,4 +404,4 @@ As this was first & foremost an exploratory project, we will take back the resul
 
 From there we will recommend applying this same logic to all other categories, as well as potentially across the full-product range.
 
-We will also propose the build of the "Keyword Search Engine" which will help Category Managers extract and utilise the insights held within the data.
+We will also propose the build of the "Keyword Search Engine" which will help Category Managers extract and utilize the insights held within the data.

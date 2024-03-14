@@ -90,9 +90,9 @@ ___
 <br>
 #### A/B Testing
 
-An A/B Test can be described as a randomised experiment containing two groups, A & B, that receive different experiences. Within an A/B Test, we look to understand and measure the response of each group - and the information from this helps drive future business decisions.
+An A/B Test can be described as a randomized experiment containing two groups, A & B, that receive different experiences. Within an A/B Test, we look to understand and measure the response of each group - and the information from this helps drive future business decisions.
 
-Application of A/B testing can range from testing different online ad strategies, different email subject lines when contacting customers, or testing the effect of mailing customers a coupon, vs a control group.  Companies like Amazon are running these tests in an almost never-ending cycle, testing new website features on randomised groups of customers...all with the aim of finding what works best so they can stay ahead of their competition.  Reportedly, Netflix will even test different images for the same movie or show, to different segments of their customer base to see if certain images pull more viewers in.
+Application of A/B testing can range from testing different online ad strategies, different email subject lines when contacting customers, or testing the effect of mailing customers a coupon, vs a control group.  Companies like Amazon are running these tests in an almost never-ending cycle, testing new website features on randomized groups of customers...all with the aim of finding what works best so they can stay ahead of their competition.  Reportedly, Netflix will even test different images for the same movie or show, to different segments of their customer base to see if certain images pull more viewers in.
 
 <br>
 #### Hypothesis Testing
@@ -118,14 +118,14 @@ In a Hypothesis Test, before we collect any data or run any numbers - we specify
 
 Conventionally, we set our Acceptance Criteria to 0.05 - but this does not have to be the case.  If we need to be more confident that something did not occur through chance alone, we could lower this value down to something much smaller, meaning that we only come to the conclusion that the outcome was special or rare if it’s extremely rare.
 
-So to summarise, in a Hypothesis Test, we test the Null Hypothesis using a p-value and then decide it’s fate based on the Acceptance Criteria.
+So to summarize, in a Hypothesis Test, we test the Null Hypothesis using a p-value and then decide it’s fate based on the Acceptance Criteria.
 
 <br>
 **Types Of Hypothesis Test**
 
 There are many different types of Hypothesis Tests, each of which is appropriate for use in differing scenarios - depending on a) the type of data that you’re looking to test and b) the question that you’re asking of that data.
 
-In the case of our task here, where we are looking to understand the difference in sign-up *rate* between two groups - we will utilise the Chi-Square Test For Independence.
+In the case of our task here, where we are looking to understand the difference in sign-up *rate* between two groups - we will utilize the Chi-Square Test For Independence.
 
 <br>
 #### Chi-Square Test For Independence
@@ -210,7 +210,7 @@ ___
 
 The very first thing we need to do in any form of Hypothesis Test is state our Null Hypothesis, our Alternate Hypothesis, and the Acceptance Criteria (more details on these in the section above)
 
-In the code below we code these in explcitly & clearly so we can utilise them later to explain the results.  We specify the common Acceptance Criteria value of 0.05.
+In the code below we code these in explcitly & clearly so we can utilize them later to explain the results.  We specify the common Acceptance Criteria value of 0.05.
 
 ```python
 
@@ -228,7 +228,7 @@ As mentioned in the section above, in a Chi-Square Test For Independence, the *o
 
 The below code:
 
-* Summarises our dataset to a 2x2 matrix for *signup_flag* by *mailer_type*
+* Summarizes our dataset to a 2x2 matrix for *signup_flag* by *mailer_type*
 * Based on this, calculates the:
     * Chi-Square Statistic
     * p-value
