@@ -1,9 +1,11 @@
 ---
 layout: post
-title: Comparison of Boosting Models on Parkinsons Prediction
+title: Comparison of Boosted Models on Parkinsons Prediction
 image: "/posts/parkinsons_logo.png"
 tags: [XGBoost, SMOTE, Classification, Python]
 ---
+
+In this project we use three boosted classification models and Synthetic Minority Oversampling Technique (SMOTE) for predicting the maximum severity of the Parkinsons disease in patients. 
 
 # Comparison of Boosting Models on Parkinsons Prediction
 
