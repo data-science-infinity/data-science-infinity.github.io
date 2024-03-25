@@ -72,14 +72,14 @@ All peptide mass spectrometry data is signified by the protein UniProt labeled c
 | **UDPRS 3** | 0 | 78 |
 | **UPDRS 4** | 0 | 20 |
 
-![](/img/posts/UPDRS1_Histogram.png)
-![](/img/posts/UPDRS2_Histogram.png)
-![](/img/posts/UPDRS3_Histogram.png)
-![](/img/posts/UPDRS4_Histogram.png)
+![](/img/posts/UPDRS1_Histogram_dark.png)
+![](/img/posts/UPDRS2_Histogram_dark.png)
+![](/img/posts/UPDRS3_Histogram_dark.png)
+![](/img/posts/UPDRS4_Histogram_dark.png)
 
 For each UPDRS there are many more for the value 0, and this is extremely the case for UPDRS 4.
 
-<img src="/UPDRS_Missing_Values.png" alt="image" width="50%" height="auto">
+<img src="/UPDRS_Missing_Values_dark.png" alt="image" width="50%" height="auto">
 
 ### Remove UPDRS 4 from the Experiment
 
@@ -111,9 +111,9 @@ Use the range of values for severity given from Wikipedia [3]
 
 After converting the targets into categories, there is significant class imbalance of the targets. The category "severe" is barely represented and will not perform well in a ML model. In order to adjust for this issue, **moderate and severe will be combined into a single category**. This will mean the model will now be determining whether a user will have mild vs non-mild symptoms (moderate/severe).
 
-![](/img/posts/UPDRS1_Cat_Bars.png)
-![](/img/posts/UPDRS2_Cat_Bars.png)
-![](/img/posts/UPDRS3_Cat_Bars.png)
+![](/img/posts/UPDRS1_Cat_Bars_dark.png)
+![](/img/posts/UPDRS2_Cat_Bars_dark.png)
+![](/img/posts/UPDRS3_Cat_Bars_dark.png)
 
 ## Feature Engineering
 
@@ -221,7 +221,7 @@ Using 5 fold Cross Validation and taking the mean results of each the 5 holdout 
 
 The distribution of visit months is most high in the 0 to 24 range. Perhaps the later visit months are actually only adding noise because the protein changes have already happened and may have a delayed effect on the symptoms.
 
-![](/img/posts/Visit_Month_Distribution.png)
+![](/img/posts/Visit_Month_Distribution_dark.png)
 
 ### UPDRS Categorical Max Values in the First 12 Months
 
@@ -246,33 +246,33 @@ Validation curves for the hyperparameters Max Depth and Subsample were tried for
 
 ### UPDRS 1 – Max Depth Validation Curve
 
-<img src="/img/posts//Max_Depth_Val_Curve_UPDRS1.png" alt="image" width="50%" height="auto">
+<img src="/img/posts//Max_Depth_Val_Curve_UPDRS1_dark.png" alt="image" width="50%" height="auto">
 
 The UPDRS 1 AUC score for the validation curve for Max Depth showed a high value at max_depth = 6 and 8, Since 6 is lower and should be better for generalization, the Max Depth used was 6.
 
 ### UPDRS 2 – Max Depth Validation Curve
 
-<img src="/img/posts//Max_Depth_Val_Curve_UPDRS2.png" alt="image" width="50%" height="auto">
+<img src="/img/posts//Max_Depth_Val_Curve_UPDRS2_dark.png" alt="image" width="50%" height="auto">
 
 The UPDRS 2 AUC score for the validation curve for Max Depth showed a high value at max_depth = 5
 
 ### UPDRS 3 – Max Depth Validation Curve
 
-<img src="/img/posts//Max_Depth_Val_Curve_UPDRS3.png" alt="image" width="50%" height="auto">
+<img src="/img/posts//Max_Depth_Val_Curve_UPDRS3_dark.png" alt="image" width="50%" height="auto">
 
 The UPDRS 3 AUC score for Max Depth the value of max_depth = 4 will be used even though the best AUC was max\_depth = 8. But since the AUC values are close and max depth 4 will be better at generalizing, it will be used.
 
 ### UPDRS 1 - Subsample Validation Curve
 
-![](/img/posts/Subsample_Val_Curve_UPDRS1.png)
+![](/img/posts/Subsample_Val_Curve_UPDRS1_dark.png)
 
 ### UPDRS 2 – Subsample Validation Curve
 
-![](/img/posts/Subsample_Val_Curve_UPDRS2.png)
+![](/img/posts/Subsample_Val_Curve_UPDRS2_dark.png)
 
 ### UPDRS 3 – Subsample Validation Curve
 
-![](/img/posts/Subsample_Val_Curve_UPDRS3.png)
+![](/img/posts/Subsample_Val_Curve_UPDRS3_dark.png)
 
 ## Fine Tuned Hyperparameter Comparison for XGBoost
 
@@ -453,7 +453,7 @@ The test data is a stratified holdout fold of the 5 Fold CV labeling which did n
 | --- | --- | --- | --- | --- |
 | 0.4 | 0.750 | 0.655 | 0.537 | 0.853 |
 
-![](/img/posts/xgb_updrs1_f1_curve.png)
+![](/img/posts/xgb_updrs1_f1_curve_dark.png)
 
 **XGBoost UPDRS 2**
 
@@ -461,7 +461,7 @@ The test data is a stratified holdout fold of the 5 Fold CV labeling which did n
 | --- | --- | --- | --- | --- |
 | 0.17 | 0.860 | 0.636 | 0.436 | 0.960 |
 
-![](/img/posts/xgb_updrs2_f1_curve.png)
+![](/img/posts/xgb_updrs2_f1_curve_dark.png)
 
 **XGBoost UPDRS 3**
 
@@ -469,7 +469,7 @@ The test data is a stratified holdout fold of the 5 Fold CV labeling which did n
 | --- | --- | --- | --- | --- |
 | 0.15 | 0.643 | 0.388 | 0.378 | 0.969 |
 
-![](/img/posts/xgb_updrs2_f1_curve.png)
+![](/img/posts/xgb_updrs2_f1_curve_dark.png)
 
 **LightGBM UPDRS 1**
 
@@ -477,7 +477,7 @@ The test data is a stratified holdout fold of the 5 Fold CV labeling which did n
 | --- | --- | --- | --- | --- |
 | 0.4 | 0.759 | 0.690 | 0.571 | 0.824 |
 
-![](/img/posts/lgb_updrs1_f1_curve.png)
+![](/img/posts/lgb_updrs1_f1_curve_dark.png)
 
 **LightGBM UPDRS 2**
 
@@ -485,7 +485,7 @@ The test data is a stratified holdout fold of the 5 Fold CV labeling which did n
 | --- | --- | --- | --- | --- |
 | 0.38 | 0.785 | 0.716 | 0.500 | 0.720 |
 
-![](/img/posts/lgb_updrs2_f1_curve.png)
+![](/img/posts/lgb_updrs2_f1_curve_dark.png)
 
 **LightGBM UPDRS 3**
 
@@ -493,7 +493,7 @@ The test data is a stratified holdout fold of the 5 Fold CV labeling which did n
 | --- | --- | --- | --- | --- |
 | 0.30 | 0.703 | 0.694 | 0.568 | 0.781 | 
 
-![](/img/posts/lgb_updrs3_f1_curve.png)
+![](/img/posts/lgb_updrs3_f1_curve_dark.png)
 
 **CatBoost UPDRS 1**
 
@@ -562,7 +562,7 @@ There is data on whether the patient was on medication during the clinical visit
 | 0.5 | 0.750 | 0.724 | 0.639 | 0.676 |
 
 
-![](/img/posts/xgb_updrs1_f1_curve_smote.png)
+![](/img/posts/xgb_updrs1_f1_curve_smote_dark.png)
 
 **XGBoost UPDRS 2**
 
@@ -570,7 +570,7 @@ There is data on whether the patient was on medication during the clinical visit
 | --- | --- | --- | --- | --- |
 | 0.33 | 0.853 | 0.716 | 0.5 | 0.8 | 
 
-![](/img/posts/xgb_updrs2_f1_curve_smote.png)
+![](/img/posts/xgb_updrs2_f1_curve_smote_dark.png)
 
 **XGBoost UPDRS 3**
 
@@ -578,7 +578,7 @@ There is data on whether the patient was on medication during the clinical visit
 | --- | --- | --- | --- | --- |
 | 0.52 | 0.676 | 0.624 | 0.5 | 0.72 | 
 
-![](/img/posts/xgb_updrs3_f1_curve_smote.png)
+![](/img/posts/xgb_updrs3_f1_curve_smote_dark.png)
 
 **LightGBM UPDRS 1**
 
@@ -586,7 +586,7 @@ There is data on whether the patient was on medication during the clinical visit
 | --- | --- | --- | --- | --- |
 | 0.35 | 0.768 | 0.644 | 0.528 | 0.824 |
 
-![](/img/posts/1gb_updrs1_f1_curve_smote.png)
+![](/img/posts/1gb_updrs1_f1_curve_smote_dark.png)
 
 **LightGBM UPDRS 2**
 
@@ -594,7 +594,7 @@ There is data on whether the patient was on medication during the clinical visit
 | --- | --- | --- | --- | --- |
 | 0.42 | 0.856 | 0.830 | 0.667 | 0.8 |
 
-![](/img/posts/lgb_updrs2_f1_curve_smote.png)
+![](/img/posts/lgb_updrs2_f1_curve_smote_dark.png)
 
 **LightGBM UPDRS 3**
 
@@ -602,7 +602,7 @@ There is data on whether the patient was on medication during the clinical visit
 | --- | --- | --- | --- | --- |
 | 0.28 | 0.729 | 0.682 | 0.556| 0.781 | 
 
-![](/img/posts/lgb_updrs3_f1_curve_smote.png)
+![](/img/posts/lgb_updrs3_f1_curve_smote_dark.png)
 
 **CatBoost UPDRS 1**
 
