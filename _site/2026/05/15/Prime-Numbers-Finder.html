@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Prime Numbers Finder with Python</title>
+    <meta name="description" content="Hi I'm Tonii, an engineer by trade, looking to pivot my career into data science and analytics! My portfolio contains interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!" />
+    <link rel="canonical" href="http://localhost:4000/2026/05/15/Prime-Numbers-Finder.html">
+    <link rel="alternate" type="application/rss+xml" title="Antonia Iaquinta" href="/feed.xml">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700" rel="stylesheet">
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+<body>
+    <header class="header">
+	<div class="container">
+		<div class="row">
+			<div class="col col-12">
+				<div class="header-box">
+					<div class="col col-3 wd-mob">
+						
+						<a href="/" class="header-avatar">
+							<img src="/img/my_headshot.jpg" class="header-avatar-img" alt="Antonia Iaquinta">
+						</a>
+						
+					</div>
+					<hr>
+					<div class="col col-9 wd-mob">
+						
+						<h1 class="header-title">Antonia Iaquinta</h1>
+						
+						
+						<h1 class="header-subtitle">Data Science & Analytics <span style="color:#f58506"> Portfolio </span></h1>
+						
+						
+						<p class="header-tagline">Hi I'm Tonii, an engineer by trade, looking to pivot my career into data science and analytics! My portfolio contains interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!</p>
+						
+						<div class="menu-links">
+							<ul class="list-reset">
+								<li class="item"><a class="item-link"><i class="ion ion-ios-pin"></i> Massachusetts, US</a></li>
+								<li class="item"><a class="item-link" href="https://github.com/golden-hail/golden-hail.github.io"><i class="ion ion-logo-github"></i> Github</a></li>
+								<li class="item"><a class="item-link" href="https://www.linkedin.com/in/antonia-iaquinta/"><i class="ion ion-logo-linkedin"></i> LinkedIn</a></li>
+								<li class="item"><a class="item-link" href="/docs/antonia_iaquinta_resume.docx"><i class="ion ion-ios-document"></i> Resume</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</header> <!-- /.header -->
+
+    <div class="container">
+    <div class="row">
+        <div class="col col-12">
+            <div class="post-image-box">
+                <div class="post-image" style="background-image: url(/img//posts/prime_nums.jpg)"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <article class="col col-12 col-t-12 post">
+            <div class="post-content">
+                <div class="post-head">
+                    
+                    <div class="post-tag">
+                        
+                        <a href="/tags#Python" class="tag">Python</a>
+                        
+                        <a href="/tags#Primes" class="tag">Primes</a>
+                        
+                    </div>
+                    
+                    <h1 class="post-title">Prime Numbers Finder with Python</h1>
+                    <div class="post-info">
+                        <div class="post-time">
+                            <span class="page__meta"><i class="ion ion-md-time"></i>
+
+
+
+
+  6 minute read
+</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-body">
+                    <p>Hello! In this post, I’ll be walking through a Python function I wrote that returns a list of all prime numbers that are below a specified input number, <strong>n</strong>. For example, if we passed in a value n=10, this function would return a list of all prime numbers below the specified number 10!</p>
+
+<p>For reference, a prime number is an integer that can only be divided wholly by itself and 1. In our example of n=10, we would expect an output as follows:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+<p>Before we jump into the final script, we’ll be walking through each functional step of the code. In the end, we’ll have a while loop that loops through a range of numbers up to the defined number, <strong>n</strong> that is able to return a list of prime numbers within that range.</p>
+
+<p>First, let’s set our input value <strong>n</strong>, the number in which we want to find all prime numbers up to.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n</span> <span class="o">=</span> <span class="mi">20</span>
+</code></pre></div></div>
+
+<p>Next, let’s define the range of values, up to n = 20.</p>
+
+<p>The lowest prime number to exist is 2. Because of this, we want our initial list of possible prime numbers, <strong>number_range</strong>, to be a list of numbers starting from 2 and ending at specified input “n”.</p>
+
+<p>Instead of an ordinary list, however, we’ll be using a set for our number_range. Sets are a good choice as sets are faster than lists and contain unique values, however, Stay tuned to find out why!</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">number_range</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">}</span>
+</code></pre></div></div>
+<p>The end goal is to loop through this number_range and extract each value from this set with the <em>pop</em> method to determine whether each value is a prime number. If the routine determines a value is prime, we’ll append it onto the new <strong>primes_list</strong> list. Let’s initialize that empty list!</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">primes_list</span> <span class="o">=</span> <span class="p">[]</span>
+</code></pre></div></div>
+
+<p>The <em>pop</em> method removes an element from a list or set, and returns that value to us. 2 is the first value in our number_range, and is the lowest prime number to exist. Let’s pop it out and assign it to <strong>prime</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">prime</span> <span class="o">=</span> <span class="n">number_range</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">prime</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">2</span>
+<span class="k">print</span><span class="p">(</span><span class="n">number_range</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>After the pop is applied, value 2 is no longer in our number_range set. We’ll then add this first prime number <strong>prime</strong> to our empty <strong>primes_list</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">primes_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">prime</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">primes_list</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>All multiples of 2 are by default not prime numbers, since they can be divided by 2 in addition to itself and 1. Let’s define a new set for all multiples of 2 that are lower than the defined n=20 value.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">multiples</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">prime</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">prime</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>The range was determined as follows: range(start, stop, step)</p>
+
+<p>For the START in our range, we can start with prime*2, which will be the first multiple of the prime number.<br />
+For the STOP in our range, we want to stop at the index of our number n=20, which is the value of n+1.<br />
+For the STEP in our range, we want multiples of our prime, so we want to increment in steps of this popped out prime number so we can put in our <strong>prime</strong> list.</p>
+
+<p>Now we can see that this range worked in our output as we have all multiples of 2 up to our n value of 20!</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">multiples</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">20</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>Here’s where the magic happens! Why did we use sets? With sets, we can use a special functionality called <strong>difference_update</strong>.</p>
+
+<p>Before we apply the <strong>difference_update</strong> method, let’s look at our two sets again.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">number_range</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">}</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">multiples</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">20</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>difference_update</strong> will be used to update our number_range by dropping the values that exist in the <strong>multiples</strong> list we defined.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">number_range</span><span class="p">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">multiples</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">number_range</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">19</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>Our number_range list is now trimmed down to not include multiples of 2, as we’ve determined the <strong>multiples</strong> values are not prime. This vastly reduces how many numbers in the number_range we have left to assess. The same steps above can now be applied to the the first number in the new number_range set, 3. We would pop 3 into the primes_list, find all multiples of 3 up to value <strong>n=20</strong>, and then difference_update to remove the non-prime multiples from our number_range set.</p>
+
+<p>We now have all the pieces to make this loop work, where we can define <strong>n</strong> and have the script return the <strong>primes_list</strong> on it’s own!</p>
+
+<p>Let’s assemble our while loop and up the ante, setting our <strong>n</strong> value to 1000:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="c1"># define number range
+</span><span class="n">number_range</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># create empty list to append prime numbers to
+</span><span class="n">primes_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># iterate until the number_range set is empty
+</span><span class="k">while</span> <span class="n">number_range</span><span class="p">:</span>
+    <span class="n">prime</span> <span class="o">=</span> <span class="n">number_range</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">primes_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">prime</span><span class="p">)</span>
+    <span class="n">multiples</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">prime</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">prime</span><span class="p">))</span>
+    <span class="n">number_range</span><span class="p">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">multiples</span><span class="p">)</span>
+	
+<span class="k">print</span><span class="p">(</span><span class="n">primes_list</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">107</span><span class="p">,</span> <span class="mi">109</span><span class="p">,</span> <span class="mi">113</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span> <span class="mi">137</span><span class="p">,</span> <span class="mi">139</span><span class="p">,</span> <span class="mi">149</span><span class="p">,</span> <span class="mi">151</span><span class="p">,</span> <span class="mi">157</span><span class="p">,</span> <span class="mi">163</span><span class="p">,</span> <span class="mi">167</span><span class="p">,</span> <span class="mi">173</span><span class="p">,</span> <span class="mi">179</span><span class="p">,</span> <span class="mi">181</span><span class="p">,</span> <span class="mi">191</span><span class="p">,</span> <span class="mi">193</span><span class="p">,</span> <span class="mi">197</span><span class="p">,</span> <span class="mi">199</span><span class="p">,</span> <span class="mi">211</span><span class="p">,</span> <span class="mi">223</span><span class="p">,</span> <span class="mi">227</span><span class="p">,</span> <span class="mi">229</span><span class="p">,</span> <span class="mi">233</span><span class="p">,</span> <span class="mi">239</span><span class="p">,</span> <span class="mi">241</span><span class="p">,</span> <span class="mi">251</span><span class="p">,</span> <span class="mi">257</span><span class="p">,</span> <span class="mi">263</span><span class="p">,</span> <span class="mi">269</span><span class="p">,</span> <span class="mi">271</span><span class="p">,</span> <span class="mi">277</span><span class="p">,</span> <span class="mi">281</span><span class="p">,</span> <span class="mi">283</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="mi">307</span><span class="p">,</span> <span class="mi">311</span><span class="p">,</span> <span class="mi">313</span><span class="p">,</span> <span class="mi">317</span><span class="p">,</span> <span class="mi">331</span><span class="p">,</span> <span class="mi">337</span><span class="p">,</span> <span class="mi">347</span><span class="p">,</span> <span class="mi">349</span><span class="p">,</span> <span class="mi">353</span><span class="p">,</span> <span class="mi">359</span><span class="p">,</span> <span class="mi">367</span><span class="p">,</span> <span class="mi">373</span><span class="p">,</span> <span class="mi">379</span><span class="p">,</span> <span class="mi">383</span><span class="p">,</span> <span class="mi">389</span><span class="p">,</span> <span class="mi">397</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">409</span><span class="p">,</span> <span class="mi">419</span><span class="p">,</span> <span class="mi">421</span><span class="p">,</span> <span class="mi">431</span><span class="p">,</span> <span class="mi">433</span><span class="p">,</span> <span class="mi">439</span><span class="p">,</span> <span class="mi">443</span><span class="p">,</span> <span class="mi">449</span><span class="p">,</span> <span class="mi">457</span><span class="p">,</span> <span class="mi">461</span><span class="p">,</span> <span class="mi">463</span><span class="p">,</span> <span class="mi">467</span><span class="p">,</span> <span class="mi">479</span><span class="p">,</span> <span class="mi">487</span><span class="p">,</span> <span class="mi">491</span><span class="p">,</span> <span class="mi">499</span><span class="p">,</span> <span class="mi">503</span><span class="p">,</span> <span class="mi">509</span><span class="p">,</span> <span class="mi">521</span><span class="p">,</span> <span class="mi">523</span><span class="p">,</span> <span class="mi">541</span><span class="p">,</span> <span class="mi">547</span><span class="p">,</span> <span class="mi">557</span><span class="p">,</span> <span class="mi">563</span><span class="p">,</span> <span class="mi">569</span><span class="p">,</span> <span class="mi">571</span><span class="p">,</span> <span class="mi">577</span><span class="p">,</span> <span class="mi">587</span><span class="p">,</span> <span class="mi">593</span><span class="p">,</span> <span class="mi">599</span><span class="p">,</span> <span class="mi">601</span><span class="p">,</span> <span class="mi">607</span><span class="p">,</span> <span class="mi">613</span><span class="p">,</span> <span class="mi">617</span><span class="p">,</span> <span class="mi">619</span><span class="p">,</span> <span class="mi">631</span><span class="p">,</span> <span class="mi">641</span><span class="p">,</span> <span class="mi">643</span><span class="p">,</span> <span class="mi">647</span><span class="p">,</span> <span class="mi">653</span><span class="p">,</span> <span class="mi">659</span><span class="p">,</span> <span class="mi">661</span><span class="p">,</span> <span class="mi">673</span><span class="p">,</span> <span class="mi">677</span><span class="p">,</span> <span class="mi">683</span><span class="p">,</span> <span class="mi">691</span><span class="p">,</span> <span class="mi">701</span><span class="p">,</span> <span class="mi">709</span><span class="p">,</span> <span class="mi">719</span><span class="p">,</span> <span class="mi">727</span><span class="p">,</span> <span class="mi">733</span><span class="p">,</span> <span class="mi">739</span><span class="p">,</span> <span class="mi">743</span><span class="p">,</span> <span class="mi">751</span><span class="p">,</span> <span class="mi">757</span><span class="p">,</span> <span class="mi">761</span><span class="p">,</span> <span class="mi">769</span><span class="p">,</span> <span class="mi">773</span><span class="p">,</span> <span class="mi">787</span><span class="p">,</span> <span class="mi">797</span><span class="p">,</span> <span class="mi">809</span><span class="p">,</span> <span class="mi">811</span><span class="p">,</span> <span class="mi">821</span><span class="p">,</span> <span class="mi">823</span><span class="p">,</span> <span class="mi">827</span><span class="p">,</span> <span class="mi">829</span><span class="p">,</span> <span class="mi">839</span><span class="p">,</span> <span class="mi">853</span><span class="p">,</span> <span class="mi">857</span><span class="p">,</span> <span class="mi">859</span><span class="p">,</span> <span class="mi">863</span><span class="p">,</span> <span class="mi">877</span><span class="p">,</span> <span class="mi">881</span><span class="p">,</span> <span class="mi">883</span><span class="p">,</span> <span class="mi">887</span><span class="p">,</span> <span class="mi">907</span><span class="p">,</span> <span class="mi">911</span><span class="p">,</span> <span class="mi">919</span><span class="p">,</span> <span class="mi">929</span><span class="p">,</span> <span class="mi">937</span><span class="p">,</span> <span class="mi">941</span><span class="p">,</span> <span class="mi">947</span><span class="p">,</span> <span class="mi">953</span><span class="p">,</span> <span class="mi">967</span><span class="p">,</span> <span class="mi">971</span><span class="p">,</span> <span class="mi">977</span><span class="p">,</span> <span class="mi">983</span><span class="p">,</span> <span class="mi">991</span><span class="p">,</span> <span class="mi">997</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Success! Now let’s throw this all into a function.</p>
+
+<p>A list of the prime numbers was our goal, however, we can also return a few more details to the user about the extracted primes_list. We can print the amount of prime numbers found in our range as well as what the highest prime number is in the set.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">primes_finder</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    
+    <span class="c1"># define number range
+</span>    <span class="n">number_range</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># create empty list to append prime numbers to
+</span>    <span class="n">primes_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># iterate until the number_range set is empty
+</span>    <span class="k">while</span> <span class="n">number_range</span><span class="p">:</span>
+        <span class="n">prime</span> <span class="o">=</span> <span class="n">number_range</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">primes_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">prime</span><span class="p">)</span>
+        <span class="n">multiples</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">prime</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">prime</span><span class="p">))</span>
+        <span class="n">number_range</span><span class="p">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">multiples</span><span class="p">)</span>
+    
+	<span class="c1"># count how many primes in primes_list output
+</span>    <span class="n">prime_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">primes_list</span><span class="p">)</span>
+	<span class="c1"># find the largest prime number
+</span>    <span class="n">largest_prime</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">primes_list</span><span class="p">)</span>
+	<span class="c1"># print the details
+</span>	<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"There are </span><span class="si">{</span><span class="n">prime_count</span><span class="si">}</span><span class="s"> prime numbers between 1 and </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s">, the largest of which is </span><span class="si">{</span><span class="n">largest_prime</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+	
+	<span class="o">&gt;&gt;&gt;</span> <span class="n">There</span> <span class="n">are</span> <span class="mi">168</span> <span class="n">prime</span> <span class="n">numbers</span> <span class="n">between</span> <span class="mi">1</span> <span class="ow">and</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">the</span> <span class="n">largest</span> <span class="n">of</span> <span class="n">which</span> <span class="ow">is</span> <span class="mi">997</span>
+</code></pre></div></div>
+
+<p>With our function now defined, it’s as easy as running <strong>primes_finder(n)</strong> where n can be any numerical value of choice.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">primes_finder</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">There</span> <span class="n">are</span> <span class="mi">78498</span> <span class="n">prime</span> <span class="n">numbers</span> <span class="n">between</span> <span class="mi">1</span> <span class="ow">and</span> <span class="mi">1000000</span><span class="p">,</span> <span class="n">the</span> <span class="n">largest</span> <span class="n">of</span> <span class="n">which</span> <span class="ow">is</span> <span class="mi">999983</span>
+</code></pre></div></div>
+
+<p>And there we have it! Feel free to copy the function and try it for yourself! :)</p>
+
+<p><strong>A NOTE ON POP():</strong></p>
+
+<p>In this script, we demonstrated the <strong>pop</strong> functionality, however, using pop() on a set could be risky in some instances.</p>
+
+<p>Pop() extracts the lowest value of a list or set, which seems confusing since sets are unordered by definition. Under the Python covers, however, the elements in the set are internally stored with an order determined by the hash code of each element. Occassionally, this hash may provide a value that is not the lowest.</p>
+
+<p>To safeguard against this, we can replace the definition of of <strong>prime</strong> value to from <em>prime = number_range.pop()</em> to..</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">prime</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">number_range</span><span class="p">))</span>
+<span class="n">number_range</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">prime</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This new definition of prime ascertains that we are always pulling the lowest value out of our number_range. This method, however, is slower as we are sorting the number_range set each time we define <strong>prime</strong>.</p>
+
+
+                    
+
+                </div>
+                
+                <div class="post-navigation">
+                    
+                    <a href="#" class="prev disabled">
+                        <div class="post-nav-arrow"><i class="ion ion-ios-arrow-round-back"></i> Previous </div>
+                    </a>
+                    
+                    
+                    <a href="/2026/06/12/Earthquake-Tracker-Tableau.html" class="next">
+                        <div class="post-nav-arrow">Next <i class="ion ion-ios-arrow-round-forward"></i></div>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </article> <!-- /.post -->
+    </div>
+</div>
+    <footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col col-12">
+                <div class="footer-top">
+                    <h2 class="logo-title">
+                        <a href="/" class="logo-text">Antonia Iaquinta</a>
+                    </h2>
+                    <div class="top"><i class="ion ion-ios-arrow-up"></i></div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="copyright">
+                        <p>&copy; 2026 Antonia Iaquinta Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a></p>
+                    </div>
+                    <div class="footer-social">
+                        <ul class="list-reset">
+                            <li><a href="https://github.com/golden-hail/golden-hail.github.io"><i class="ion ion-logo-github"></i> Github</a></li>
+                            
+                            <li><a href="/feed.xml"><i class="ion ion-logo-rss"></i> Feed</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer> <!-- /.footer -->
+    <!-- js here -->
+<script src="/assets/js/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/jquery.waitforimages.min.js"></script>
+<script src="/assets/js/jquery.fitvids.js"></script>
+<script src="/assets/js/common.js"></script>
+</body>
+
+</html>

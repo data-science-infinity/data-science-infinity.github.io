@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Assessing Campaign Performance Using Chi-Square Test For Independence</title>
+    <meta name="description" content="Hi I'm Tonii, an engineer by trade, looking to pivot my career into data science and analytics! My portfolio contains interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!" />
+    <link rel="canonical" href="http://localhost:4000/2026/06/30/Chi-Square-Test.html">
+    <link rel="alternate" type="application/rss+xml" title="Antonia Iaquinta" href="/feed.xml">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700" rel="stylesheet">
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+<body>
+    <header class="header">
+	<div class="container">
+		<div class="row">
+			<div class="col col-12">
+				<div class="header-box">
+					<div class="col col-3 wd-mob">
+						
+						<a href="/" class="header-avatar">
+							<img src="/img/my_headshot.jpg" class="header-avatar-img" alt="Antonia Iaquinta">
+						</a>
+						
+					</div>
+					<hr>
+					<div class="col col-9 wd-mob">
+						
+						<h1 class="header-title">Antonia Iaquinta</h1>
+						
+						
+						<h1 class="header-subtitle">Data Science & Analytics <span style="color:#f58506"> Portfolio </span></h1>
+						
+						
+						<p class="header-tagline">Hi I'm Tonii, an engineer by trade, looking to pivot my career into data science and analytics! My portfolio contains interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!</p>
+						
+						<div class="menu-links">
+							<ul class="list-reset">
+								<li class="item"><a class="item-link"><i class="ion ion-ios-pin"></i> Massachusetts, US</a></li>
+								<li class="item"><a class="item-link" href="https://github.com/golden-hail/golden-hail.github.io"><i class="ion ion-logo-github"></i> Github</a></li>
+								<li class="item"><a class="item-link" href="https://www.linkedin.com/in/antonia-iaquinta/"><i class="ion ion-logo-linkedin"></i> LinkedIn</a></li>
+								<li class="item"><a class="item-link" href="/docs/antonia_iaquinta_resume.docx"><i class="ion ion-ios-document"></i> Resume</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</header> <!-- /.header -->
+
+    <div class="container">
+    <div class="row">
+        <div class="col col-12">
+            <div class="post-image-box">
+                <div class="post-image" style="background-image: url(/img//posts/AB_testing.jpg)"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <article class="col col-12 col-t-12 post">
+            <div class="post-content">
+                <div class="post-head">
+                    
+                    <div class="post-tag">
+                        
+                        <a href="/tags#AB Testing" class="tag">AB Testing</a>
+                        
+                        <a href="/tags#Hypothesis Testing" class="tag">Hypothesis Testing</a>
+                        
+                        <a href="/tags#Chi-Square" class="tag">Chi-Square</a>
+                        
+                        <a href="/tags#Python" class="tag">Python</a>
+                        
+                    </div>
+                    
+                    <h1 class="post-title">Assessing Campaign Performance Using Chi-Square Test For Independence</h1>
+                    <div class="post-info">
+                        <div class="post-time">
+                            <span class="page__meta"><i class="ion ion-md-time"></i>
+
+
+
+
+  11 minute read
+</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-body">
+                    <p>In this project, we’ll be running an A/B test on grocery retailer campaign data to determine if the quality of the promotion mail sent to customers significantly impacted signup rates for a promoted “Delivery Club” membership.</p>
+
+<p>We will do this through applying the Chi-Square Test of Independence to measure the significance of the difference in signups between 2 groups of customers.</p>
+
+<h1 id="table-of-contents">Table of contents</h1>
+
+<ul>
+  <li><a href="#overview-main">00. Project Overview</a>
+    <ul>
+      <li><a href="#overview-context">Context</a></li>
+      <li><a href="#overview-actions">Actions</a></li>
+      <li><a href="#overview-results">Results &amp; Discussion</a></li>
+    </ul>
+  </li>
+  <li><a href="#concept-overview">01. Concept Overview</a></li>
+  <li><a href="#data-overview">02. Data Overview &amp; Preparation</a></li>
+  <li><a href="#chi-square-application">03. Applying Chi-Square Test For Independence</a></li>
+  <li><a href="#chi-square-results">04. Analyzing The Results</a></li>
+  <li><a href="#discussion">05. Discussion</a></li>
+</ul>
+
+<hr />
+
+<h1 id="project-overview--">Project Overview  <a name="overview-main"></a></h1>
+
+<p><br /></p>
+<h3 id="context-">Context <a name="overview-context"></a></h3>
+
+<p>In June, a grocery retailer client ran a campaign to promote their new “Delivery Club” memberships. Signing up for the club costs $100 and gives customers free grocery deliveries for one year, starting July 1st.</p>
+
+<p>For the campaign promoting the club, customers were put randomly into three groups:</p>
+<ul>
+  <li>The first group received a bland, low cost mailer, Mailer 1.</li>
+  <li>The second group received a colorful, high quality, high cost mailer, Mailer 2.</li>
+  <li>The third group was a control group. They did not receive any mail.</li>
+</ul>
+
+<p>The client knows that customers who were contacted, signed up for the Delivery Club at a far higher rate than the control group, but are now curious as to if there is a significant difference in customer signup rate between the cheap mailer and the expensive mailer. This will allow them to make more informed decisions in the future, such as whether it is worth it to spend the money on higher cost mailers or not.</p>
+
+<p><br /></p>
+
+<h3 id="actions-">Actions <a name="overview-actions"></a></h3>
+
+<p>The Chi-Square Test of Independence will be applied to compare the <strong>signup rates</strong> of two distinct groups from our <em>campaign_data</em> client database:</p>
+<ul>
+  <li>Customers who received low cost <strong>Mailer1</strong></li>
+  <li>Customers who received the higher quality, high cost <strong>Mailer2</strong>.</li>
+</ul>
+
+<p>The Hypothesis Test elements are defined as:</p>
+<ul>
+  <li><strong>Null Hypothesis:</strong> There is no relationship between mailer type and signup rate. They are independent variables and any difference in signup rates are due to chance.</li>
+  <li><strong>Alternate Hypothesis:</strong> There is a true relationship between mailer type and signup rate. They are not independent.</li>
+  <li><strong>Significance Level:</strong> 0.05 (5%)</li>
+</ul>
+
+<p>Through Pandas, we can aggregate the observed data of <em>mailer_type</em> and <em>signup_flag</em> into a 2x2 matrix. We’ll then feed these observed frequencies to the <code class="language-plaintext highlighter-rouge">chi2_contingency</code> algorithm provided by the <code class="language-plaintext highlighter-rouge">scipy</code> library to calculate the expected values, p-values, Degrees of Freedom (dof), and the Chi-Square Statistic.</p>
+
+<p>We’ll then take this one step further and find our Critical Value to truly get a grasp on whether we should reject or fail to reject our null hypothesis.</p>
+
+<p><em>See more details on the Chi-Square Test, and other related concepts in the *Concept Overview</em> section*</p>
+
+<p><strong>Note</strong>: Another viable choice for an approach comparing <em>rates</em> would be <em>Z-Test For Proportions</em>, which would provide us with the same statistical result as the Chi-Square Test would. However, in this business case, it was determined to be more beneficial to use the Chi-Square Test for analysis.</p>
+
+<p>The Chi-Square Test can be represented using a 2x2 data matrix, making the data easier to visualize and explain to stakeholders. Additionally, if the company ever had interest in expanding this campaign to more than two groups, we could easily adapt the Chi-Squared approach to include new group data, providing the business with a consistent way to measure variable significance.</p>
+
+<p><br /></p>
+
+<h3 id="results--discussion-">Results &amp; Discussion <a name="overview-results"></a></h3>
+
+<p>At a first glance of the observed data, it appears that the high-cost mailer yielded a higher signup rate:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* Mailer 1 (low-cost): 32.8% signup rate
+* Mailer 2 (high-cost): 37.8% signup rate
+</code></pre></div></div>
+
+<p>However, the results of the Chi-Square Test of Independence indicate otherwise:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* Chi-Square Statistic: 1.72 &lt; Critical Value: 3.84
+* p-value: 0.19 &gt; Acceptance Criteria 0.05
+</code></pre></div></div>
+
+<p>With these results, we retain the null hypothesis and conclude there is no measurable relationship between mailer cost and signup rates. This suggests that the 5% variation in signup rate could be due to random chance.</p>
+
+<p><strong><u>Business Impact:</u></strong><br />
+Upgrading to the higher-cost mailer risks increasing spending without reliably driving additional revenue.</p>
+
+<p><strong><u>Next Steps:</u></strong><br />
+As current findings do not support a permanent shift to higher-cost mailers, we advise running additional A/B tests with larger sample sizes to confirm whether a true performance gap exists or not.</p>
+
+<hr />
+
+<h1 id="concept-overview--">Concept Overview  <a name="concept-overview"></a></h1>
+<p><br /></p>
+<h3 id="ab-testing">A/B Testing</h3>
+
+<p>An A/B test takes two randomized groups, A and B, and provides them with different experiences. In the A/B test, we measure the response of both groups to understand the impact each experience had on the response.</p>
+
+<p>For example, a company may post 2 different pictures advertising the same product on their website. With an A/B test, we could look to measure if the picture used in the ad significantly impacted the number of users who clicked on the ad. If one ad yielded significantly more clicks, the business can use this data when thinking about what characteristics got the user to click and incorporate those features into future ads.</p>
+
+<p><br /></p>
+<h3 id="hypothesis-testing">Hypothesis Testing</h3>
+
+<p>A Hypothesis Test is a statistical method used to evaluate the likelihood of an assumption on a population, using sample data. It determines whether an observed pattern or correlation in the data is due to a true relationship or random chance.</p>
+
+<p>There are multiple types of Hypothesis Tests as well as many scenarios we can run them on.</p>
+
+<p>When performing any Hypothesis Test, the following must always be defined:</p>
+
+<ul>
+  <li>
+    <p><strong>The Null Hypothesis</strong></p>
+
+    <p>The “Null Hypothesis” is a statistical assumption stating that there is no statistically significant relationship, association, or difference between two outcomes or groups. We run a Hypothesis Test to either reject or support this Null Hypothesis.</p>
+  </li>
+  <li>
+    <p><strong>The Alternate Hypothesis</strong></p>
+
+    <p>The “Alternate Hypothesis” suggests that there is a significant and measurable relationship, effect, or difference between variables, directly contradicting the Null Hypothesis. When we reject the Null Hypothesis, we accept the Alternate Hypothesis, concluding that the observed relationship is highly unlikely to have occurred by chance alone.</p>
+  </li>
+  <li>
+    <p><strong>The Significance Level</strong></p>
+
+    <p>To statistically determine whether to reject the null hypothesis in favor of the alternate, a “significance level” must be specified. The <em>significance level</em> is a specified p-value threshold in which we are measuring our null hypothesis against. In other words, the set threshold draws a line between what we consider random chance and what we consider a statistically significant result.</p>
+
+    <p>A <em>p-value</em>, or probability value, is a calculated value used to determine if the data is extreme enough to reject the null hypothesis. It is a common practice to set the significance level to 0.05 or 5%.</p>
+
+    <ul>
+      <li>
+        <p>A <em>low p-value</em> (≤ 0.05) suggests your results are highly unlikely to have occurred by chance. There is strong evidence to reject the null hypothesis as the relationship is statistically significant</p>
+      </li>
+      <li>
+        <p>A <em>High p-value</em> (&gt; 0.05) means your results could easily happen under random variation. We would fail to reject the null hypothesis, meaning there isn’t enough evidence to prove a true association exists</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h4 id="chi-square-test-of-independence">Chi-Square Test of Independence</h4>
+
+<p>The <strong>Chi-Square Test of Independence</strong> is a hypothesis test used to determine whether a significant association exists between two categorical variables. It compares the <em>observed frequencies</em> from the actual data points collected from a sample against the <em>expected frequencies</em>, the data expected to be seen if the two variables were truly independent.</p>
+
+<p>The <em>Null Hypothesis</em> described above is our baseline assumption. It assumes that there is no relationship or difference between the two variables. It asserts that the observed frequencies of data will match the expected frequencies, with any minor difference being the result of random chance.</p>
+
+<p>The Chi-Square Contingency function provides a Chi-Square statistic that can be compared against a calculated <em>critical value</em>, in order to reject or fail to reject a null hypothesis.</p>
+
+<ul>
+  <li>
+    <p>Chi-Square Statistic &lt; Critical Value: We retain the null hypothesis - the observed results could easily happen under random variation, meaning there isn’t enough evidence to prove a true association exists between variables</p>
+  </li>
+  <li>
+    <p>Chi-Square Statistic ≥ Critical Value: We reject the null hypothesis - the observed results are highly unlikely to have occurred by chance providing strong evidence that an association exists between variables</p>
+  </li>
+</ul>
+
+<p>This function also provides a p-value, which can be compared to the chosen significance level (commonly set to 0.05). If the p-value is less than or equal to this significance level, the null hypothesis is rejected.</p>
+
+<hr />
+
+<h1 id="data-overview--preparation--">Data Overview &amp; Preparation  <a name="data-overview"></a></h1>
+
+<p>Our table of interest in the grocery client database is the <em>campaign_data</em> table. 
+This table contains each unique customer_id, the type of mailer they received, if any, and whether or not the customer signed up for the Delivery Club membership.</p>
+
+<p>To determine whether the fancier Mailer 2 led to a significant difference of people to sign up as opposed to the cheaper Mailer 1, we will first need to exclude the control group from the data by extracting the customers who got either mailer.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># import the required python libraries
+</span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">chi2_contingency</span><span class="p">,</span> <span class="n">chi2</span>
+
+<span class="c1"># import campaign data
+</span><span class="n">campaign_data</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_excel</span><span class="p">(...)</span>
+
+<span class="c1"># filter out the control group
+</span><span class="n">campaign_data</span> <span class="o">=</span> <span class="n">campaign_data</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">campaign_data</span><span class="p">[</span><span class="s">"mailer_type"</span><span class="p">]</span> <span class="o">!=</span> <span class="s">"Control"</span><span class="p">]</span>
+</code></pre></div></div>
+<p><br />
+Below is a 10 row sample of the imported <strong>campaign_data</strong> DataFrame:
+<br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>customer_id</strong></th>
+      <th><strong>campaign_name</strong></th>
+      <th><strong>mailer_type</strong></th>
+      <th><strong>signup_flag</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>74</td>
+      <td>delivery_club</td>
+      <td>Mailer1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>524</td>
+      <td>delivery_club</td>
+      <td>Mailer1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>607</td>
+      <td>delivery_club</td>
+      <td>Mailer2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>343</td>
+      <td>delivery_club</td>
+      <td>Mailer1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>322</td>
+      <td>delivery_club</td>
+      <td>Mailer2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>115</td>
+      <td>delivery_club</td>
+      <td>Mailer2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>delivery_club</td>
+      <td>Mailer2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>120</td>
+      <td>delivery_club</td>
+      <td>Mailer1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td>delivery_club</td>
+      <td>Mailer1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>405</td>
+      <td>delivery_club</td>
+      <td>Mailer1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>435</td>
+      <td>delivery_club</td>
+      <td>Mailer2</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>In the <strong>campaign_data</strong> DataFrame we have the following columns:</p>
+
+<ul>
+  <li>customer_id</li>
+  <li>campaign name</li>
+  <li>mailer_type (either Mailer1 or Mailer2)</li>
+  <li>signup_flag (either 1 or 0)</li>
+</ul>
+
+<hr />
+
+<h1 id="applying-chi-square-test-of-independence-">Applying Chi-Square Test of Independence <a name="chi-square-application"></a></h1>
+
+<p><br /></p>
+
+<h4 id="state-hypotheses--significance-level-for-test">State Hypotheses &amp; Significance Level For Test</h4>
+
+<p>To kick off our Hypothesis Test, we’ll need to define our <strong>Null Hypothesis</strong>, our <strong>Alternate Hypothesis</strong>, and our <strong>Significance Level</strong>. (See more on these terms in the <em>Concept Overview</em> section above)</p>
+
+<p>For our significance level, we’ll be using the commonly used value of 0.05 (or 5%).</p>
+
+<ul>
+  <li>null_hypothesis: There is no relationship between mailer type and signup rate. They are independent.</li>
+  <li>alternate_hypothesis: There is a relationship between mailer type and signup rate. They are not independent.</li>
+  <li>significance_level: 0.05</li>
+</ul>
+
+<p><br /></p>
+<h4 id="calculate-observed-frequencies--expected-frequencies">Calculate Observed Frequencies &amp; Expected Frequencies</h4>
+
+<p>As detailed in the <em>Concept Overview</em> section above, the <strong>observed frequencies</strong> come directly from the rates per group in our collected data. To get these frequencies, we’ll create our 2x2 matrix needed for the Chi-Square approach, using a method called <strong><code class="language-plaintext highlighter-rouge">crosstab()</code></strong>.</p>
+
+<p>Our observed values come directly from our campaign_data imported above. We are analyzing the impact that mailer_type had on member signup rates, so we’ll want to pass these data points into the crosstab method.</p>
+
+<p>We can visualize this data in the <code class="language-plaintext highlighter-rouge">DataFrame</code> below:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">observed_vals</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">campaign_data</span><span class="p">[</span><span class="s">'mailer_type'</span><span class="p">],</span><span class="n">campaign_data</span><span class="p">[</span><span class="s">'signup_flag'</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">observed_vals</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">signup_flag</span>    <span class="mi">0</span>    <span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mailer_type</span>          
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Mailer1</span>      <span class="mi">252</span>  <span class="mi">123</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Mailer2</span>      <span class="mi">209</span>  <span class="mi">127</span>
+</code></pre></div></div>
+
+<p>By running the <code class="language-plaintext highlighter-rouge">crosstab</code> method, we see:</p>
+<ul>
+  <li>For customers who received Mailer 1,
+    <ul>
+      <li>252 customers did not sign up for the promotion</li>
+      <li>123 customers signed up for the promotion.</li>
+    </ul>
+  </li>
+  <li>For customers who received Mailer 2,
+    <ul>
+      <li>209 customers did not sign up for the promotion</li>
+      <li>127 customers signed up for the promotion</li>
+    </ul>
+  </li>
+</ul>
+
+<p>The Chi-Squared contingency function won’t accept Pandas DataFrames, so we’ll have to convert the observed values data into an array by using <em>.values</em> property for observed_values.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">observed_values</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">campaign_data</span><span class="p">[</span><span class="s">'mailer_type'</span><span class="p">],</span><span class="n">campaign_data</span><span class="p">[</span><span class="s">'signup_flag'</span><span class="p">]).</span><span class="n">values</span>
+<span class="k">print</span><span class="p">(</span><span class="n">observed_values</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">array</span><span class="p">([[</span><span class="mi">252</span><span class="p">,</span> <span class="mi">123</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">209</span><span class="p">,</span> <span class="mi">127</span><span class="p">]])</span>
+</code></pre></div></div>
+
+<p>Now that the observed_values are in an array, we can pass the observed_values into our <code class="language-plaintext highlighter-rouge">chi2_contingency</code> function that we imported with <code class="language-plaintext highlighter-rouge">scipy</code>.</p>
+
+<p>Running the Chi-Squared function will provide us with the following:</p>
+<ul>
+  <li><strong>Expected values</strong></li>
+  <li><strong>P-values</strong></li>
+  <li><strong>Degrees of Freedom (dof)</strong>: used for finding the critical value later</li>
+  <li><strong>Chi2 Statistic</strong></li>
+</ul>
+
+<p>We can additionally test the null hypothesis by finding the <em>critical value</em> along our Chi-Squared distribution based on our set significance level and our calculated dof, using the <code class="language-plaintext highlighter-rouge">chi2.ppf</code> percentage point function from the scipy library.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># run the chi-square test
+</span><span class="n">chi2_statistic</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">dof</span><span class="p">,</span> <span class="n">expected_values</span> <span class="o">=</span> <span class="n">chi2_contingency</span><span class="p">(</span><span class="n">observed_values</span><span class="p">,</span> <span class="n">correction</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">chi2_statistic</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="mf">1.72</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">p_value</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="mf">0.19</span>
+
+<span class="c1"># find the critical value for our test using chi2.ppf
+</span><span class="n">critical_value</span> <span class="o">=</span> <span class="n">chi2</span><span class="p">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">significance</span> <span class="n">level</span><span class="p">,</span> <span class="n">dof</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">critical_value</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="mf">3.84</span>
+</code></pre></div></div>
+
+<p><em>Note: The chi2_contingency function accepts a correction parameter. By setting correction = True, we are applying Yate’s Correction, which is applicable when comparing 2 group totals against their results in a 2x2 matrix</em></p>
+
+<p>With that code in place, we have all of the values necessary to analyze the results for our A/B test and draw a conclusion.</p>
+
+<hr />
+
+<h1 id="analyzing-the-results-">Analyzing The Results <a name="chi-square-results"></a></h1>
+
+<p>Based upon the raw observed values from the campaign, we can see that the signup rate for customers receiving Mailer 2 was higher than for the customers receiving Mailer 1:</p>
+
+<ul>
+  <li>Mailer 1 (low-cost): 32.8% signup rate</li>
+  <li>Mailer 2 (high-cost): 37.8% signup rate</li>
+</ul>
+
+<p>The Chi-Square test gives us further insight into whether this difference in signup rate was truly due to the quality of the mailer, or just due to chance.</p>
+
+<p>Our calculated p-value of 0.19 is greater than our set significance level of 0.05, meaning that <strong>the difference in signup outcomes between the two mailing groups is not significant.</strong></p>
+
+<p>This conclusion is further supported by our Chi-Square statistic of 1.72 being lower than the calculated critical value of 3.84. In both cases, we <strong>retain the null hypothesis</strong> as there is not enough evidence that the signup rates for Mailer 1 and Mailer 2 were significantly different.</p>
+
+<hr />
+
+<h1 id="discussion-">Discussion <a name="discussion"></a></h1>
+
+<p>While Mailer 2 yielded a higher signup rate than Mailer 1 (37.8% vs. 32.8%), the difference was not statistically significant at our 0.05 significance level. The results of the Chi-Square test of independence reveal that we cannot yet conclude whether the more expensive mailer had a true impact on whether a customer signed up.</p>
+
+<p>At first glance, the client might look at the raw percentages and assume the premium quality of Mailer 2 was the driving force behind the higher signup rate. Without this hypothesis test, they may have considered exclusively sending the more expensive mailers for their next promotion, potentially wasting valuable funding.</p>
+
+<p>It is important to note that this analysis was limited to a small sample size from a single campaign. <em>Failing to reject the null hypothesis does not definitively prove that mailer quality didn’t impact signup rates, it simply means we currently lack the evidence to prove that it does.</em> Therefore, we advise the client not to jump to conclusions just yet. Running additional A/B tests over time will provide deeper insights. If future data consistently supports retaining the null hypothesis, we can then confidently recommend sticking to the cheaper mailers to optimize printing costs.</p>
+
+
+                    
+
+                </div>
+                
+                <div class="post-navigation">
+                    
+                    <a href="/2026/06/12/Earthquake-Tracker-Tableau.html" class="prev">
+                        <div class="post-nav-arrow"><i class="ion ion-ios-arrow-round-back"></i> Previous </div>
+                    </a>
+                    
+                    
+                    <a href="/2026/08/01/E-Commerce-AB-Test.html" class="next">
+                        <div class="post-nav-arrow">Next <i class="ion ion-ios-arrow-round-forward"></i></div>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </article> <!-- /.post -->
+    </div>
+</div>
+    <footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col col-12">
+                <div class="footer-top">
+                    <h2 class="logo-title">
+                        <a href="/" class="logo-text">Antonia Iaquinta</a>
+                    </h2>
+                    <div class="top"><i class="ion ion-ios-arrow-up"></i></div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="copyright">
+                        <p>&copy; 2026 Antonia Iaquinta Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a></p>
+                    </div>
+                    <div class="footer-social">
+                        <ul class="list-reset">
+                            <li><a href="https://github.com/golden-hail/golden-hail.github.io"><i class="ion ion-logo-github"></i> Github</a></li>
+                            
+                            <li><a href="/feed.xml"><i class="ion ion-logo-rss"></i> Feed</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer> <!-- /.footer -->
+    <!-- js here -->
+<script src="/assets/js/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/jquery.waitforimages.min.js"></script>
+<script src="/assets/js/jquery.fitvids.js"></script>
+<script src="/assets/js/common.js"></script>
+</body>
+
+</html>
