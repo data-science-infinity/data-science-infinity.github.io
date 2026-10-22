@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Understanding Alcohol Product Relationships Using Association Rule Learning</title>
+    <meta name="description" content="Hi, I'm Tonii! A Data Analyst bringing 7 years of defense systems engineering rigor to business applications. Driven by a deep curiosity for how complex systems work, I focus on validating data integrity before using it to drive decisions. My portfolio contains interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!" />
+    <link rel="canonical" href="http://localhost:4000/2026/09/07/Association-Rule-Learning.html">
+    <link rel="alternate" type="application/rss+xml" title="Antonia Iaquinta" href="/feed.xml">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700" rel="stylesheet">
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+<body>
+    <header class="header">
+	<div class="container">
+		<div class="row">
+			<div class="col col-12">
+				<div class="header-box">
+					<div class="col col-3 wd-mob">
+						
+						<a href="/" class="header-avatar">
+							<img src="/img/my_headshot.jpg" class="header-avatar-img" alt="Antonia Iaquinta">
+						</a>
+						
+					</div>
+					<hr>
+					<div class="col col-9 wd-mob">
+						
+						<h1 class="header-title">Antonia Iaquinta</h1>
+						
+						
+						<h1 class="header-subtitle">Data Science & Analytics <span style="color:#f58506"> Portfolio </span></h1>
+						
+						
+						<p class="header-tagline">Hi, I'm Tonii! A Data Analyst bringing 7 years of defense systems engineering rigor to business applications. Driven by a deep curiosity for how complex systems work, I focus on validating data integrity before using it to drive decisions. My portfolio contains interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!</p>
+						
+						<div class="menu-links">
+							<ul class="list-reset">
+								<li class="item"><a class="item-link"><i class="ion ion-ios-pin"></i> Massachusetts, US</a></li>
+								<li class="item"><a class="item-link" href="https://github.com/golden-hail/golden-hail.github.io"><i class="ion ion-logo-github"></i> Github</a></li>
+								<li class="item"><a class="item-link" href="https://www.linkedin.com/in/antonia-iaquinta/"><i class="ion ion-logo-linkedin"></i> LinkedIn</a></li>
+								<li class="item"><a class="item-link" href="/docs/antonia_iaquinta_resume.docx"><i class="ion ion-ios-document"></i> Resume</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</header> <!-- /.header -->
+
+    <div class="container">
+    <div class="row">
+        <div class="col col-12">
+            <div class="post-image-box">
+                <div class="post-image" style="background-image: url(/img//posts/association-rules.png)"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <article class="col col-12 col-t-12 post">
+            <div class="post-content">
+                <div class="post-head">
+                    
+                    <div class="post-tag">
+                        
+                        <a href="/tags#Association Rule Learning" class="tag">Association Rule Learning</a>
+                        
+                        <a href="/tags#Python" class="tag">Python</a>
+                        
+                    </div>
+                    
+                    <h1 class="post-title">Understanding Alcohol Product Relationships Using Association Rule Learning</h1>
+                    <div class="post-info">
+                        <div class="post-time">
+                            <span class="page__meta"><i class="ion ion-md-time"></i>
+
+
+
+
+  12 minute read
+</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-body">
+                    <p>In this post, I’ll be walking us through using Association Rule Learning to analyze the transactional relationships and dependencies between products in the alcohol section of a grocery store.</p>
+
+<hr />
+
+<h1 id="table-of-contents">Table of contents</h1>
+
+<ul>
+  <li><a href="#overview-main">00. Project Overview</a>
+    <ul>
+      <li><a href="#overview-context">Context</a></li>
+      <li><a href="#overview-actions">Actions</a></li>
+      <li><a href="#overview-results">Results</a></li>
+    </ul>
+  </li>
+  <li><a href="#data-overview">01. Data Overview</a></li>
+  <li><a href="#apriori-overview">02. Apriori Overview</a></li>
+  <li><a href="#apriori-data-prep">03. Data Preparation</a></li>
+  <li><a href="#apriori-fit">04. Applying The Apriori Algorithm</a></li>
+  <li><a href="#apriori-results">05. Interpreting The Results</a></li>
+  <li><a href="#growth-next-steps">06. Growth &amp; Next Steps</a></li>
+</ul>
+
+<hr />
+
+<h1 id="project-overview--">Project Overview  <a name="overview-main"></a></h1>
+
+<p><br /></p>
+
+<h3 id="context-">Context <a name="overview-context"></a></h3>
+
+<p>Our client is looking to reorganize the alcohol section within their store. Customers are often complaining that they can’t find the products they want and are also wanting recommendations about which other products to try. The marketing team also sees this as an opportunity to start running “bundled” promotions, but needs guidance with selecting which products to bundle together.</p>
+
+<p>They have provided us a sample of 3,567 alcohol transactions. Our task is to see if we can find solutions or insights that might help the business address these endeavors.</p>
+
+<p><br /></p>
+
+<h3 id="actions-">Actions <a name="overview-actions"></a></h3>
+
+<p>Association Rule Learning, specifically <em>Apriori</em> will be used to examine and analyze the strength of relationships between different alcohol products within the transactional data.</p>
+
+<ul>
+  <li>Import <code class="language-plaintext highlighter-rouge">pandas</code> and the <code class="language-plaintext highlighter-rouge">apyori</code> package in Python, which contains all of the required functionality for this analysis.</li>
+  <li>Import the sample data and process it into the <em>list of lists</em> format that the Apriori algorithm takes as an input.</li>
+  <li>Apply the <code class="language-plaintext highlighter-rouge">Apriori</code> algorithm to acquire the following relationship metrics:
+    <ul>
+      <li>Support</li>
+      <li>Confidence</li>
+      <li>Expected Confidence</li>
+      <li>Lift</li>
+    </ul>
+  </li>
+  <li>Interpret the Results</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="results-">Results <a name="overview-results"></a></h3>
+
+<p>The Apriori analysis identified 132 product pairs, which produced 166 directional rules. The strongest associations involved gift products (Wine Gifts with Beer/Lager Gifts and Spirits &amp; Fortified), boxed wine products (Red Wine Bxes &amp; 25Cl with White Boxes), and small-size products (Small Sizes White with Small Sizes Red).</p>
+
+<p>These patterns suggest a few possible actions for the client. Gift products could be grouped together rather than by product type, while boxed and small size products could be considered for bundles or promotions. All of these rule findings provide low Support values (0.003 to 0.025), so they should be treated as hypotheses to verify with the client rather than settled recommendations.</p>
+
+<p><strong><u>Next Steps:</u></strong> Build an Apriori pipeline with K-Fold validation for the business to use in other store areas and across store areas.</p>
+
+<hr />
+
+<h1 id="data-overview--">Data Overview  <a name="data-overview"></a></h1>
+
+<p>The initial dataset contains 3,567 transactions, each of which shows the unique alcohol products that were purchased in that transaction.</p>
+
+<p>We’ll import <code class="language-plaintext highlighter-rouge">Pandas</code> and the <code class="language-plaintext highlighter-rouge">apriori</code> algorithm from the <code class="language-plaintext highlighter-rouge">apyori</code> library, then import the raw data into Python.
+<br />
+<br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># import required Python packages
+</span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">from</span> <span class="nn">apyori</span> <span class="kn">import</span> <span class="n">apriori</span>
+
+<span class="c1"># import the sample data
+</span><span class="n">alcohol_transactions</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"data/sample_data_apriori.csv"</span><span class="p">)</span>
+</code></pre></div></div>
+<p><br /></p>
+
+<p>A sample of 10 transactions is shown below. Each row is one transaction, and each product&lt;#&gt; column holds one product from that transaction. Rows with fewer products have blank cells for the rightmost columns.
+<br />
+<br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>transaction_id</strong></th>
+      <th><strong>product1</strong></th>
+      <th><strong>product2</strong></th>
+      <th><strong>product3</strong></th>
+      <th><strong>product4</strong></th>
+      <th><strong>product5</strong></th>
+      <th><strong>…</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Premium Lager</td>
+      <td>Iberia</td>
+      <td>…</td>
+      <td> </td>
+      <td> </td>
+      <td>…</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Sparkling</td>
+      <td>Premium Lager</td>
+      <td>Premium Cider</td>
+      <td>Own Label</td>
+      <td>Italy White</td>
+      <td>…</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Small Sizes White</td>
+      <td>Small Sizes Red</td>
+      <td>Sherry Spanish</td>
+      <td>No/Low Alc Cider</td>
+      <td>Cooking Wine</td>
+      <td>…</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>White Uk</td>
+      <td>Sherry Spanish</td>
+      <td>Port</td>
+      <td>Italian White</td>
+      <td>Italian Red</td>
+      <td>…</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Premium Lager</td>
+      <td>Over-Ice Cider</td>
+      <td>French White South</td>
+      <td>French Rose</td>
+      <td>Cocktails/Liqueurs</td>
+      <td>…</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Kosher Red</td>
+      <td>…</td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td>…</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Own Label</td>
+      <td>Italy White</td>
+      <td>Australian Red</td>
+      <td>…</td>
+      <td> </td>
+      <td>…</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Brandy/Cognac</td>
+      <td>…</td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td>…</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>Small Sizes White</td>
+      <td>Bottled Ale</td>
+      <td>…</td>
+      <td> </td>
+      <td> </td>
+      <td>…</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>White Uk</td>
+      <td>Spirits Mixers</td>
+      <td>Sparkling</td>
+      <td>German</td>
+      <td>Australian Red</td>
+      <td>…</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<p>In the table, <em>Transaction 1</em> (where <code class="language-plaintext highlighter-rouge">transaction_id</code> is 1) contained two products: Premium Lager and Iberia. As there were only two products in this transaction, the remaining columns are blank.</p>
+
+<p><em>Transaction 2</em> (where <code class="language-plaintext highlighter-rouge">transaction_id</code> is 2) contained nine products, which were not all included in the data snippet above. The first nine columns after the <code class="language-plaintext highlighter-rouge">transaction_id</code> for this row are populated, followed by blank values in the rest of the product&lt;#&gt; columns.</p>
+
+<p>For the sample data, the maximum number of unique products in a transaction was 45, meaning the table of data had a total of 46 columns (45 for <code class="language-plaintext highlighter-rouge">product&lt;#&gt;</code>s + <code class="language-plaintext highlighter-rouge">transaction_id</code>).</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">apriori</code> method that we are using does not take DataFrames as inputs; it instead expects data passed in as a <em>list of lists</em>. The code and logic on how to modify the input can be found in the <a href="#apriori-data-prep">03. Data Preparation</a> section.</p>
+
+<hr />
+
+<h1 id="apriori-overview--">Apriori Overview  <a name="apriori-overview"></a></h1>
+
+<p><em>Association Rule Learning</em> is an approach that discovers the strength of relationships between different data points. It is commonly used to determine which products are frequently or infrequently purchased together. This determination provides useful information that a business can use to optimize marketing strategies such as:</p>
+
+<ul>
+  <li><em>Product arrangement/placement</em>: making the customer journey more efficient</li>
+  <li><em>Relevant Product Recommendations</em>: based on the <em>customers who bought product A also bought product B</em> principle</li>
+  <li><em>Bundled Discounts</em>: determining which products should or should not be put together</li>
+</ul>
+
+<p>A commonly used algorithm for Association Rule Learning is <strong>Apriori</strong>. In Apriori there are four key metrics: <em>Support</em>, <em>Confidence</em>, <em>Expected Confidence</em> and <em>Lift</em>. Each of these metrics helps us understand items and their relationship with other items.</p>
+
+<p><br /></p>
+
+<h4 id="support">Support</h4>
+
+<p><strong>Support</strong> simply tells us the percentage of all transactions that contain <em>both</em> Item A and Item B. To calculate this we’d count up the transactions that include both items and divide this by the total number of transactions.</p>
+
+<p>You can think of <em>Support</em> as a baseline metric that helps us understand how common or popular purchasing this particular pair of items together is.</p>
+
+<p><br /></p>
+
+<h4 id="confidence">Confidence</h4>
+
+<p><strong>Confidence</strong> looks more explicitly at the <em>relationship</em> between the two items. It asks <em>of all transactions that included ‘item A’, what proportion also included ‘item B’?</em></p>
+
+<p>Here we are counting up the number of transactions that contained <em>both items A and B</em> and then rather than dividing by <em>all transactions</em> like we did for Support, we divide by the <em>total number of transactions that contained item A</em>.</p>
+
+<p>A high score for Confidence could indicate a strong product relationship, but not always. When one of the items is very popular we can get an inflated score. To help recognize this, we can look at the last two metrics, <em>Expected Confidence</em> and <em>Lift</em>.</p>
+
+<p><br /></p>
+
+<h4 id="expected-confidence">Expected Confidence</h4>
+
+<p><strong>Expected Confidence</strong> is simply the percentage of <em>all transactions</em> that <em>contained item B</em>.</p>
+
+<p>This is important as it provides an indication of what the Confidence <em>would be</em> if there were no relationship between the items. We can use Expected Confidence, along with Confidence to calculate our final and most powerful metric, <em>Lift</em>.</p>
+
+<p><br /></p>
+
+<h4 id="lift">Lift</h4>
+
+<p><strong>Lift</strong> is the factor by which the <em>Confidence exceeds the Expected Confidence</em>. In other words, Lift tells us <em>how much more likely item B is to be purchased when item A is purchased than would be expected by chance</em> after adjusting for how popular item B is.</p>
+
+<p>We calculate Lift by dividing <code class="language-plaintext highlighter-rouge">Confidence</code> by <code class="language-plaintext highlighter-rouge">Expected Confidence</code>.</p>
+
+<p>A Lift score <em>greater than 1</em> indicates that items A and B appear together <em>more often</em> than expected, while a Lift score <em>less than 1</em> indicates that items A and B appear together <em>less often</em> than expected. A Lift score <strong>equal to 1</strong> indicates that items A and B are independent and have no association.</p>
+
+<p><br /></p>
+
+<h4 id="in-practice">In Practice</h4>
+
+<p>When running all possible combinations of paired items through the <code class="language-plaintext highlighter-rouge">apriori</code> algorithm, sorting all pairings by lift score can identify which pairs of products have the strongest and weakest relationships. This information can strategically guide business and marketing decisions regarding product layout, recommendations for customers or promotions.</p>
+
+<blockquote>
+  <p><strong>Important Consideration</strong>: Item pairs with a <em>high Lift</em> and <em>low Support</em> should be interpreted with caution. If we sort all pairs by Lift, the top result may look like a very strong relationship, but it could be happening by chance because the pair is rare. Always check the Support metric alongside Lift.</p>
+</blockquote>
+
+<hr />
+
+<h1 id="data-preparation--">Data Preparation  <a name="apriori-data-prep"></a></h1>
+
+<p>As mentioned in the <a href="#data-overview">01. Data Overview</a> section above, the <code class="language-plaintext highlighter-rouge">apyori</code> library requires a <em>list of lists</em> as an input, so the tabular data must be modified to accommodate the <code class="language-plaintext highlighter-rouge">apriori</code> method.</p>
+
+<p>In the code below, we:</p>
+<ul>
+  <li>Remove the <code class="language-plaintext highlighter-rouge">transaction_id</code> index column</li>
+  <li>Iterate over each row in the imported DataFrame, appending each <code class="language-plaintext highlighter-rouge">transaction</code> to a list, and appending those transactions to a master list, <code class="language-plaintext highlighter-rouge">transactions_list</code></li>
+  <li>Print out the first 10 lists from the <code class="language-plaintext highlighter-rouge">transactions_list</code></li>
+</ul>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># drop ID column
+</span><span class="n">alcohol_transactions</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">"transaction_id"</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># modify data for apriori algorithm
+</span><span class="n">transactions_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">alcohol_transactions</span><span class="p">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">transaction</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">row</span><span class="p">.</span><span class="n">dropna</span><span class="p">())</span>
+    <span class="n">transactions_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">transaction</span><span class="p">)</span>
+    
+<span class="c1"># print out first 10 lists from transactions_list
+</span><span class="k">print</span><span class="p">(</span><span class="n">transactions_list</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+
+<span class="p">[[</span><span class="s">'Premium Lager'</span><span class="p">,</span> <span class="s">'Iberia'</span><span class="p">],</span>
+ <span class="p">[</span><span class="s">'Sparkling'</span><span class="p">,</span> <span class="s">'Premium Lager'</span><span class="p">,</span> <span class="s">'Premium Cider'</span><span class="p">,</span> <span class="s">'Own Label'</span><span class="p">,</span> <span class="s">'Italy White'</span><span class="p">,</span> <span class="s">'Italian White'</span><span class="p">,</span> <span class="s">'Italian Red'</span><span class="p">,</span> <span class="s">'French Red'</span><span class="p">,</span> <span class="s">'Bottled Ale'</span><span class="p">],</span>
+ <span class="p">[</span><span class="s">'Small Sizes White'</span><span class="p">,</span> <span class="s">'Small Sizes Red'</span><span class="p">,</span> <span class="s">'Sherry Spanish'</span><span class="p">,</span> <span class="s">'No/Low Alc Cider'</span><span class="p">,</span> <span class="s">'Cooking Wine'</span><span class="p">,</span> <span class="s">'Cocktails/Liqueurs'</span><span class="p">,</span> <span class="s">'Bottled Ale'</span><span class="p">],</span>
+ <span class="p">[</span><span class="s">'White Uk'</span><span class="p">,</span> <span class="s">'Sherry Spanish'</span><span class="p">,</span> <span class="s">'Port'</span><span class="p">,</span> <span class="s">'Italian White'</span><span class="p">,</span> <span class="s">'Italian Red'</span><span class="p">],</span>
+ <span class="p">[</span><span class="s">'Premium Lager'</span><span class="p">,</span> <span class="s">'Over-Ice Cider'</span><span class="p">,</span> <span class="s">'French White South'</span><span class="p">,</span> <span class="s">'French Rose'</span><span class="p">,</span> <span class="s">'Cocktails/Liqueurs'</span><span class="p">,</span> <span class="s">'Bottled Ale'</span><span class="p">],</span>
+ <span class="p">[</span><span class="s">'Kosher Red'</span><span class="p">],</span>
+ <span class="p">[</span><span class="s">'Own Label'</span><span class="p">,</span> <span class="s">'Italy White'</span><span class="p">,</span> <span class="s">'Australian Red'</span><span class="p">],</span>
+ <span class="p">[</span><span class="s">'Brandy/Cognac'</span><span class="p">],</span>
+ <span class="p">[</span><span class="s">'Small Sizes White'</span><span class="p">,</span> <span class="s">'Bottled Ale'</span><span class="p">],</span>
+ <span class="p">[</span><span class="s">'White Uk'</span><span class="p">,</span> <span class="s">'Spirits Mixers'</span><span class="p">,</span> <span class="s">'Sparkling'</span><span class="p">,</span> <span class="s">'German'</span><span class="p">,</span> <span class="s">'Australian Red'</span><span class="p">,</span> <span class="s">'American Red'</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>The print statement demonstrates that each transaction row from the original raw DataFrame is now captured as a <code class="language-plaintext highlighter-rouge">transaction</code> list, contained within a master list, <code class="language-plaintext highlighter-rouge">transactions_list</code>.</p>
+
+<p>With the data in this format, the Apriori algorithm can be applied.</p>
+
+<hr />
+
+<h1 id="applying-the-apriori-algorithm-">Applying The Apriori Algorithm <a name="apriori-fit"></a></h1>
+
+<p>In the code below we apply the <code class="language-plaintext highlighter-rouge">apriori</code> algorithm from the <code class="language-plaintext highlighter-rouge">apyori</code> library.</p>
+
+<p>This algorithm allows us to specify the association rules for the analysis. For this test, the input rule parameters are set to:</p>
+
+<ul>
+  <li>A minimum <em>Support</em> of 0.003 to eliminate very rare product sets</li>
+  <li>A minimum <em>Confidence</em> of 0.2</li>
+  <li>A minimum <em>Lift</em> of 3 to ensure we’re only focusing on product sets with strong associations</li>
+  <li>A maximum length of 2, meaning we’re only focusing on product <em>pairs</em> rather than larger sets</li>
+</ul>
+
+<p>The output from the Apriori algorithm is in the form of a generator; the code will convert this to a list as this is easier to manipulate and analyze.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># apply the apriori algorithm and specify required parameters
+</span><span class="n">apriori_rules</span> <span class="o">=</span> <span class="n">apriori</span><span class="p">(</span><span class="n">transactions_list</span><span class="p">,</span>
+                        <span class="n">min_support</span> <span class="o">=</span> <span class="mf">0.003</span><span class="p">,</span>
+                        <span class="n">min_confidence</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+                        <span class="n">min_lift</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+                        <span class="n">max_length</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># convert the output to a list
+</span><span class="n">apriori_rules</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">apriori_rules</span><span class="p">)</span>
+
+<span class="c1"># check number of rules 
+</span><span class="n">num_pairs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">apriori_rules</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">num_pairs</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="mi">132</span>
+</code></pre></div></div>
+
+<p>Based on the parameters set when applying the algorithm, there were 132 product pairs identified and stored as their own elements in the <code class="language-plaintext highlighter-rouge">apriori_rules</code> list output. Running <code class="language-plaintext highlighter-rouge">apriori_rules[0]</code> prints out the first element from the list along with the necessary analysis metrics for that specific item pairing.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># print out the first element
+</span><span class="n">apriori_rules</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">RelationRecord</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({</span><span class="s">'America White'</span><span class="p">,</span> <span class="s">'American Rose'</span><span class="p">}),</span> <span class="n">support</span><span class="o">=</span><span class="mf">0.020745724698626296</span><span class="p">,</span> <span class="n">ordered_statistics</span><span class="o">=</span><span class="p">[</span><span class="n">OrderedStatistic</span><span class="p">(</span><span class="n">items_base</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({</span><span class="s">'American Rose'</span><span class="p">}),</span> <span class="n">items_add</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({</span><span class="s">'America White'</span><span class="p">}),</span> <span class="n">confidence</span><span class="o">=</span><span class="mf">0.5323741007194245</span><span class="p">,</span> <span class="n">lift</span><span class="o">=</span><span class="mf">3.997849299507762</span><span class="p">)])</span>
+</code></pre></div></div>
+
+<p>It is extremely important to note that the <code class="language-plaintext highlighter-rouge">ordered_statistics</code> in each pair may contain more than one direction between products. For example, the rule could contain information on the relationship between item A -&gt; B and item B -&gt; A. For each pair, both directions will have the same support and lift, however, the confidence value will differ. Because of this, we want to loop through each ordered_statistic within each generated pair.</p>
+
+<p>To get this information into a readable table for all elements in the <code class="language-plaintext highlighter-rouge">apriori_rules</code> list, the following code snippet extracts the key elements and translates the data into a Pandas DataFrame.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">apriori_rules</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">rule</span><span class="p">.</span><span class="n">ordered_statistics</span><span class="p">:</span>
+        <span class="n">rows</span><span class="p">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s">"product1"</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">stat</span><span class="p">.</span><span class="n">items_base</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s">"product2"</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">stat</span><span class="p">.</span><span class="n">items_add</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s">"support"</span><span class="p">:</span> <span class="n">rule</span><span class="p">.</span><span class="n">support</span><span class="p">,</span>
+            <span class="s">"confidence"</span><span class="p">:</span> <span class="n">stat</span><span class="p">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="s">"lift"</span><span class="p">:</span> <span class="n">stat</span><span class="p">.</span><span class="n">lift</span><span class="p">,</span>
+        <span class="p">})</span>
+
+<span class="n">apriori_rules_df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+
+<span class="c1"># check number of directional pairs
+</span><span class="n">directional_pairs</span> <span class="o">=</span> <span class="n">apriori_rules_df</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">directional_pairs</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="mi">166</span>
+</code></pre></div></div>
+
+<p><br />
+When considering the directional relationships between all the rules, we end up with 166 directional product pairs. A sample of the created DataFrame can be seen below, where we have the two products in each row along with the three key metrics; <em>support</em>, <em>confidence</em>, and <em>lift</em>.
+<br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>product1</strong></th>
+      <th><strong>product2</strong></th>
+      <th><strong>support</strong></th>
+      <th><strong>confidence</strong></th>
+      <th><strong>lift</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>American Rose</td>
+      <td>America White</td>
+      <td>0.021</td>
+      <td>0.532</td>
+      <td>3.998</td>
+    </tr>
+    <tr>
+      <td>America White</td>
+      <td>American White</td>
+      <td>0.054</td>
+      <td>0.408</td>
+      <td>3.597</td>
+    </tr>
+    <tr>
+      <td>American White</td>
+      <td>America White</td>
+      <td>0.054</td>
+      <td>0.479</td>
+      <td>3.597</td>
+    </tr>
+    <tr>
+      <td>Australian Rose</td>
+      <td>America White</td>
+      <td>0.005</td>
+      <td>0.486</td>
+      <td>3.653</td>
+    </tr>
+    <tr>
+      <td>Low Alcohol A.C</td>
+      <td>America White</td>
+      <td>0.003</td>
+      <td>0.462</td>
+      <td>3.466</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h1 id="interpreting-the-results-">Interpreting The Results <a name="apriori-results"></a></h1>
+
+<p>With the Apriori data in a DataFrame, we can now easily identify the product pairs with the <em>strongest</em> relationships by sorting our DataFrame entries by the <code class="language-plaintext highlighter-rouge">lift</code> column in descending order.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># sort pairs by descending Lift
+</span><span class="n">apriori_rules_df</span><span class="p">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span> <span class="o">=</span> <span class="s">"lift"</span><span class="p">,</span> <span class="n">ascending</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br />
+In the table below, we can see the ten strongest product relationships based on highest Lift value:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>product1</strong></th>
+      <th><strong>product2</strong></th>
+      <th><strong>support</strong></th>
+      <th><strong>confidence</strong></th>
+      <th><strong>lift</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Wine Gifts</td>
+      <td>Beer/Lager Gifts</td>
+      <td>0.004</td>
+      <td>0.314</td>
+      <td>10.173</td>
+    </tr>
+    <tr>
+      <td>Spirits &amp; Fortified</td>
+      <td>Beer/Lager Gifts</td>
+      <td>0.013</td>
+      <td>0.305</td>
+      <td>9.897</td>
+    </tr>
+    <tr>
+      <td>Beer/Lager Gifts</td>
+      <td>Spirits &amp; Fortified</td>
+      <td>0.013</td>
+      <td>0.427</td>
+      <td>9.897</td>
+    </tr>
+    <tr>
+      <td>Wine Gifts</td>
+      <td>Spirits &amp; Fortified</td>
+      <td>0.006</td>
+      <td>0.412</td>
+      <td>9.537</td>
+    </tr>
+    <tr>
+      <td>Red Wine Bxes &amp; 25Cl</td>
+      <td>White Boxes</td>
+      <td>0.015</td>
+      <td>0.474</td>
+      <td>9.344</td>
+    </tr>
+    <tr>
+      <td>White Boxes</td>
+      <td>Red Wine Bxes &amp; 25Cl</td>
+      <td>0.015</td>
+      <td>0.304</td>
+      <td>9.344</td>
+    </tr>
+    <tr>
+      <td>French White Rhone</td>
+      <td>French Red</td>
+      <td>0.003</td>
+      <td>0.480</td>
+      <td>8.691</td>
+    </tr>
+    <tr>
+      <td>Small Sizeswhite Oth</td>
+      <td>Small Sizes White</td>
+      <td>0.005</td>
+      <td>0.559</td>
+      <td>8.340</td>
+    </tr>
+    <tr>
+      <td>Small Sizes White</td>
+      <td>Small Sizes Red</td>
+      <td>0.025</td>
+      <td>0.372</td>
+      <td>7.258</td>
+    </tr>
+    <tr>
+      <td>Small Sizes Red</td>
+      <td>Small Sizes White</td>
+      <td>0.025</td>
+      <td>0.486</td>
+      <td>7.258</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br />
+Some pairs appear in both directions, such as <em>Red Wine Bxes</em> and <em>25Cl and White Boxes</em>. Both rows share the same support and lift, but their confidence values differ. Lift is the same in both directions because it accounts for the popularity of both items.</p>
+
+<p>Confidence is calculated from the count of the “if” item, and Red Wine Bxes appear in fewer transactions than White Boxes. As a result, 47% of Red Wine Bxes buyers also bought White Boxes, while only 30% of White Boxes buyers also bought Red Wine Bxes.</p>
+
+<p><br />
+At a first glance, the following observations can be made:</p>
+
+<ul>
+  <li><strong><em>Gifts:</em></strong> The strongest links include <em>Gift</em> products. Managers could consider grouping gifts together in the store rather than by product type, but further analysis should be done to consider the seasonal impact of <em>Gift</em> sales.</li>
+  <li><strong>Wines:</strong> Wines seem to be commonly bought together in general, with strong notable relationships such as “Small Sizes” Variety wines and “Boxs”/”Boxes” wine items. It may be worth considering doing bundles, promotions, or discounts grouping boxed wines or small sized wines together.</li>
+</ul>
+
+<p>All item pairs in the table have low Support values, between 0.003 and 0.025, meaning each appears in roughly 12 to 89 of the 3,567 transactions. Because Lift is calculated from small transaction counts, a few new purchases could noticeably change the Lift values. For this reason, these results should be treated as hypotheses to verify with the client, not as settled findings. Pairs with more supporting transactions are better evidenced. For example, <em>Small Sizes Red</em> and <em>Small Sizes White</em> (at 0.025 Support) are better evidenced than <em>French White Rhone</em> and <em>French Red</em> (at 0.003 Support).</p>
+
+<hr />
+
+<h1 id="growth--next-steps-">Growth &amp; Next Steps <a name="growth-next-steps"></a></h1>
+
+<p>This analysis found notable associations between alcohol products by looking at which pairs had the highest Lift values. Because the Support values are low, these findings should be treated as hypotheses to test rather than a prescription for action. Even so, the results are still useful for the business. Knowing which relationships exist lets us investigate why they occur, which can inform strategic and impactful marketing decisions.</p>
+
+<p>Expanding this Apriori approach to other areas of the business could uncover more marketing opportunities, such as alcohol paired with soft drinks or snacks. I’d propose integrating this analysis into a pipeline that Category Managers and analysts can use to identify product relationships within and across areas, providing more insight for sales decisions. The pipeline should also test whether the strongest pairs hold up across several subsets of the data using k-fold  and adjust the results accordingly.</p>
+
+
+                    
+
+                </div>
+                
+                <div class="post-navigation">
+                    
+                    <a href="/2026/08/15/Causal-Impact-Analysis.html" class="prev">
+                        <div class="post-nav-arrow"><i class="ion ion-ios-arrow-round-back"></i> Previous </div>
+                    </a>
+                    
+                    
+                    <a href="/2026/10/01/KMeans_Clustering.html" class="next">
+                        <div class="post-nav-arrow">Next <i class="ion ion-ios-arrow-round-forward"></i></div>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </article> <!-- /.post -->
+    </div>
+</div>
+    <footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col col-12">
+                <div class="footer-top">
+                    <h2 class="logo-title">
+                        <a href="/" class="logo-text">Antonia Iaquinta</a>
+                    </h2>
+                    <div class="top"><i class="ion ion-ios-arrow-up"></i></div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="copyright">
+                        <p>&copy; 2026 Antonia Iaquinta Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a></p>
+                    </div>
+                    <div class="footer-social">
+                        <ul class="list-reset">
+                            <li><a href="https://github.com/golden-hail/golden-hail.github.io"><i class="ion ion-logo-github"></i> Github</a></li>
+                            
+                            <li><a href="/feed.xml"><i class="ion ion-logo-rss"></i> Feed</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer> <!-- /.footer -->
+    <!-- js here -->
+<script src="/assets/js/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/jquery.waitforimages.min.js"></script>
+<script src="/assets/js/jquery.fitvids.js"></script>
+<script src="/assets/js/common.js"></script>
+</body>
+
+</html>

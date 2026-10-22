@@ -8,22 +8,21 @@ plugins:
 
 #-------------------------------
 # General Site Settings
-title: Johnny Hopkins
-description: "Hi I'm Johnny, and I'm a Data Scientist.  My portfolio focuses on interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!"
-baseurl: "" # the subpath of your site, e.g. /blog
+title: Antonia Iaquinta
+description: "Hi, I'm Tonii! A Data Analyst bringing 7 years of defense systems engineering rigor to business applications. Driven by a deep curiosity for how complex systems work, I focus on validating data integrity before using it to drive decisions. My portfolio contains interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!"
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
 #-------------------------------
 # About Section
-subtitle: Data Science <span style="color:#f58506"> Portfolio </span>
-location: "London, UK"
-resume_url: /docs/resume.docx
-avatar_image: /img/profile_picture.JPG
+subtitle: Data Science & Analytics <span style="color:#f58506"> Portfolio </span>
+location: "Massachusetts, US"
+resume_url: /docs/antonia_iaquinta_resume.docx
+avatar_image: /img/my_headshot.jpg
 
 #-------------------------------
 # Contact links
-linkedln: "https://linkedln.com/#" # Add your linkedln handle
-github: "https://github.com/#"  # Add your github handle
+linkedin: "https://www.linkedin.com/in/antonia-iaquinta/" # Add your linkedln handle
+github: "https://github.com/golden-hail/golden-hail.github.io"  # Add your github handle
 
 paginate: 6
 paginate_path: "/page/:num"
@@ -39,16 +38,4 @@ defaults:
       layout: post
       read_time: true
       share: false
-
-
-#-------------------------------
-# Exclude from processing.
-# exclude:
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
 

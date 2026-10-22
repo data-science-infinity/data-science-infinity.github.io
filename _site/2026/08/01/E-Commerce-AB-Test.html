@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Customer Checkout UI Redesign A/B Test</title>
+    <meta name="description" content="Hi, I'm Tonii! A Data Analyst bringing 7 years of defense systems engineering rigor to business applications. Driven by a deep curiosity for how complex systems work, I focus on validating data integrity before using it to drive decisions. My portfolio contains interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!" />
+    <link rel="canonical" href="http://localhost:4000/2026/08/01/E-Commerce-AB-Test.html">
+    <link rel="alternate" type="application/rss+xml" title="Antonia Iaquinta" href="/feed.xml">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700" rel="stylesheet">
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+<body>
+    <header class="header">
+	<div class="container">
+		<div class="row">
+			<div class="col col-12">
+				<div class="header-box">
+					<div class="col col-3 wd-mob">
+						
+						<a href="/" class="header-avatar">
+							<img src="/img/my_headshot.jpg" class="header-avatar-img" alt="Antonia Iaquinta">
+						</a>
+						
+					</div>
+					<hr>
+					<div class="col col-9 wd-mob">
+						
+						<h1 class="header-title">Antonia Iaquinta</h1>
+						
+						
+						<h1 class="header-subtitle">Data Science & Analytics <span style="color:#f58506"> Portfolio </span></h1>
+						
+						
+						<p class="header-tagline">Hi, I'm Tonii! A Data Analyst bringing 7 years of defense systems engineering rigor to business applications. Driven by a deep curiosity for how complex systems work, I focus on validating data integrity before using it to drive decisions. My portfolio contains interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!</p>
+						
+						<div class="menu-links">
+							<ul class="list-reset">
+								<li class="item"><a class="item-link"><i class="ion ion-ios-pin"></i> Massachusetts, US</a></li>
+								<li class="item"><a class="item-link" href="https://github.com/golden-hail/golden-hail.github.io"><i class="ion ion-logo-github"></i> Github</a></li>
+								<li class="item"><a class="item-link" href="https://www.linkedin.com/in/antonia-iaquinta/"><i class="ion ion-logo-linkedin"></i> LinkedIn</a></li>
+								<li class="item"><a class="item-link" href="/docs/antonia_iaquinta_resume.docx"><i class="ion ion-ios-document"></i> Resume</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</header> <!-- /.header -->
+
+    <div class="container">
+    <div class="row">
+        <div class="col col-12">
+            <div class="post-image-box">
+                <div class="post-image" style="background-image: url(/img//posts/checkout_UI.jpg)"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <article class="col col-12 col-t-12 post">
+            <div class="post-content">
+                <div class="post-head">
+                    
+                    <div class="post-tag">
+                        
+                        <a href="/tags#AB Testing" class="tag">AB Testing</a>
+                        
+                        <a href="/tags#Hypothesis Testing" class="tag">Hypothesis Testing</a>
+                        
+                        <a href="/tags#Z-Test" class="tag">Z-Test</a>
+                        
+                        <a href="/tags#Shapiro-Wilk" class="tag">Shapiro-Wilk</a>
+                        
+                        <a href="/tags#Mann-Whitney U" class="tag">Mann-Whitney U</a>
+                        
+                        <a href="/tags#Python" class="tag">Python</a>
+                        
+                    </div>
+                    
+                    <h1 class="post-title">Customer Checkout UI Redesign A/B Test</h1>
+                    <div class="post-info">
+                        <div class="post-time">
+                            <span class="page__meta"><i class="ion ion-md-time"></i>
+
+
+
+
+  9 minute read
+</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-body">
+                    <p>Can a checkout redesign boost conversion rates without lowering average order values? In this case study, we evaluate a 30-day e-commerce A/B test using a triad of statistical hypothesis tests; combining a Two-Sample Z-Test for Proportions, Shapiro-Wilk normality testing, and a Mann-Whitney U Test to deliver a data-backed rollout recommendation.</p>
+
+<hr />
+
+<h1 id="table-of-contents">Table of Contents</h1>
+
+<ul>
+  <li><a href="#overview-main">00. Project Overview</a>
+    <ul>
+      <li><a href="#overview-context">Context</a></li>
+      <li><a href="#overview-actions">Actions</a></li>
+      <li><a href="#overview-results">Results &amp; Discussion</a></li>
+    </ul>
+  </li>
+  <li><a href="#data-overview">01. Data Overview &amp; Preparation</a></li>
+  <li><a href="#z-test-application">02. Applying Z-Test for Proportions</a></li>
+  <li><a href="#shapiro-wilk">03. Applying Shapiro-Wilk to Assess for Data Normality</a></li>
+  <li><a href="#mann-whitney">04. Applying Mann-Whitney U Test</a></li>
+  <li><a href="#Z-test-results">05. Analyzing The Results</a></li>
+  <li><a href="#discussion">06. Discussion</a></li>
+</ul>
+
+<hr />
+
+<h1 id="project-overview--">Project Overview  <a name="overview-main"></a></h1>
+<p><br /></p>
+<h3 id="context-">Context <a name="overview-context"></a></h3>
+
+<p>An e-commerce retailer redesigned their customer checkout user interface (UI) in an effort to streamline the cart-to-purchase process and improve checkout conversion rates.</p>
+
+<p>The campaign was run across a 30-day testing window where incoming site traffic was randomly split between two groups:</p>
+<ul>
+  <li>The <code class="language-plaintext highlighter-rouge">Control Group</code> used the legacy UI to complete purchases</li>
+  <li>The <code class="language-plaintext highlighter-rouge">Test Group</code> used the new redesigned UI to complete purchases</li>
+</ul>
+
+<p>The product and marketing teams logged daily performance metrics including number of items added to carts, number of completed purchases, and the total spent by customers on a day-to-day basis.</p>
+
+<p><strong><u>Objective:</u></strong> Determine if the redesigned UI significantly improves purchase conversion rates without negatively impacting Average Order Value (AOV).</p>
+
+<p><br /></p>
+
+<h3 id="actions-">Actions <a name="overview-actions"></a></h3>
+
+<p>To evaluate the performance of the UI redesign, as well as the impact on Average Order Value (AOV), this analysis will be conducted across three sequential hypothesis tests:</p>
+
+<ol>
+  <li><strong>Primary Metric Evaluation (Conversion Rate):</strong>
+    <ul>
+      <li><u>Objective:</u> Determine whether the new checkout UI drives a statistically significant lift in cart-to-purchase conversion rates.</li>
+      <li><u>Method:</u> Run a Two-Sample Z-Test for Proportions with <code class="language-plaintext highlighter-rouge">statsmodels</code>.</li>
+    </ul>
+  </li>
+  <li>Normality Diagnostic (Daily Average Order Value):
+    <ul>
+      <li><u>Objective:</u> Evaluate whether daily Average Order Value (spent/purchased) meets the parametric assumption of a normal distribution.</li>
+      <li><u>Method:</u> Run a Shapiro-Wilk Test on daily AOV for both Control and Test groups using <code class="language-plaintext highlighter-rouge">scipy.stats</code>.</li>
+    </ul>
+  </li>
+  <li>Secondary Metric Evaluation (AOV Impact)
+    <ul>
+      <li><u>Objective:</u> Assess whether customer spending per completed order changed significantly between UI variants.</li>
+      <li><u>Method:</u> Select the final two-sample test based on the Shapiro-Wilk diagnostic. If the data is normally distributed, run the Welch’s <em>t</em>-Test. If the AOV data is non-parametric, run the Mann-Whitney U Test with. Use <code class="language-plaintext highlighter-rouge">scipy.stats</code>.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<h3 id="results--discussion-">Results &amp; Discussion <a name="overview-results"></a></h3>
+
+<p>Our 30-day A/B experiment confirmed that the redesigned checkout UI significantly improves purchase completion without harming average order value.</p>
+
+<ul>
+  <li>Conversion Rate Lift: Cart-to-purchase conversion increased from 40.21% (Control) to 59.13% (Test) with a +47.03% relative improvement. Z-Test of Proportions confirmed this difference is statistically significant (p-value [0.0000] &lt; significance level [0.05])</li>
+  <li>Average Order Value (AOV): AOV saw a nominal increase of +$0.51 ($102.14 vs. $102.65), but non-parametric testing confirmed this difference is not statistically significant (p-value [0.2717] &gt; significance level [0.05]).</li>
+</ul>
+
+<p><strong><u>Business Recommendation:</u></strong> Proceed with the complete rollout the redesigned UI to all customers. With the split-testing routing infrastructure already in place, the engineering effort to fully deploy the UI is minimal and carries negligible risk. Continue with further metric testing as detailed in the <em>Discussion</em> section of this report.</p>
+
+<hr />
+
+<h1 id="data-overview--preparation--">Data Overview &amp; Preparation  <a name="data-overview"></a></h1>
+<p><br />
+We’ll start by importing our two groups of data, the <code class="language-plaintext highlighter-rouge">control</code> group who used the legacy UI and the <code class="language-plaintext highlighter-rouge">test</code> group who used the new UI for purchasing items in their carts. This data contains sales metrics on each unique day during the 30 day trial in August.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+<span class="n">control</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'control_group.csv'</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">';'</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'test_group.csv'</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">';'</span><span class="p">)</span>
+
+<span class="n">control</span> <span class="o">=</span> <span class="n">control</span><span class="p">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">test</span><span class="p">.</span><span class="n">dropna</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>We have the following columns of interest in both datasets:</p>
+<ul>
+  <li>Date</li>
+  <li>Spend [USD]</li>
+  <li># of Add to Cart</li>
+  <li># of Purchase</li>
+</ul>
+
+<p>Before applying statistical analyses, let’s simply aggregate the raw data to determine the conversion rates of items being put into carts to being purchased.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ctrl_conversion_rate</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">control</span><span class="p">[</span><span class="s">'# of Purchase'</span><span class="p">].</span><span class="nb">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">control</span><span class="p">[</span><span class="s">'# of Add to Cart'</span><span class="p">].</span><span class="nb">sum</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">test_conversion_rate</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="s">'# of Purchase'</span><span class="p">].</span><span class="nb">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">test</span><span class="p">[</span><span class="s">'# of Add to Cart'</span><span class="p">].</span><span class="nb">sum</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="n">relative_lift</span> <span class="o">=</span> <span class="p">(</span><span class="n">test_conversion_rate</span> <span class="o">-</span> <span class="n">ctrl_conversion_rate</span><span class="p">)</span><span class="o">/</span><span class="n">ctrl_conversion_rate</span> <span class="o">*</span> <span class="mi">100</span>
+
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Control Group Conversion Rate = </span><span class="si">{</span><span class="n">ctrl_conversion_rate</span><span class="si">}</span><span class="s">%'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Test Group Conversion Rate = </span><span class="si">{</span><span class="n">test_conversion_rate</span><span class="si">}</span><span class="s">%'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Relative Lift = </span><span class="si">{</span><span class="n">relative_lift</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s">%'</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">Control</span> <span class="n">Group</span> <span class="n">Conversion</span> <span class="n">Rate</span> <span class="o">=</span> <span class="mf">40.215</span><span class="o">%</span>
+<span class="o">&gt;&gt;</span> <span class="n">Test</span> <span class="n">Group</span> <span class="n">Conversion</span> <span class="n">Rate</span> <span class="o">=</span> <span class="mf">59.128</span><span class="o">%</span>
+<span class="o">&gt;&gt;</span> <span class="n">Relative</span> <span class="n">Lift</span> <span class="o">=</span> <span class="mf">47.03</span><span class="o">%</span>
+</code></pre></div></div>
+
+<p>At first glance, basic conversion rate data aggregation suggests the newly deployed UI improved checkout performance, driving a +47.03% relative lift in conversion rate (rising from 40.22% in the Control group to 59.13% in the Test group).</p>
+
+<p>Looking at the average order value (AOV) data, we seemed to only have a $0.51 increase in revenue, which so far suggests that the new UI did not negatively impact sales.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ctrl_AOV</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">control</span><span class="p">[</span><span class="s">'Spend [USD]'</span><span class="p">].</span><span class="nb">sum</span><span class="p">()</span><span class="o">/</span><span class="n">control</span><span class="p">[</span><span class="s">'# of Purchase'</span><span class="p">].</span><span class="nb">sum</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">test_AOV</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="s">'Spend [USD]'</span><span class="p">].</span><span class="nb">sum</span><span class="p">()</span><span class="o">/</span><span class="n">test</span><span class="p">[</span><span class="s">'# of Purchase'</span><span class="p">].</span><span class="nb">sum</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Control AOV = $</span><span class="si">{</span><span class="n">ctrl_AOV</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Test AOV = $</span><span class="si">{</span><span class="n">test_AOV</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">Control</span> <span class="n">AOV</span> <span class="o">=</span> <span class="err">$</span><span class="mf">4.41</span>
+<span class="o">&gt;&gt;</span> <span class="n">Test</span> <span class="n">AOV</span> <span class="o">=</span> <span class="err">$</span><span class="mf">4.92</span>
+</code></pre></div></div>
+
+<p>However, raw descriptive statistics alone cannot determine whether these gains are statistically meaningful or the result of random sampling noise. To establish whether the redesigned UI genuinely drives conversion rate improvements, we evaluate these proportions using a Two-Sample Z-Test for Proportions.</p>
+
+<hr />
+
+<h1 id="applying-z-test-for-proportions-">Applying Z-Test for Proportions <a name="z-test-application"></a></h1>
+
+<p><br /></p>
+
+<h3 id="state-hypotheses--significance-level-for-test">State Hypotheses &amp; Significance Level For Test</h3>
+
+<p>To kick off our Z-Test, we’ll need to define our <strong>Null Hypothesis</strong>, our <strong>Alternate Hypothesis</strong>, and our <strong>Significance Level</strong>. For our significance level, we’ll be using the commonly used value of 0.05 (or 5%), which will be carried through for all subsequent tests.</p>
+
+<ul>
+  <li><strong>Null Hypothesis:</strong> There is no significant relationship between the checkout UI version and the sales conversion rate. They are independent.</li>
+  <li><strong>Alternate Hypothesis:</strong> There is a relationship between the checkout UI version and the sales conversion rate. They are not independent.</li>
+  <li><strong>Significance Level:</strong> 0.05</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="calculating-the-p-value">Calculating the P-Value</h2>
+
+<p>We want to look at if the new UI led to a significant increase in conversion rate, from items added to the cart to the purchase step.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* If p-value &gt;= 0.05: Fail to reject the null hypothesis. UI version and conversion rate are statistically independent
+* If p-value &lt; 0.05: Reject the null hypothesis in favor of the alternate
+</code></pre></div></div>
+
+<p>To do this, we will <code class="language-plaintext highlighter-rouge">statsmodels.stats.proportion</code> library was used to import the <code class="language-plaintext highlighter-rouge">proportion_ztest</code> algorithm, to run our Z-Test. The results of this test will provide a p-value to be compared against our significance level.</p>
+
+<p><u>Inputs of the proportions_ztest:</u><br />
+–<code class="language-plaintext highlighter-rouge">count</code> represents the amount of successes for each dataset: it will be defined as the number of total purchases from each dataset.<br />
+–<code class="language-plaintext highlighter-rouge">nobs (ie. Number of Observations)</code> will be the number of items added to carts.<br />
+–<code class="language-plaintext highlighter-rouge">alternative</code>, looking if the % of signups is significantly higher, or <em>larger</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.proportion</span> <span class="kn">import</span> <span class="n">proportions_ztest</span>
+
+<span class="n">purchases</span> <span class="o">=</span> <span class="p">[</span><span class="n">test</span><span class="p">[</span><span class="s">"# of Purchase"</span><span class="p">].</span><span class="nb">sum</span><span class="p">(),</span> <span class="n">control</span><span class="p">[</span><span class="s">"# of Purchase"</span><span class="p">].</span><span class="nb">sum</span><span class="p">()]</span>
+<span class="n">carts</span> <span class="o">=</span> <span class="p">[</span><span class="n">test</span><span class="p">[</span><span class="s">"# of Add to Cart"</span><span class="p">].</span><span class="nb">sum</span><span class="p">(),</span> <span class="n">control</span><span class="p">[</span><span class="s">"# of Add to Cart"</span><span class="p">].</span><span class="nb">sum</span><span class="p">()]</span>
+
+<span class="n">z_stat</span><span class="p">,</span> <span class="n">p_val</span> <span class="o">=</span> <span class="n">proportions_ztest</span><span class="p">(</span>
+    <span class="n">count</span><span class="o">=</span><span class="n">purchases</span><span class="p">,</span> <span class="n">nobs</span><span class="o">=</span><span class="n">carts</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s">"larger"</span>
+<span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Z-statistic: </span><span class="si">{</span><span class="n">z_stat</span><span class="si">:</span><span class="p">.</span><span class="mi">4</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"p-value:     </span><span class="si">{</span><span class="n">p_val</span><span class="si">:</span><span class="p">.</span><span class="mi">4</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">Z</span><span class="o">-</span><span class="n">statistic</span><span class="p">:</span> <span class="mf">47.1959</span>
+<span class="o">&gt;&gt;</span> <span class="n">p</span><span class="o">-</span><span class="n">value</span><span class="p">:</span>     <span class="mf">0.0000</span>
+</code></pre></div></div>
+
+<p>Our calculated p-value of 0.0000 is less than our set significance level of 0.05, which provides evidence to reject the null hypothesis in favor of the alternate. The 18.92% jump in cart-to-purchase conversion rate is statistically significant and virtually impossible to have happened by random chance!</p>
+
+<hr />
+
+<h1 id="applying-shapiro-wilk-to-assess-for-data-normality-">Applying Shapiro-Wilk to Assess for Data Normality <a name="shapiro-wilk"></a></h1>
+
+<p><br /></p>
+
+<p>To assess the effect the UI version had on the Average Order Value (AOV), we first need to determine whether to run a parametric or a non-parametric test through another hypothesis test known as the Shapiro-Wilk test.</p>
+
+<ul>
+  <li><strong>Null Hypothesis:</strong> The daily AOV data in both groups is normally distributed</li>
+  <li><strong>Alternate Hypothesis:</strong> The daily AOV data in both groups is not normally distributed</li>
+  <li><strong>Significance Level:</strong> 0.05</li>
+</ul>
+
+<p>Parametric tests such as the standard two-sample <em>t</em>-test rely on the assumption of data normality to calculate standard errors and p-values; violating this assumption risks inflating Type I error rates. Running the Shapiro-Wilk test allows us to verify the data structure before selecting a model.</p>
+
+<h2 id="calculating-the-p-value-1">Calculating the P-Value</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* If p-value &gt;= 0.05: The daily AOV in both groups is normally distributed. Run Welch's *t*-test to assess statistical significance
+* If p-value &lt; 0.05: The daily AOV data is not normally distributed. Run the Mann Whitney U to assess statistical significance
+</code></pre></div></div>
+
+<p>We’ll acquire the Shapiro-Wilk p-value outputs with the <code class="language-plaintext highlighter-rouge">scipy</code> library <code class="language-plaintext highlighter-rouge">stats</code> module.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+
+<span class="c1"># Calculate AOV
+</span><span class="n">control</span><span class="p">[</span><span class="s">"AOV"</span><span class="p">]</span> <span class="o">=</span> <span class="n">control</span><span class="p">[</span><span class="s">"Spend [USD]"</span><span class="p">]</span> <span class="o">/</span> <span class="n">control</span><span class="p">[</span><span class="s">"# of Purchase"</span><span class="p">]</span>
+<span class="n">test</span><span class="p">[</span><span class="s">"AOV"</span><span class="p">]</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="s">"Spend [USD]"</span><span class="p">]</span> <span class="o">/</span> <span class="n">test</span><span class="p">[</span><span class="s">"# of Purchase"</span><span class="p">]</span>
+
+<span class="c1"># Run Shapiro-Wilk on AOV
+</span><span class="n">stat_ctrl</span><span class="p">,</span> <span class="n">p_ctrl</span> <span class="o">=</span> <span class="n">stats</span><span class="p">.</span><span class="n">shapiro</span><span class="p">(</span><span class="n">control</span><span class="p">[</span><span class="s">"AOV"</span><span class="p">])</span>
+<span class="n">stat_test</span><span class="p">,</span> <span class="n">p_test</span> <span class="o">=</span> <span class="n">stats</span><span class="p">.</span><span class="n">shapiro</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="s">"AOV"</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Control AOV - W Stat: </span><span class="si">{</span><span class="n">stat_ctrl</span><span class="si">:</span><span class="p">.</span><span class="mi">4</span><span class="n">f</span><span class="si">}</span><span class="s">, p-value: </span><span class="si">{</span><span class="n">p_ctrl</span><span class="si">:</span><span class="p">.</span><span class="mi">4</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Test AOV - W Stat: </span><span class="si">{</span><span class="n">stat_test</span><span class="si">:</span><span class="p">.</span><span class="mi">4</span><span class="n">f</span><span class="si">}</span><span class="s">, p-value: </span><span class="si">{</span><span class="n">p_test</span><span class="si">:</span><span class="p">.</span><span class="mi">4</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">Control</span> <span class="n">AOV</span> <span class="o">-</span> <span class="n">W</span> <span class="n">Stat</span><span class="p">:</span> <span class="mf">0.9132</span><span class="p">,</span> <span class="n">p</span><span class="o">-</span><span class="n">value</span><span class="p">:</span> <span class="mf">0.0206</span>
+<span class="o">&gt;&gt;</span> <span class="n">Test</span> <span class="n">AOV</span> <span class="o">-</span> <span class="n">W</span> <span class="n">Stat</span><span class="p">:</span> <span class="mf">0.8966</span><span class="p">,</span> <span class="n">p</span><span class="o">-</span><span class="n">value</span><span class="p">:</span> <span class="mf">0.0069</span>
+</code></pre></div></div>
+
+<p>The p-values returned from the Shapiro-Wilk test are less than the significance level of 0.05 for both groups, indicating that the AOV data is not normally distributed.</p>
+
+<p>Consequently, we proceed with the non-parametric Mann-Whitney U test, which compares distribution ranks rather than sample means and requires no distributional assumptions.</p>
+
+<hr />
+
+<h1 id="applying-mann-whitney-u-test-">Applying Mann-Whitney U Test <a name="mann-whitney"></a></h1>
+
+<p>We’ve now determined to run the Mann-Whitney U Test to assess our AOV between the control and test data.</p>
+
+<ul>
+  <li><strong>Null Hypothesis:</strong> There is no statistical difference in the distribution of daily AOV between the Control and Test groups</li>
+  <li><strong>Alternate Hypothesis:</strong> There is a statistically significant difference in the distribution of daily AOV between the Control and Test groups</li>
+  <li><strong>Significance Level:</strong> 0.05</li>
+</ul>
+
+<h2 id="calculating-the-p-value-2">Calculating the P-Value</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* If p-value &gt;= 0.05: There is statistically no difference in daily AOV between groups. Fail to reject the null hypothesis. 
+* If p-value &lt; 0.05: There is a statistically significant difference in daily AOV between groups. Reject the null hypothesis.
+</code></pre></div></div>
+
+<p>With <code class="language-plaintext highlighter-rouge">scipy</code> <code class="language-plaintext highlighter-rouge">stats</code> already imported, we can run the <code class="language-plaintext highlighter-rouge">mannwhitneyu</code> algorithm on our data, then compare the returned p-value to our initial significance level.</p>
+
+<p><strong><u>Inputs of mannwhitneyu:</u></strong><br />
+–<code class="language-plaintext highlighter-rouge">control["AOV"]</code><br />
+–<code class="language-plaintext highlighter-rouge">test["AOV"]</code><br />
+–<code class="language-plaintext highlighter-rouge">alternative</code>: <em>two-sided</em> since we are looking at the difference between the control and test AOV.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">u_stat</span><span class="p">,</span> <span class="n">u_pvalue</span> <span class="o">=</span> <span class="n">stats</span><span class="p">.</span><span class="n">mannwhitneyu</span><span class="p">(</span>
+    <span class="n">test</span><span class="p">[</span><span class="s">"AOV"</span><span class="p">],</span> <span class="n">control</span><span class="p">[</span><span class="s">"AOV"</span><span class="p">],</span> <span class="n">alternative</span><span class="o">=</span><span class="s">"two-sided"</span>
+<span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"U-statistic: </span><span class="si">{</span><span class="n">u_stat</span><span class="si">:</span><span class="p">.</span><span class="mi">4</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"p-value: </span><span class="si">{</span><span class="n">u_pvalue</span><span class="si">:</span><span class="p">.</span><span class="mi">4</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">U</span><span class="o">-</span><span class="n">statistic</span><span class="p">:</span> <span class="mf">508.0000</span>
+<span class="o">&gt;&gt;</span> <span class="n">p</span><span class="o">-</span><span class="n">value</span><span class="p">:</span> <span class="mf">0.2717</span>
+</code></pre></div></div>
+
+<p>The returned p-value for the Mann-Whitney U test is greater than our significance level, thus, we fail to reject the null hypothesis.</p>
+
+<p>Based on the 30-day trial, there is no statistically significant difference in AOV across the two groups.</p>
+
+<hr />
+
+<h1 id="analyzing-the-results-">Analyzing The Results <a name="Z-test-results"></a></h1>
+
+<p>Through the <strong>Z-Test of Proportions</strong>, we calculated:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>p-value [0.0000] &lt; significance level [0.05]
+</code></pre></div></div>
+
+<p>Thus, we reject the null hypothesis in favor of the alternate - indicating that there is a true relationship between the new UI and the increase in conversion rate, and that the observed relative lift was not due to chance.</p>
+
+<p><br /></p>
+
+<p>Through the <strong>Mann-Whitney U test</strong> used to assess the statistical impact the new UI had on AOV, we determined the following:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>p-value [0.2717] &gt; significance level [0.05]
+</code></pre></div></div>
+
+<p>Thus, we fail to reject the null hypothesis - indicating that the new UI led to no statistically significant impact on AOV.</p>
+
+<p><br /></p>
+
+<p><strong><u>Conclusion:</u></strong> We can statistically conclude that the new UI led to more items purchased while not negatively impacting AOV.</p>
+
+<hr />
+
+<h1 id="discussion-">Discussion <a name="discussion"></a></h1>
+
+<p>Our 30-day A/B experiment confirms that the redesigned checkout UI delivered a statistically significant boost in conversion rate without degrading customer average order values.</p>
+
+<p>Cart-to-purchase conversion increased from 40.21% (Control) to 59.13% (Test), representing a +47.03% relative lift in checkout efficiency. While raw AOV showed a slight increase of $0.51 cents per order, non-parametric testing confirmed this difference is not statistically significant with a p-value of 0.2717.</p>
+
+<p><strong><u>Business Impact:</u></strong> These statistical conclusions support the business decision to roll out the redesigned UI to all customers. With the split-testing routing infrastructure already in place, the engineering effort to fully deploy the UI is minimal and carries negligible risk.</p>
+
+<p><strong><u>Next Steps:</u></strong></p>
+<ul>
+  <li><strong>Monitor Long-Term AOV Trends Post-Rollout:</strong> Higher cart conversion in theory lays the groundwork for revenue growth over time. We recommend tracking AOV and total revenue across a 60–90 day post-launch window to evaluate whether increased purchase frequency translates into higher revenue.</li>
+  <li><strong>Analyze Behavioral Flow Features for Website-wide Applicability:</strong> Analyze the new UI features (such as simplified fields, button placements, color schemes, widgets, etc) to determine which design features drove the highest lift. Then, identify ways to apply these effective design choices to other areas of the website.</li>
+</ul>
+
+
+                    
+
+                </div>
+                
+                <div class="post-navigation">
+                    
+                    <a href="/2026/06/30/Chi-Square-Test.html" class="prev">
+                        <div class="post-nav-arrow"><i class="ion ion-ios-arrow-round-back"></i> Previous </div>
+                    </a>
+                    
+                    
+                    <a href="/2026/08/15/Causal-Impact-Analysis.html" class="next">
+                        <div class="post-nav-arrow">Next <i class="ion ion-ios-arrow-round-forward"></i></div>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </article> <!-- /.post -->
+    </div>
+</div>
+    <footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col col-12">
+                <div class="footer-top">
+                    <h2 class="logo-title">
+                        <a href="/" class="logo-text">Antonia Iaquinta</a>
+                    </h2>
+                    <div class="top"><i class="ion ion-ios-arrow-up"></i></div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="copyright">
+                        <p>&copy; 2026 Antonia Iaquinta Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a></p>
+                    </div>
+                    <div class="footer-social">
+                        <ul class="list-reset">
+                            <li><a href="https://github.com/golden-hail/golden-hail.github.io"><i class="ion ion-logo-github"></i> Github</a></li>
+                            
+                            <li><a href="/feed.xml"><i class="ion ion-logo-rss"></i> Feed</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer> <!-- /.footer -->
+    <!-- js here -->
+<script src="/assets/js/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/jquery.waitforimages.min.js"></script>
+<script src="/assets/js/jquery.fitvids.js"></script>
+<script src="/assets/js/common.js"></script>
+</body>
+
+</html>
